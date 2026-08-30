@@ -39,7 +39,6 @@ class JsonSerializable(object):
     Subclasses of this class are guaranteed to be able to be converted to JSON format.
     All subclasses of this class must override to_json.
     """
-
     def to_json(self):
         """
         Returns a JSON string representation of this class.
@@ -57,7 +56,6 @@ class Dictionaryable(object):
     Subclasses of this class are guaranteed to be able to be converted to dictionary.
     All subclasses of this class must override to_dict.
     """
-
     def to_dict(self):
         """
         Returns a DICT with class field values
@@ -75,7 +73,6 @@ class JsonDeserializable(object):
     Subclasses of this class are guaranteed to be able to be created from a json-style dict or json formatted string.
     All subclasses of this class must override de_json.
     """
-
     @classmethod
     def de_json(cls, json_string):
         """
@@ -206,7 +203,6 @@ class Update(JsonDeserializable):
 
     :return: Instance of the class
     :rtype: :class:`telebot.types.Update`
-
     """
     @classmethod
     def de_json(cls, json_string):
@@ -2792,6 +2788,7 @@ class ReplyKeyboardMarkup(JsonSerializable):
     :param row_width: Non-API. The width of the row in the keyboard when adding keys using "add" method. Defaults to 3. Maximum value is 12.
     :type row_width: :obj:`int`
 
+    :return: Instance of the class
     :rtype: :class:`telebot.types.ReplyKeyboardMarkup`
     """
     max_row_keys = 12
@@ -3013,7 +3010,6 @@ class KeyboardButtonRequestChat(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.KeyboardButtonRequestChat`
     """
-
     def __init__(
         self, request_id: int, chat_is_channel: bool,
         chat_is_forum: Optional[bool] = None,
@@ -3558,7 +3554,6 @@ class ChatMember(JsonDeserializable, ABC):
 
     Telegram documentation: https://core.telegram.org/bots/api#chatmember
     """
-
     def __init__(self, user, status, **kwargs):
         self.user: User = user
         self.status: str = status
@@ -4613,7 +4608,6 @@ class InputInvoiceMessageContent(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputInvoiceMessageContent`
     """
-
     def __init__(self, title: str, description: str, payload: str, provider_token: Optional[str], currency: str, prices: List[LabeledPrice],
                     max_tip_amount: Optional[int] = None, suggested_tip_amounts: Optional[List[int]] = None, provider_data: Optional[str] = None,
                     photo_url: Optional[str] = None, photo_size: Optional[int] = None, photo_width: Optional[int] = None, photo_height: Optional[int] = None,
@@ -4683,12 +4677,13 @@ class InputRichMessageContent(Dictionaryable):
     """
     Represents the content of a rich message to be sent as the result of an inline query.
 
+    Telegram documentation: https://core.telegram.org/bots/api#inputrichmessagecontent
+
     :param rich_message: The message to be sent
     :type rich_message: :class:`InputRichMessage`
 
     :return: Instance of the class
     :rtype: :class:`InputRichMessageContent`
-
     """
     def __init__(self, rich_message: InputRichMessage, **kwargs):
         self.rich_message: InputRichMessage = rich_message
@@ -4773,8 +4768,6 @@ class InlineQueryResultBase(Dictionaryable, JsonSerializable, ABC):
     """
     Deprecated. Use `InlineQueryResult` instead.
     """
-
-
 class InlineQueryResultCachedBase(InlineQueryResultBase, ABC):
     """
     Deprecated. Use `InlineQueryResult` instead.
@@ -4902,7 +4895,6 @@ class InlineQueryResultArticle(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultArticle`
     """
-
     def __init__(self, id: str, title: str, input_message_content: InputMessageContent, reply_markup: Optional[InlineKeyboardMarkup] = None,
                  url: Optional[str] = None, hide_url: Optional[bool] = None, description: Optional[str] = None,
                  thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None, thumbnail_height: Optional[int] = None):
@@ -5696,7 +5688,6 @@ class InlineQueryResultContact(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultContact`
     """
-
     def __init__(self, id: str, phone_number: str, first_name: str, last_name: Optional[str] = None, vcard: Optional[str] = None,
                     reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
                     thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None, thumbnail_height: Optional[int] = None):
@@ -6006,7 +5997,6 @@ class InlineQueryResultCachedDocument(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedDocument`
     """
-
     def __init__(self, id: str, document_file_id: str, title: str, description: Optional[str] = None,
                     caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
                     parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
@@ -6065,7 +6055,6 @@ class InlineQueryResultCachedVideo(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedVideo`
     """
-
     def __init__(self, id: str, video_file_id: str, title: str, description: Optional[str] = None,
                     caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
                     parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
@@ -6119,7 +6108,6 @@ class InlineQueryResultCachedVoice(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedVoice`
     """
-
     def __init__(self, id: str, voice_file_id: str, title: str, caption: Optional[str] = None,
                     caption_entities: Optional[List[MessageEntity]] = None, parse_mode: Optional[str] = None,
                     reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None):
@@ -6168,7 +6156,6 @@ class InlineQueryResultCachedAudio(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedAudio`
     """
-
     def __init__(self, id: str, audio_file_id: str, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
                     parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
                     input_message_content: Optional[InputMessageContent] = None):
@@ -6807,7 +6794,6 @@ class Sticker(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.Sticker`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -6868,7 +6854,6 @@ class MaskPosition(Dictionaryable, JsonDeserializable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.MaskPosition`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -7183,7 +7168,6 @@ class InputMediaAnimation(InputMedia):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputMediaAnimation`
     """
-
     def __init__(self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
                     caption: Optional[str] = None, parse_mode: Optional[str] = None,
                     caption_entities: Optional[List[MessageEntity]] = None, width: Optional[int] = None,
@@ -8038,7 +8022,6 @@ class VoiceChatStarted(VideoChatStarted):
     """
     Deprecated, use :class:`VideoChatStarted` instead.
     """
-
     def __init__(self):
         log_deprecation_warning('VoiceChatStarted is deprecated. Use VideoChatStarted instead.')
         super().__init__()
@@ -8208,7 +8191,6 @@ class MenuButtonCommands(MenuButton):
     :return: Instance of the class
     :rtype: :class:`telebot.types.MenuButtonCommands`
     """
-
     def __init__(self, **kwargs):
         self.type: str = "commands"
 
@@ -8238,7 +8220,6 @@ class MenuButtonWebApp(MenuButton):
     :return: Instance of the class
     :rtype: :class:`telebot.types.MenuButtonWebApp`
     """
-
     def __init__(self, text: str, web_app: WebAppInfo, **kwargs):
         self.type: str = "web_app"
         self.text: str = text
@@ -8334,7 +8315,6 @@ class ChatAdministratorRights(JsonDeserializable, JsonSerializable, Dictionaryab
     :return: Instance of the class
     :rtype: :class:`telebot.types.ChatAdministratorRights`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8584,7 +8564,6 @@ class GeneralForumTopicUnhidden(JsonDeserializable):
 
     Telegram documentation: https://core.telegram.org/bots/api#generalforumtopicunhidden
     """
-
     @classmethod
     def de_json(cls, json_string):
         return cls()
@@ -8618,7 +8597,6 @@ class ForumTopic(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ForumTopic`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8648,6 +8626,9 @@ class WriteAccessAllowed(JsonDeserializable):
 
     :param from_attachment_menu: Optional. True, if the access was granted when the bot was added to the attachment or side menu
     :type from_attachment_menu: :obj:`bool`
+
+    :return: Instance of the class
+    :rtype: :class:`telebot.types.WriteAccessAllowed`
     """
     @classmethod
     def de_json(cls, json_string):
@@ -8692,7 +8673,6 @@ class ChatShared(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ChatShared`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8720,7 +8700,6 @@ class BotDescription(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.BotDescription`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8743,7 +8722,6 @@ class BotShortDescription(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.BotShortDescription`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8779,7 +8757,6 @@ class InputSticker(Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputSticker`
     """
-
     def __init__(self, sticker: Union[str, InputFile], emoji_list: List[str],  format: Optional[str]=None,
                  mask_position: Optional[MaskPosition]=None, keywords: Optional[List[str]]=None) -> None:
         self.sticker: Union[str, InputFile] = sticker
@@ -8846,7 +8823,6 @@ class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerial
     :return: Instance of the class
     :rtype: :class:`SwitchInlineQueryChosenChat`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8897,7 +8873,6 @@ class BotName(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BotName`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8926,7 +8901,6 @@ class InlineQueryResultsButton(JsonSerializable, Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`InlineQueryResultsButton`
     """
-
     def __init__(self, text: str, web_app: Optional[WebAppInfo]=None, start_parameter: Optional[str]=None) -> None:
         self.text: str = text
         self.web_app: Optional[WebAppInfo] = web_app
@@ -8964,7 +8938,6 @@ class Story(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`Story`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8994,7 +8967,6 @@ class ReactionType(JsonDeserializable, Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`ReactionType`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9043,7 +9015,6 @@ class ReactionTypeEmoji(ReactionType):
     :return: Instance of the class
     :rtype: :class:`ReactionTypeEmoji`
     """
-
     def __init__(self, emoji: str, **kwargs) -> None:
         super().__init__('emoji')
         self.emoji: str = emoji
@@ -9070,7 +9041,6 @@ class ReactionTypeCustomEmoji(ReactionType):
     :return: Instance of the class
     :rtype: :class:`ReactionTypeCustomEmoji`
     """
-
     def __init__(self, custom_emoji_id: str, **kwargs) -> None:
         super().__init__('custom_emoji')
         self.custom_emoji_id: str = custom_emoji_id
@@ -9093,7 +9063,6 @@ class ReactionTypePaid(ReactionType):
     :return: Instance of the class
     :rtype: :class:`ReactionTypePaid`
     """
-
     def __init__(self, **kwargs) -> None:
         super().__init__('paid')
 
@@ -9132,7 +9101,6 @@ class MessageReactionUpdated(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`MessageReactionUpdated`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9183,7 +9151,6 @@ class MessageReactionCountUpdated(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`MessageReactionCountUpdated`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9215,7 +9182,6 @@ class ReactionCount(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ReactionCount`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9440,7 +9406,6 @@ class MessageOrigin(JsonDeserializable, ABC):
     :return: Instance of the class
     :rtype: :class:`MessageOrigin`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9562,7 +9527,6 @@ class MessageOriginChannel(MessageOrigin):
     :return: Instance of the class
     :rtype: :class:`telebot.types.MessageOriginChannel`
     """
-
     def __init__(self, date: int, chat: Chat, message_id: int, author_signature: Optional[str] = None) -> None:
         super().__init__('channel', date)
         self.chat: Chat = chat
@@ -9594,7 +9558,6 @@ class LinkPreviewOptions(JsonDeserializable, Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`LinkPreviewOptions`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9665,7 +9628,6 @@ class Giveaway(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`Giveaway`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9734,7 +9696,6 @@ class GiveawayWinners(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`GiveawayWinners`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9783,7 +9744,6 @@ class GiveawayCompleted(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`GiveawayCompleted`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9815,7 +9775,6 @@ class GiveawayCreated(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`GiveawayCreated`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9847,7 +9806,6 @@ class TextQuote(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`TextQuote`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -9913,7 +9871,6 @@ class ReplyParameters(JsonDeserializable, Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`ReplyParameters`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10020,7 +9977,6 @@ class ChatBoostUpdated(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ChatBoostUpdated`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10055,7 +10011,6 @@ class ChatBoostRemoved(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ChatBoostRemoved`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10083,7 +10038,6 @@ class ChatBoostSource(ABC, JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ChatBoostSourcePremium` or :class:`ChatBoostSourceGiftCode` or :class:`ChatBoostSourceGiveaway`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10113,7 +10067,6 @@ class ChatBoostSourcePremium(ChatBoostSource):
     :return: Instance of the class
     :rtype: :class:`ChatBoostSourcePremium`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10142,7 +10095,6 @@ class ChatBoostSourceGiftCode(ChatBoostSource):
     :return: Instance of the class
     :rtype: :class:`ChatBoostSourceGiftCode`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10180,7 +10132,6 @@ class ChatBoostSourceGiveaway(ChatBoostSource):
     :return: Instance of the class
     :rtype: :class:`ChatBoostSourceGiveaway`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10218,7 +10169,6 @@ class ChatBoost(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ChatBoost`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10258,7 +10208,6 @@ class UserChatBoosts(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`UserChatBoosts`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10288,7 +10237,6 @@ class InaccessibleMessage(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`InaccessibleMessage`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10339,7 +10287,6 @@ class ChatBoostAdded(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ChatBoostAdded`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10381,7 +10328,6 @@ class BusinessConnection(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BusinessConnection`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10427,7 +10373,6 @@ class BusinessMessagesDeleted(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BusinessMessagesDeleted`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10460,7 +10405,6 @@ class BusinessIntro(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BusinessIntro`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10491,7 +10435,6 @@ class BusinessLocation(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BusinessLocation`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10520,7 +10463,6 @@ class BusinessOpeningHoursInterval(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BusinessOpeningHoursInterval`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10548,7 +10490,6 @@ class BusinessOpeningHours(JsonDeserializable):
 
     :rtype: :class:`BusinessOpeningHours`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10585,7 +10526,6 @@ class SharedUser(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`SharedUser`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10621,7 +10561,6 @@ class Birthdate(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`Birthdate`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10646,7 +10585,6 @@ class BackgroundFill(ABC, JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BackgroundFillSolid` or :class:`BackgroundFillGradient` or :class:`BackgroundFillFreeformGradient`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10676,7 +10614,6 @@ class BackgroundFillSolid(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundFillSolid`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10710,7 +10647,6 @@ class BackgroundFillGradient(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundFillGradient`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10740,7 +10676,6 @@ class BackgroundFillFreeformGradient(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundFillFreeformGradient`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10765,7 +10700,6 @@ class BackgroundType(ABC, JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`BackgroundTypeFill` or :class:`BackgroundTypeWallpaper` or :class:`BackgroundTypePattern` or :class:`BackgroundTypeChatTheme`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10800,7 +10734,6 @@ class BackgroundTypeFill(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundTypeFill`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10839,7 +10772,6 @@ class BackgroundTypeWallpaper(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundTypeWallpaper`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10884,7 +10816,6 @@ class BackgroundTypePattern(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundTypePattern`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10918,7 +10849,6 @@ class BackgroundTypeChatTheme(BackgroundFill):
     :return: Instance of the class
     :rtype: :class:`BackgroundTypeChatTheme`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10943,7 +10873,6 @@ class ChatBackground(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`ChatBackground`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10971,7 +10900,6 @@ class RevenueWithdrawalState(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStatePending` or :class:`RevenueWithdrawalStateSucceeded` or :class:`RevenueWithdrawalStateFailed`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -10998,7 +10926,6 @@ class RevenueWithdrawalStatePending(RevenueWithdrawalState):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStatePending`
     """
-
     def __init__(self, type, **kwargs):
         self.type: str = type
 
@@ -11028,7 +10955,6 @@ class RevenueWithdrawalStateSucceeded(RevenueWithdrawalState):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStateSucceeded`
     """
-
     def __init__(self, type, date, url, **kwargs):
         self.type: str = type
         self.date: int = date
@@ -11054,7 +10980,6 @@ class RevenueWithdrawalStateFailed(RevenueWithdrawalState):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStateFailed`
     """
-
     def __init__(self, type, **kwargs):
         self.type: str = type
 
@@ -11085,7 +11010,6 @@ class TransactionPartner(JsonDeserializable, ABC):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerFragment` or :class:`TransactionPartnerUser` or :class:`TransactionPartnerOther`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -11123,9 +11047,7 @@ class TransactionPartnerFragment(TransactionPartner):
 
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerFragment`
-
     """
-
     def __init__(self, type, withdrawal_state=None, **kwargs):
         self.type: str = type
         self.withdrawal_state: Optional[RevenueWithdrawalState] = withdrawal_state
@@ -11155,7 +11077,6 @@ class TransactionPartnerTelegramApi(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerTelegramApi`
     """
-
     def __init__(self, type, request_count, **kwargs):
         self.type: str = type
         self.request_count: int = request_count
@@ -11207,7 +11128,6 @@ class TransactionPartnerUser(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerUser`
     """
-
     def __init__(self, type, user, affiliate=None, invoice_payload=None, paid_media: Optional[List[PaidMedia]] = None,
                     subscription_period=None, gift: Optional[Gift] = None, premium_subscription_duration: Optional[int] = None,
                     transaction_type: Optional[str] = None, **kwargs):
@@ -11248,7 +11168,6 @@ class TransactionPartnerTelegramAds(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerTelegramAds`
     """
-
     def __init__(self, type, **kwargs):
         self.type: str = type
 
@@ -11272,7 +11191,6 @@ class TransactionPartnerOther(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerOther`
     """
-
     def __init__(self, type, **kwargs):
         self.type: str = type
 
@@ -11311,7 +11229,6 @@ class StarTransaction(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`StarTransaction`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -11342,9 +11259,7 @@ class StarTransactions(JsonDeserializable):
 
     :return: Instance of the class
     :rtype: :class:`StarTransactions`
-
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -11370,7 +11285,6 @@ class PaidMedia(JsonDeserializable, ABC):
     :return: Instance of the class
     :rtype: :class:`PaidMediaPreview` or :class:`PaidMediaPhoto` or :class:`PaidMediaVideo`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -11409,7 +11323,6 @@ class PaidMediaPreview(PaidMedia):
     :return: Instance of the class
     :rtype: :class:`PaidMediaPreview`
     """
-
     def __init__(self, type: str, width: Optional[int] = None, height: Optional[int] = None,
                  duration: Optional[int] = None, **kwargs):
         self.type: str = type
@@ -11440,7 +11353,6 @@ class PaidMediaLivePhoto(PaidMedia):
     :return: Instance of the class
     :rtype: :class:`PaidMediaLivePhoto`
     """
-
     def __init__(self, type: str, live_photo: LivePhoto, **kwargs):
         self.type: str = type
         self.live_photo: LivePhoto = live_photo
@@ -11468,9 +11380,7 @@ class PaidMediaPhoto(PaidMedia):
 
     :return: Instance of the class
     :rtype: :class:`PaidMediaPhoto`
-
     """
-
     def __init__(self, type: str, photo: List[PhotoSize], **kwargs):
         self.type: str = type
         self.photo: List[PhotoSize] = photo
@@ -11500,7 +11410,6 @@ class PaidMediaVideo(PaidMedia):
     :return: Instance of the class
     :rtype: :class:`PaidMediaVideo`
     """
-
     def __init__(self, type: str, video: Video, **kwargs):
         self.type: str = type
         self.video: Video = video
@@ -11528,7 +11437,6 @@ class PaidMediaInfo(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`PaidMediaInfo`
     """
-
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -11554,7 +11462,6 @@ class InputPaidMedia(Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`InputPaidMediaPhoto` or :class:`InputPaidMediaVideo`
     """
-
     def __init__(self, type: str, media: Union[str, InputFile], **kwargs):
         self.type: str = type
         self.media: Union[str, InputFile] = media
@@ -11596,7 +11503,6 @@ class InputPaidMediaPhoto(InputPaidMedia):
     :return: Instance of the class
     :rtype: :class:`InputPaidMediaPhoto`
     """
-
     def __init__(self, media: Union[str, InputFile], **kwargs):
         super().__init__(type='photo', media=media)
 
@@ -11671,7 +11577,6 @@ class InputPaidMediaVideo(InputPaidMedia):
 
     :return: Instance of the class
     :rtype: :class:`InputPaidMediaVideo`
-
     """
     def __init__(
         self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
@@ -11753,7 +11658,6 @@ class RefundedPayment(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`RefundedPayment`
     """
-
     def __init__(self, currency, total_amount, invoice_payload, telegram_payment_charge_id, provider_payment_charge_id=None, **kwargs):
         self.currency: str = currency
         self.total_amount: int = total_amount
@@ -11783,7 +11687,6 @@ class PaidMediaPurchased(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`PaidMediaPurchased`
     """
-
     def __init__(self, from_user, paid_media_payload, **kwargs):
         self.from_user: User = from_user
         self.paid_media_payload: str = paid_media_payload
@@ -11843,7 +11746,6 @@ class PreparedInlineMessage(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`PreparedInlineMessage`
     """
-
     def __init__(self, id: str, expiration_date: int, **kwargs):
         self.id: str = id
         self.expiration_date: int = expiration_date
@@ -11904,7 +11806,6 @@ class Gift(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`Gift`
     """
-
     def __init__(self, id: str, sticker: Sticker, star_count: int, upgrade_star_count: Optional[int] = None,
                  is_premium: Optional[bool] = None, has_colors: Optional[bool] = None,
                  total_count: Optional[int] = None, remaining_count: Optional[int] = None,
@@ -11949,7 +11850,6 @@ class Gifts(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`Gifts`
     """
-
     def __init__(self, gifts: List[Gift], **kwargs):
         self.gifts: List[Gift] = gifts
 
@@ -11980,7 +11880,6 @@ class TransactionPartnerAffiliateProgram(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerAffiliateProgram`
     """
-
     def __init__(self, type, commission_per_mille, sponsor_user=None, **kwargs):
         self.type: str = type
         self.sponsor_user: Optional[User] = sponsor_user
@@ -12020,7 +11919,6 @@ class AffiliateInfo(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`AffiliateInfo`
     """
-
     def __init__(self, commission_per_mille, amount, affiliate_user=None, affiliate_chat=None, nanostar_amount=None, **kwargs):
         self.affiliate_user: Optional[User] = affiliate_user
         self.affiliate_chat: Optional[Chat] = affiliate_chat
@@ -12058,7 +11956,6 @@ class TransactionPartnerChat(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerChat`
     """
-
     def __init__(self, type, chat, gift=None, **kwargs):
         self.type: str = type
         self.chat: Chat = chat
@@ -12249,7 +12146,6 @@ class OwnedGift(JsonDeserializable, ABC):
 
     Telegram documentation: https://core.telegram.org/bots/api#ownedgift
     """
-
     def __init__(self, type, **kwargs):
         self.type: str = type
         self.gift: Optional[Union[Gift, UniqueGift]] = None
@@ -12432,7 +12328,6 @@ class OwnedGifts(JsonDeserializable):
 
     :return: Instance of the class
     :rtype: :class:`OwnedGifts`
-
     """
     def __init__(self, total_count: int, gifts: List[OwnedGift], next_offset: Optional[str] = None, **kwargs):
         self.total_count: int = total_count
@@ -12544,7 +12439,6 @@ class UniqueGiftModel(JsonDeserializable):
 
     :return: Instance of the class
     :rtype: :class:`UniqueGiftModel`
-
     """
     def __init__(self, name: str, sticker: Sticker, rarity_per_mille: int,
                  rarity: Optional[str] = None, **kwargs):
@@ -12579,7 +12473,6 @@ class UniqueGiftSymbol(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`UniqueGiftSymbol`
     """
-
     def __init__(self, name: str, sticker: Sticker, rarity_per_mille: int, **kwargs):
         self.name: str = name
         self.sticker: Sticker = sticker
@@ -13253,8 +13146,6 @@ class InputProfilePhoto(JsonSerializable, ABC):
     :return: Instance of the class
     :rtype: :class:`InputProfilePhoto`
     """
-
-
 class InputProfilePhotoStatic(InputProfilePhoto):
     """
     A static profile photo in the .JPG format.
@@ -13269,7 +13160,6 @@ class InputProfilePhotoStatic(InputProfilePhoto):
 
     :return: Instance of the class
     :rtype: :class:`InputProfilePhotoStatic`
-
     """
     def __init__(self, photo: InputFile, **kwargs):
         self.type: str = "static"
@@ -13308,7 +13198,6 @@ class InputProfilePhotoAnimated(InputProfilePhoto):
 
     :return: Instance of the class
     :rtype: :class:`InputProfilePhotoAnimated`
-
     """
     def __init__(self, animation: InputFile, main_frame_timestamp: Optional[float] = None, **kwargs):
         self.type: str = "animated"
@@ -14396,7 +14285,6 @@ class PollMedia(JsonDeserializable):
 
     :return: Instance of the class
     :rtype: :class:`PollMedia`
-
     """
     def __init__(
         self, animation: Optional[Animation] = None,
@@ -14461,7 +14349,6 @@ class InputMediaLink(InputMedia):
     :return: Instance of the class
     :rtype: :class:`InputMediaLink`
     """
-
     def __init__(self, url: str, **kwargs):
         super().__init__(type='link', **kwargs)
         self.url: str = url
@@ -15586,9 +15473,7 @@ class RichBlockCaption(JsonDeserializable, Dictionaryable):
 
     :return: Instance of the class
     :rtype: :class:`RichBlockCaption`
-
     """
-
     def __init__(self, text: RichText, credit: Optional[RichText] = None, **kwargs):
         self.text: RichText = text
         self.credit: Optional[RichText] = credit
@@ -15977,7 +15862,6 @@ class RichBlockAnchor(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockAnchor`
     """
-
     def __init__(self, name: str, **kwargs):
         super().__init__(type='anchor', **kwargs)
         self.name: str = name
@@ -16004,7 +15888,6 @@ class RichBlockList(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockList`
     """
-
     def __init__(self, items: List['RichBlockListItem'], **kwargs):
         super().__init__(type='list', **kwargs)
         self.items: List[RichBlockListItem] = items
@@ -16066,7 +15949,6 @@ class RichBlockPullQuotation(RichBlock):
 
     :return: Instance of the class
     :rtype: :class:`RichBlockPullQuotation`
-
     """
     def __init__(self, text: RichText, credit: Optional[RichText] = None, **kwargs):
         super().__init__(type='pullquote', **kwargs)
@@ -16285,7 +16167,6 @@ class RichBlockAnimation(RichBlock):
 
     :return: Instance of the class
     :rtype: :class:`RichBlockAnimation`
-
     """
     def __init__(self, animation: Animation, has_spoiler: Optional[bool] = None, caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='animation', **kwargs)
@@ -16423,7 +16304,6 @@ class RichBlockVoiceNote(RichBlock):
 
     :return: Instance of the class
     :rtype: :class:`RichBlockVoiceNote`
-
     """
     def __init__(self, voice_note: Voice, caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='voice_note', **kwargs)
@@ -16496,6 +16376,8 @@ class RichMessage(JsonDeserializable):
 class InputRichMessage(Dictionaryable):
     """
     Describes a rich message to be sent. Exactly one of the fields html, markdown, or blocks must be used.
+
+    Telegram documentation: https://core.telegram.org/bots/api#inputrichmessage
 
     :param blocks: Optional. Content of the rich message to send described as a list of blocks
     :type blocks: :obj:`list` of :class:`InputRichBlock`
