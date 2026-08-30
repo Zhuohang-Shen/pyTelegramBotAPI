@@ -247,12 +247,28 @@ class Update(JsonDeserializable):
                    deleted_business_messages, purchased_paid_media, managed_bot, guest_message, subscription,
                    stopped_message_generation)
 
-    def __init__(self, update_id, message, edited_message, channel_post, edited_channel_post, inline_query,
-                 chosen_inline_result, callback_query, shipping_query, pre_checkout_query, poll, poll_answer,
-                 my_chat_member, chat_member, chat_join_request, message_reaction, message_reaction_count,
-                 removed_chat_boost, chat_boost, business_connection, business_message, edited_business_message,
-                 deleted_business_messages, purchased_paid_media, managed_bot, guest_message, subscription,
-                 stopped_message_generation):
+    def __init__(self, update_id: int,
+                 message: Optional[Message] = None, edited_message: Optional[Message] = None,
+                 channel_post: Optional[Message] = None, edited_channel_post: Optional[Message] = None,
+                 inline_query: Optional[InlineQuery] = None,
+                 chosen_inline_result: Optional[ChosenInlineResult] = None,
+                 callback_query: Optional[CallbackQuery] = None,
+                 shipping_query: Optional[ShippingQuery] = None, pre_checkout_query: Optional[PreCheckoutQuery] = None,
+                 poll: Optional[Poll] = None, poll_answer: Optional[PollAnswer] = None,
+                 my_chat_member: Optional[ChatMemberUpdated] = None, chat_member: Optional[ChatMemberUpdated] = None,
+                 chat_join_request: Optional[ChatJoinRequest] = None,
+                 message_reaction: Optional[MessageReactionUpdated] = None,
+                 message_reaction_count: Optional[MessageReactionCountUpdated] = None,
+                 removed_chat_boost: Optional[ChatBoostRemoved] = None, chat_boost: Optional[ChatBoostUpdated] = None,
+                 business_connection: Optional[BusinessConnection] = None,
+                 business_message: Optional[Message] = None,
+                 edited_business_message: Optional[Message] = None,
+                 deleted_business_messages: Optional[BusinessMessagesDeleted] = None,
+                 purchased_paid_media: Optional[PaidMediaPurchased] = None,
+                 managed_bot: Optional[ManagedBotUpdated] = None,
+                 guest_message: Optional[Message] = None,
+                 subscription: Optional[BotSubscriptionUpdated] = None,
+                 stopped_message_generation: Optional[MessageGenerationStopped] = None):
         self.update_id: int = update_id
         self.message: Optional[Message] = message
         self.edited_message: Optional[Message] = edited_message
@@ -453,9 +469,11 @@ class WebhookInfo(JsonDeserializable):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(self, url, has_custom_certificate, pending_update_count, ip_address=None,
-                 last_error_date=None, last_error_message=None, last_synchronization_error_date=None,
-                 max_connections=None, allowed_updates=None, **kwargs):
+    def __init__(self,
+                 url: str, has_custom_certificate: bool, pending_update_count: int, ip_address: Optional[str] = None,
+                 last_error_date: Optional[int] = None, last_error_message: Optional[str] = None,
+                 last_synchronization_error_date: Optional[int] = None, max_connections: Optional[int] = None,
+                 allowed_updates: Optional[List[str]] = None, **kwargs):
         self.url: str = url
         self.has_custom_certificate: bool = has_custom_certificate
         self.pending_update_count: int = pending_update_count
@@ -537,22 +555,21 @@ class User(JsonDeserializable, Dictionaryable, JsonSerializable):
         return cls(**obj)
 
     # noinspection PyShadowingBuiltins
-    def __init__(
-        self, id: int, is_bot: bool, first_name: str,
-        last_name: Optional[str] = None, username: Optional[str] = None,
-        language_code: Optional[str] = None, is_premium: Optional[bool] = None,
-        added_to_attachment_menu: Optional[bool] = None,
-        can_join_groups: Optional[bool] = None,
-        can_read_all_group_messages: Optional[bool] = None,
-        supports_guest_queries: Optional[bool] = None,
-        supports_inline_queries: Optional[bool] = None,
-        can_connect_to_business: Optional[bool] = None,
-        has_main_web_app: Optional[bool] = None,
-        has_topics_enabled: Optional[bool] = None,
-        allows_users_to_create_topics: Optional[bool] = None,
-        can_manage_bots: Optional[bool] = None,
-        supports_join_request_queries: Optional[bool] = None,
-        **kwargs):
+    def __init__(self, id: int, is_bot: bool, first_name: str,
+                 last_name: Optional[str] = None, username: Optional[str] = None,
+                 language_code: Optional[str] = None, is_premium: Optional[bool] = None,
+                 added_to_attachment_menu: Optional[bool] = None,
+                 can_join_groups: Optional[bool] = None,
+                 can_read_all_group_messages: Optional[bool] = None,
+                 supports_guest_queries: Optional[bool] = None,
+                 supports_inline_queries: Optional[bool] = None,
+                 can_connect_to_business: Optional[bool] = None,
+                 has_main_web_app: Optional[bool] = None,
+                 has_topics_enabled: Optional[bool] = None,
+                 allows_users_to_create_topics: Optional[bool] = None,
+                 can_manage_bots: Optional[bool] = None,
+                 supports_join_request_queries: Optional[bool] = None,
+                 **kwargs):
         self.id: int = id
         self.is_bot: bool = is_bot
         self.first_name: str = first_name
@@ -618,7 +635,7 @@ class GroupChat(JsonDeserializable):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(self, id, title, **kwargs):
+    def __init__(self, id: int, title: str, **kwargs):
         self.id: int = id
         self.title: str = title
 
@@ -994,7 +1011,7 @@ class MessageID(JsonDeserializable, ABC):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(self, message_id, **kwargs):
+    def __init__(self, message_id: int, **kwargs):
         self.message_id: int = message_id
         log_deprecation_warning('The class "MessageID" is deprecated, use "MessageId" instead')
 
@@ -1860,6 +1877,7 @@ class Message(JsonDeserializable):
         self.paid_media : Optional[PaidMediaInfo] = None
         self.refunded_payment : Optional[RefundedPayment] = None
         self.proximity_alert_triggered: Optional[ProximityAlertTriggered] = None
+        self.poll: Optional[Poll] = None
         self.video_chat_scheduled: Optional[VideoChatScheduled] = None
         self.video_chat_started: Optional[VideoChatStarted] = None
         self.video_chat_ended: Optional[VideoChatEnded] = None
@@ -2692,9 +2710,8 @@ class ForceReply(JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ForceReply`
     """
-    def __init__(
-        self, force_reply: bool = True, selective: Optional[bool] = None,
-        input_field_placeholder: Optional[str] = None):
+    def __init__(self, force_reply: bool = True, selective: Optional[bool] = None,
+                 input_field_placeholder: Optional[str] = None):
         self.force_reply: bool = force_reply
         self.selective: Optional[bool] = selective
         self.input_field_placeholder: Optional[str] = input_field_placeholder
@@ -2724,8 +2741,7 @@ class ReplyKeyboardRemove(JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ReplyKeyboardRemove`
     """
-    def __init__(
-        self, remove_keyboard: bool = True, selective: Optional[bool] = None):
+    def __init__(self, remove_keyboard: bool = True, selective: Optional[bool] = None):
         self.remove_keyboard: bool = remove_keyboard
         self.selective: Optional[bool] = selective
 
@@ -2811,8 +2827,9 @@ class ReplyKeyboardMarkup(JsonSerializable):
     max_row_keys = 12
 
     def __init__(self, resize_keyboard: Optional[bool]=None, one_time_keyboard: Optional[bool]=None,
-            selective: Optional[bool]=None, row_width: int=3, input_field_placeholder: Optional[str]=None,
-            is_persistent: Optional[bool]=None, keyboard: Optional[List[List[KeyboardButton]]]=None):
+                 selective: Optional[bool]=None, row_width: int=3, input_field_placeholder: Optional[str]=None,
+                 is_persistent: Optional[bool]=None, keyboard: Optional[List[List[KeyboardButton]]]=None,
+                 force_reply: Optional[bool]=None):
         if row_width > self.max_row_keys:
             # Todo: Will be replaced with Exception in future releases
             if not DISABLE_KEYLEN_ERROR:
@@ -2826,6 +2843,7 @@ class ReplyKeyboardMarkup(JsonSerializable):
         self.input_field_placeholder: Optional[str] = input_field_placeholder
         self.keyboard: List[List[KeyboardButton]] = keyboard or []
         self.is_persistent: Optional[bool] = is_persistent
+        self.force_reply: Optional[bool] = force_reply
 
 
     def add(self, *args, row_width=None) -> 'ReplyKeyboardMarkup':
@@ -2947,10 +2965,9 @@ class KeyboardButtonRequestUsers(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.KeyboardButtonRequestUsers`
     """
-    def __init__(
-            self, request_id: int, user_is_bot: Optional[bool]=None, user_is_premium: Optional[bool]=None,
-            max_quantity: Optional[int]=None, request_name: Optional[bool]=None, request_username: Optional[bool]=None,
-            request_photo: Optional[bool]=None) -> None:
+    def __init__(self, request_id: int, user_is_bot: Optional[bool]=None, user_is_premium: Optional[bool]=None,
+                 max_quantity: Optional[int]=None, request_name: Optional[bool]=None,
+                 request_username: Optional[bool]=None, request_photo: Optional[bool]=None) -> None:
         self.request_id: int = request_id
         self.user_is_bot: Optional[bool] = user_is_bot
         self.user_is_premium: Optional[bool] = user_is_premium
@@ -3027,17 +3044,16 @@ class KeyboardButtonRequestChat(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.KeyboardButtonRequestChat`
     """
-    def __init__(
-        self, request_id: int, chat_is_channel: bool,
-        chat_is_forum: Optional[bool] = None,
-        chat_has_username: Optional[bool] = None,
-        chat_is_created: Optional[bool] = None,
-        user_administrator_rights: Optional[ChatAdministratorRights] = None,
-        bot_administrator_rights: Optional[ChatAdministratorRights] = None,
-        bot_is_member: Optional[bool] = None,
-        request_title: Optional[bool] = None,
-        request_photo: Optional[bool] = None,
-        request_username: Optional[bool] = None):
+    def __init__(self, request_id: int, chat_is_channel: bool,
+                 chat_is_forum: Optional[bool] = None,
+                 chat_has_username: Optional[bool] = None,
+                 chat_is_created: Optional[bool] = None,
+                 user_administrator_rights: Optional[ChatAdministratorRights] = None,
+                 bot_administrator_rights: Optional[ChatAdministratorRights] = None,
+                 bot_is_member: Optional[bool] = None,
+                 request_title: Optional[bool] = None,
+                 request_photo: Optional[bool] = None,
+                 request_username: Optional[bool] = None):
         self.request_id: int = request_id
         self.chat_is_channel: bool = chat_is_channel
         self.chat_is_forum: Optional[bool] = chat_is_forum
@@ -3117,16 +3133,15 @@ class KeyboardButton(Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.KeyboardButton`
     """
-    def __init__(
-        self, text: str, request_contact: Optional[bool] = None,
-        request_location: Optional[bool] = None,
-        request_poll: Optional[KeyboardButtonPollType] = None,
-        web_app: Optional[WebAppInfo] = None,
-        request_user: Optional[KeyboardButtonRequestUser] = None,
-        request_chat: Optional[KeyboardButtonRequestChat] = None,
-        request_users: Optional[KeyboardButtonRequestUsers] = None,
-        icon_custom_emoji_id: Optional[str] = None, style: Optional[str] = None,
-        request_managed_bot: Optional[KeyboardButtonRequestManagedBot] = None):
+    def __init__(self, text: str, request_contact: Optional[bool] = None,
+                 request_location: Optional[bool] = None,
+                 request_poll: Optional[KeyboardButtonPollType] = None,
+                 web_app: Optional[WebAppInfo] = None,
+                 request_user: Optional[KeyboardButtonRequestUser] = None,
+                 request_chat: Optional[KeyboardButtonRequestChat] = None,
+                 request_users: Optional[KeyboardButtonRequestUsers] = None,
+                 icon_custom_emoji_id: Optional[str] = None, style: Optional[str] = None,
+                 request_managed_bot: Optional[KeyboardButtonRequestManagedBot] = None):
         self.text: str = text
         self.request_contact: Optional[bool] = request_contact
         self.request_location: Optional[bool] = request_location
@@ -3215,9 +3230,10 @@ class InlineKeyboardMarkup(Dictionaryable, JsonSerializable, JsonDeserializable)
         inline_keyboard = [[InlineKeyboardButton.de_json(button) for button in row] for row in obj['inline_keyboard']]
         return cls(inline_keyboard=inline_keyboard)
 
-    def __init__(
-        self, inline_keyboard: List[List[InlineKeyboardButton]] = None, row_width: int = 3,
-        keyboard: List[List[InlineKeyboardButton]] = None, **kwargs):
+    def __init__(self, inline_keyboard: List[List[InlineKeyboardButton]] = None, row_width: int = 3,
+                 keyboard: List[List[InlineKeyboardButton]] = None,
+                 force_reply: Optional[bool] = None,
+                 **kwargs):
         if row_width > self.max_row_keys:
             # Todo: Will be replaced with Exception in future releases
             logger.error('Telegram does not support inline keyboard row width over %d.' % self.max_row_keys)
@@ -3229,6 +3245,7 @@ class InlineKeyboardMarkup(Dictionaryable, JsonSerializable, JsonDeserializable)
             logger.warning('The "keyboard" parameter is deprecated. Use "inline_keyboard" instead.')
             if not self.inline_keyboard:
                 self.inline_keyboard = keyboard
+        self.force_reply: Optional[bool] = force_reply
 
     def add(self, *args, row_width=None) -> 'InlineKeyboardMarkup':
         """
@@ -3370,7 +3387,9 @@ This offers a quick way for the user to open your bot in inline mode in the same
                  switch_inline_query_chosen_chat: Optional[SwitchInlineQueryChosenChat] = None,
                  callback_game: Optional[CallbackGame] = None, pay: Optional[bool] = None,
                  login_url: Optional[LoginUrl] = None, copy_text: Optional[CopyTextButton] = None,
-                 icon_custom_emoji_id: Optional[str] = None, style: Optional[str] = None, **kwargs):
+                 icon_custom_emoji_id: Optional[str] = None,
+                 style: Optional[str] = None,
+                 disabled: Optional[DisabledButton] = None, **kwargs):
         self.text: str = text
         self.url: Optional[str] = url
         self.callback_data: Optional[str] = callback_data
@@ -3384,6 +3403,7 @@ This offers a quick way for the user to open your bot in inline mode in the same
         self.copy_text: Optional[CopyTextButton] = copy_text
         self.icon_custom_emoji_id: Optional[str] = icon_custom_emoji_id
         self.style: Optional[str] = style
+        self.disabled: Optional[DisabledButton] = disabled
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -3444,10 +3464,9 @@ class LoginUrl(Dictionaryable, JsonSerializable, JsonDeserializable):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(
-        self, url: str, forward_text: Optional[str] = None,
-        bot_username: Optional[str] = None,
-        request_write_access: Optional[bool] = None, **kwargs):
+    def __init__(self, url: str, forward_text: Optional[str] = None,
+                 bot_username: Optional[str] = None,
+                 request_write_access: Optional[bool] = None, **kwargs):
         self.url: str = url
         self.forward_text: Optional[str] = forward_text
         self.bot_username: Optional[str] = bot_username
@@ -3516,11 +3535,10 @@ class CallbackQuery(JsonDeserializable):
         obj['json_string'] = json_string
         return cls(**obj)
 
-    def __init__(
-        self, id: str, from_user: User, chat_instance: str, json_string: str,
-        data: Optional[str] = None,
-        message: Optional[MaybeInaccessibleMessage] = None, inline_message_id: Optional[str] = None,
-        game_short_name: Optional[str] = None, **kwargs):
+    def __init__(self, id: str, from_user: User, chat_instance: str, json_string: str,
+                 data: Optional[str] = None,
+                 message: Optional[MaybeInaccessibleMessage] = None, inline_message_id: Optional[str] = None,
+                 game_short_name: Optional[str] = None, **kwargs):
         self.id: str = id
         self.from_user: User = from_user
         self.message: Optional[MaybeInaccessibleMessage] = message
@@ -3578,7 +3596,7 @@ class ChatMember(JsonDeserializable, ABC):
 
     Telegram documentation: https://core.telegram.org/bots/api#chatmember
     """
-    def __init__(self, user, status, **kwargs):
+    def __init__(self, user: User, status: str, **kwargs):
         self.user: User = user
         self.status: str = status
 
@@ -3709,16 +3727,15 @@ class ChatMemberAdministrator(ChatMember):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ChatMemberAdministrator`
     """
-    def __init__(
-        self, user: User, status: str, can_be_edited: bool, is_anonymous: bool,
-        can_manage_chat: bool, can_delete_messages: bool,
-        can_manage_video_chats: bool, can_restrict_members: bool, can_promote_members: bool,
-        can_change_info: bool, can_invite_users: bool, can_post_stories: bool,
-        can_edit_stories: bool, can_delete_stories: bool,
-        can_post_messages: Optional[bool] = None, can_edit_messages: Optional[bool] = None,
-        can_pin_messages: Optional[bool] = None, can_manage_topics: Optional[bool] = None,
-        custom_title: Optional[str] = None, can_manage_direct_messages: Optional[bool] = None,
-        can_manage_tags: Optional[bool] = None, **kwargs):
+    def __init__(self, user: User, status: str, can_be_edited: bool, is_anonymous: bool,
+                 can_manage_chat: bool, can_delete_messages: bool,
+                 can_manage_video_chats: bool, can_restrict_members: bool, can_promote_members: bool,
+                 can_change_info: bool, can_invite_users: bool, can_post_stories: bool,
+                 can_edit_stories: bool, can_delete_stories: bool,
+                 can_post_messages: Optional[bool] = None, can_edit_messages: Optional[bool] = None,
+                 can_pin_messages: Optional[bool] = None, can_manage_topics: Optional[bool] = None,
+                 custom_title: Optional[str] = None, can_manage_direct_messages: Optional[bool] = None,
+                 can_manage_tags: Optional[bool] = None, can_send_welcome_messages: bool = False, **kwargs):
         super().__init__(user, status, **kwargs)
         self.can_be_edited: bool = can_be_edited
         self.is_anonymous: bool = is_anonymous
@@ -3739,6 +3756,7 @@ class ChatMemberAdministrator(ChatMember):
         self.custom_title: Optional[str] = custom_title
         self.can_manage_direct_messages: Optional[bool] = can_manage_direct_messages
         self.can_manage_tags: Optional[bool] = can_manage_tags
+        self.can_send_welcome_messages: bool = can_send_welcome_messages
 
     @property
     def can_manage_voice_chats(self):
@@ -3847,15 +3865,14 @@ class ChatMemberRestricted(ChatMember):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ChatMemberRestricted`
     """
-    def __init__(
-        self, user: ChatMember, status: str, is_member: bool,
-        can_send_messages: bool, can_send_audios: bool, can_send_documents: bool,
-        can_send_photos: bool, can_send_videos: bool, can_send_video_notes: bool,
-        can_send_voice_notes: bool, can_send_polls: bool,
-        can_send_other_messages: bool, can_add_web_page_previews: bool,
-        can_change_info: bool, can_invite_users: bool, can_pin_messages: bool,
-        can_manage_topics: bool, until_date: int = None, tag: Optional[str] = None,
-        can_edit_tag: bool = None, can_react_to_messages: bool = None, **kwargs):
+    def __init__(self, user: ChatMember, status: str, is_member: bool,
+                 can_send_messages: bool, can_send_audios: bool, can_send_documents: bool,
+                 can_send_photos: bool, can_send_videos: bool, can_send_video_notes: bool,
+                 can_send_voice_notes: bool, can_send_polls: bool,
+                 can_send_other_messages: bool, can_add_web_page_previews: bool,
+                 can_change_info: bool, can_invite_users: bool, can_pin_messages: bool,
+                 can_manage_topics: bool, until_date: int = None, tag: Optional[str] = None,
+                 can_edit_tag: bool = None, can_react_to_messages: bool = None, **kwargs):
         super().__init__(user, status, **kwargs)
         self.is_member: bool = is_member
         self.can_send_messages: bool = can_send_messages
@@ -4162,7 +4179,10 @@ class BotCommandScope(ABC, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.BotCommandScope`
     """
-    def __init__(self, type='default', chat_id=None, user_id=None):
+    def __init__(self,
+                 type: str = 'default',
+                 chat_id: Optional[Union[int, str]] = None,
+                 user_id: Optional[Union[int, str]] = None):
         self.type: str = type
         self.chat_id: Optional[Union[int, str]] = chat_id
         self.user_id: Optional[Union[int, str]] = user_id
@@ -4359,7 +4379,9 @@ class InlineQuery(JsonDeserializable):
             obj['location'] = Location.de_json(obj['location'])
         return cls(**obj)
 
-    def __init__(self, id, from_user, query, offset, chat_type=None, location=None, **kwargs):
+    def __init__(self,
+                 id: str, from_user: User, query: str, offset: str, chat_type: Optional[str] = None,
+                 location: Optional[Location] = None, **kwargs):
         self.id: str = id
         self.from_user: User = from_user
         self.query: str = query
@@ -4392,8 +4414,11 @@ class InputTextMessageContent(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputTextMessageContent`
     """
-    def __init__(self, message_text: str, parse_mode: Optional[str] = None, entities: Optional[List[MessageEntity]] = None,
-                    disable_web_page_preview: Optional[bool] = None, link_preview_options: Optional[LinkPreviewOptions] = None):
+    def __init__(self, message_text: str,
+                 parse_mode: Optional[str] = None,
+                 entities: Optional[List[MessageEntity]] = None,
+                 disable_web_page_preview: Optional[bool] = None,
+                 link_preview_options: Optional[LinkPreviewOptions] = None):
         self.message_text: str = message_text
         self.parse_mode: Optional[str] = parse_mode
         self.entities: Optional[List[MessageEntity]] = entities
@@ -4444,7 +4469,12 @@ class InputLocationMessageContent(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputLocationMessageContent`
     """
-    def __init__(self, latitude, longitude, horizontal_accuracy=None, live_period=None, heading=None, proximity_alert_radius=None):
+    def __init__(self,
+                 latitude: float, longitude: float,
+                 horizontal_accuracy: Optional[float] = None,
+                 live_period: Optional[int] = None,
+                 heading: Optional[int] = None,
+                 proximity_alert_radius: Optional[int] = None):
         self.latitude: float = latitude
         self.longitude: float = longitude
         self.horizontal_accuracy: Optional[float] = horizontal_accuracy
@@ -4501,8 +4531,13 @@ class InputVenueMessageContent(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputVenueMessageContent`
     """
-    def __init__(self, latitude, longitude, title, address, foursquare_id=None, foursquare_type=None,
-                 google_place_id=None, google_place_type=None):
+    def __init__(self,
+                 latitude: float, longitude: float,
+                 title: str, address: str,
+                 foursquare_id: Optional[str] = None,
+                 foursquare_type: Optional[str] = None,
+                 google_place_id: Optional[str] = None,
+                 google_place_type: Optional[str] = None):
         self.latitude: float = latitude
         self.longitude: float = longitude
         self.title: str = title
@@ -4551,7 +4586,7 @@ class InputContactMessageContent(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputContactMessageContent`
     """
-    def __init__(self, phone_number, first_name, last_name=None, vcard=None):
+    def __init__(self, phone_number: str, first_name: str, last_name: Optional[str] = None, vcard: Optional[str] = None):
         self.phone_number: str = phone_number
         self.first_name: str = first_name
         self.last_name: Optional[str] = last_name
@@ -4635,11 +4670,23 @@ class InputInvoiceMessageContent(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputInvoiceMessageContent`
     """
-    def __init__(self, title: str, description: str, payload: str, provider_token: Optional[str], currency: str, prices: List[LabeledPrice],
-                    max_tip_amount: Optional[int] = None, suggested_tip_amounts: Optional[List[int]] = None, provider_data: Optional[str] = None,
-                    photo_url: Optional[str] = None, photo_size: Optional[int] = None, photo_width: Optional[int] = None, photo_height: Optional[int] = None,
-                    need_name: Optional[bool] = None, need_phone_number: Optional[bool] = None, need_email: Optional[bool] = None, need_shipping_address: Optional[bool] = None,
-                    send_phone_number_to_provider: Optional[bool] = None, send_email_to_provider: Optional[bool] = None, is_flexible: Optional[bool] = None):
+    def __init__(self, title: str, description: str, payload: str,
+                 provider_token: Optional[str], currency: str,
+                 prices: List[LabeledPrice],
+                 max_tip_amount: Optional[int] = None,
+                 suggested_tip_amounts: Optional[List[int]] = None,
+                 provider_data: Optional[str] = None,
+                 photo_url: Optional[str] = None,
+                 photo_size: Optional[int] = None,
+                 photo_width: Optional[int] = None,
+                 photo_height: Optional[int] = None,
+                 need_name: Optional[bool] = None,
+                 need_phone_number: Optional[bool] = None,
+                 need_email: Optional[bool] = None,
+                 need_shipping_address: Optional[bool] = None,
+                 send_phone_number_to_provider: Optional[bool] = None,
+                 send_email_to_provider: Optional[bool] = None,
+                 is_flexible: Optional[bool] = None):
         self.title: str = title
         self.description: str = description
         self.payload: str = payload
@@ -4755,7 +4802,9 @@ class ChosenInlineResult(JsonDeserializable):
             obj['location'] = Location.de_json(obj['location'])
         return cls(**obj)
 
-    def __init__(self, result_id, from_user, query, location=None, inline_message_id=None, **kwargs):
+    def __init__(self,
+                 result_id: str, from_user: User, query: str, location: Optional[Location] = None,
+                 inline_message_id: Optional[str] = None, **kwargs):
         self.result_id: str = result_id
         self.from_user: User = from_user
         self.location: Optional[Location] = location
@@ -4922,9 +4971,14 @@ class InlineQueryResultArticle(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultArticle`
     """
-    def __init__(self, id: str, title: str, input_message_content: InputMessageContent, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                 url: Optional[str] = None, hide_url: Optional[bool] = None, description: Optional[str] = None,
-                 thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None, thumbnail_height: Optional[int] = None):
+    def __init__(self, id: str, title: str,
+                 input_message_content: InputMessageContent,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 url: Optional[str] = None, hide_url: Optional[bool] = None,
+                 description: Optional[str] = None,
+                 thumbnail_url: Optional[str] = None,
+                 thumbnail_width: Optional[int] = None,
+                 thumbnail_height: Optional[int] = None):
 
         super().__init__('article', id, title = title, input_message_content = input_message_content,
                          reply_markup = reply_markup, description = description)
@@ -5002,10 +5056,17 @@ class InlineQueryResultPhoto(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultPhoto`
     """
-    def __init__(self, id: str, photo_url: str, thumbnail_url: str, photo_width: Optional[int] = None, photo_height: Optional[int] = None,
-                    title: Optional[str] = None, description: Optional[str] = None, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
-                    show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, photo_url: str, thumbnail_url: str,
+                 photo_width: Optional[int] = None,
+                 photo_height: Optional[int] = None,
+                 title: Optional[str] = None,
+                 description: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 show_caption_above_media: Optional[bool] = None):
         super().__init__('photo', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities, description = description,
@@ -5081,11 +5142,18 @@ class InlineQueryResultGif(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultGif`
     """
-    def __init__(self, id: str, gif_url: str, thumbnail_url: str, gif_width: Optional[int] = None, gif_height: Optional[int] = None,
-                    title: Optional[str] = None, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
-                    gif_duration: Optional[int] = None, parse_mode: Optional[str] = None, thumbnail_mime_type: Optional[str] = None,
-                    show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, gif_url: str, thumbnail_url: str,
+                 gif_width: Optional[int] = None,
+                 gif_height: Optional[int] = None,
+                 title: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 gif_duration: Optional[int] = None,
+                 parse_mode: Optional[str] = None,
+                 thumbnail_mime_type: Optional[str] = None,
+                 show_caption_above_media: Optional[bool] = None):
 
         super().__init__('gif', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
@@ -5168,10 +5236,18 @@ class InlineQueryResultMpeg4Gif(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultMpeg4Gif`
     """
-    def __init__(self, id: str, mpeg4_url: str, thumbnail_url: str, mpeg4_width: Optional[int] = None, mpeg4_height: Optional[int] = None,
-                    title: Optional[str] = None, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
-                    mpeg4_duration: Optional[int] = None, thumbnail_mime_type: Optional[str] = None, show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, mpeg4_url: str, thumbnail_url: str,
+                 mpeg4_width: Optional[int] = None,
+                 mpeg4_height: Optional[int] = None,
+                 title: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 mpeg4_duration: Optional[int] = None,
+                 thumbnail_mime_type: Optional[str] = None,
+                 show_caption_above_media: Optional[bool] = None):
 
         super().__init__('mpeg4_gif', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
@@ -5257,11 +5333,18 @@ class InlineQueryResultVideo(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultVideo`
     """
-    def __init__(self, id: str, video_url: str, mime_type: str, thumbnail_url: str, title: str,
-                 caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                 parse_mode: Optional[str] = None, video_width: Optional[int] = None, video_height: Optional[int] = None,
-                 video_duration: Optional[int] = None, description: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                 input_message_content: Optional[InputMessageContent] = None, show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, video_url: str, mime_type: str,
+                 thumbnail_url: str, title: str,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 video_width: Optional[int] = None,
+                 video_height: Optional[int] = None,
+                 video_duration: Optional[int] = None,
+                 description: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 show_caption_above_media: Optional[bool] = None):
 
         super().__init__('video', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
@@ -5329,9 +5412,14 @@ class InlineQueryResultAudio(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultAudio`
     """
-    def __init__(self, id: str, audio_url: str, title: str, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                 parse_mode: Optional[str] = None, performer: Optional[str] = None, audio_duration: Optional[int] = None,
-                 reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None):
+    def __init__(self, id: str, audio_url: str, title: str,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 performer: Optional[str] = None,
+                 audio_duration: Optional[int] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None):
 
         super().__init__('audio', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
@@ -5390,9 +5478,13 @@ class InlineQueryResultVoice(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultVoice`
     """
-    def __init__(self, id: str, voice_url: str, title: str, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, voice_duration: Optional[int] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None):
+    def __init__(self, id: str, voice_url: str, title: str,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 voice_duration: Optional[int] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None):
 
         super().__init__('voice', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
@@ -5460,10 +5552,17 @@ class InlineQueryResultDocument(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultDocument`
     """
-    def __init__(self, id: str, title: str, document_url: str, mime_type: str, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, description: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None, thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None,
-                    thumbnail_height: Optional[int] = None):
+    def __init__(self, id: str, title: str, document_url: str,
+                 mime_type: str,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 description: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 thumbnail_url: Optional[str] = None,
+                 thumbnail_width: Optional[int] = None,
+                 thumbnail_height: Optional[int] = None):
 
         super().__init__('document', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
@@ -5539,10 +5638,17 @@ class InlineQueryResultLocation(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultLocation`
     """
-    def __init__(self, id: str, title: str, latitude: float, longitude: float, horizontal_accuracy: float, live_period: Optional[int] = None,
-                    reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
-                    thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None, thumbnail_height: Optional[int] = None,
-                    heading: Optional[int] = None, proximity_alert_radius: Optional[int] = None):
+    def __init__(self, id: str, title: str,
+                 latitude: float, longitude: float,
+                 horizontal_accuracy: float,
+                 live_period: Optional[int] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 thumbnail_url: Optional[str] = None,
+                 thumbnail_width: Optional[int] = None,
+                 thumbnail_height: Optional[int] = None,
+                 heading: Optional[int] = None,
+                 proximity_alert_radius: Optional[int] = None):
 
         super().__init__('location', id, title = title,
                          input_message_content = input_message_content, reply_markup = reply_markup)
@@ -5632,10 +5738,18 @@ class InlineQueryResultVenue(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultVenue`
     """
-    def __init__(self, id: str, title: str, latitude: float, longitude: float, address: str, foursquare_id: Optional[str] = None,
-                    foursquare_type: Optional[str] = None, google_place_id: Optional[str] = None, google_place_type: Optional[str] = None,
-                    reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
-                    thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None, thumbnail_height: Optional[int] = None):
+    def __init__(self, id: str, title: str,
+                 latitude: float, longitude: float,
+                 address: str,
+                 foursquare_id: Optional[str] = None,
+                 foursquare_type: Optional[str] = None,
+                 google_place_id: Optional[str] = None,
+                 google_place_type: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 thumbnail_url: Optional[str] = None,
+                 thumbnail_width: Optional[int] = None,
+                 thumbnail_height: Optional[int] = None):
 
         super().__init__('venue', id, title = title,
                          input_message_content = input_message_content, reply_markup = reply_markup)
@@ -5715,9 +5829,13 @@ class InlineQueryResultContact(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultContact`
     """
-    def __init__(self, id: str, phone_number: str, first_name: str, last_name: Optional[str] = None, vcard: Optional[str] = None,
-                    reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None,
-                    thumbnail_url: Optional[str] = None, thumbnail_width: Optional[int] = None, thumbnail_height: Optional[int] = None):
+    def __init__(self, id: str, phone_number: str, first_name: str,
+                 last_name: Optional[str] = None, vcard: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 thumbnail_url: Optional[str] = None,
+                 thumbnail_width: Optional[int] = None,
+                 thumbnail_height: Optional[int] = None):
         super().__init__('contact', id,
                          input_message_content = input_message_content, reply_markup = reply_markup)
         self.phone_number: str = phone_number
@@ -5820,10 +5938,14 @@ class InlineQueryResultCachedPhoto(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedPhoto`
     """
-    def __init__(self, id: str, photo_file_id: str, title: Optional[str] = None, description: Optional[str] = None,
-                    caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None, show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, photo_file_id: str,
+                 title: Optional[str] = None, description: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 show_caption_above_media: Optional[bool] = None):
         super().__init__('photo', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities, description = description,
@@ -5876,10 +5998,14 @@ class InlineQueryResultCachedGif(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedGif`
     """
-    def __init__(self, id: str, gif_file_id: str, title: Optional[str] = None, description: Optional[str] = None,
-                    caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None, show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, gif_file_id: str,
+                 title: Optional[str] = None, description: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 show_caption_above_media: Optional[bool] = None):
         super().__init__('gif', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities, description = description,
@@ -5932,10 +6058,14 @@ class InlineQueryResultCachedMpeg4Gif(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedMpeg4Gif`
     """
-    def __init__(self, id: str, mpeg4_file_id: str, title: Optional[str] = None, description: Optional[str] = None,
-                    caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None, show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, mpeg4_file_id: str,
+                 title: Optional[str] = None, description: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 show_caption_above_media: Optional[bool] = None):
         super().__init__('mpeg4_gif', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities, description = description,
@@ -5974,7 +6104,7 @@ class InlineQueryResultCachedSticker(InlineQueryResult):
     :rtype: :class:`telebot.types.InlineQueryResultCachedSticker`
     """
     def __init__(self, id: str, sticker_file_id: str, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None):
+                 input_message_content: Optional[InputMessageContent] = None):
         super().__init__('sticker', id, input_message_content = input_message_content, reply_markup = reply_markup)
         self.sticker_file_id: str = sticker_file_id
 
@@ -6025,9 +6155,9 @@ class InlineQueryResultCachedDocument(InlineQueryResult):
     :rtype: :class:`telebot.types.InlineQueryResultCachedDocument`
     """
     def __init__(self, id: str, document_file_id: str, title: str, description: Optional[str] = None,
-                    caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None):
+                 caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None):
         super().__init__('document', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities, description = description)
@@ -6082,10 +6212,14 @@ class InlineQueryResultCachedVideo(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedVideo`
     """
-    def __init__(self, id: str, video_file_id: str, title: str, description: Optional[str] = None,
-                    caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None, show_caption_above_media: Optional[bool] = None):
+    def __init__(self, id: str, video_file_id: str, title: str,
+                 description: Optional[str] = None,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None,
+                 show_caption_above_media: Optional[bool] = None):
         super().__init__('video', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities, description = description,
@@ -6135,9 +6269,12 @@ class InlineQueryResultCachedVoice(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedVoice`
     """
-    def __init__(self, id: str, voice_file_id: str, title: str, caption: Optional[str] = None,
-                    caption_entities: Optional[List[MessageEntity]] = None, parse_mode: Optional[str] = None,
-                    reply_markup: Optional[InlineKeyboardMarkup] = None, input_message_content: Optional[InputMessageContent] = None):
+    def __init__(self, id: str, voice_file_id: str, title: str,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None):
         super().__init__('voice', id, title = title, caption = caption,
                          input_message_content = input_message_content, reply_markup = reply_markup,
                          parse_mode = parse_mode, caption_entities = caption_entities)
@@ -6183,9 +6320,12 @@ class InlineQueryResultCachedAudio(InlineQueryResult):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InlineQueryResultCachedAudio`
     """
-    def __init__(self, id: str, audio_file_id: str, caption: Optional[str] = None, caption_entities: Optional[List[MessageEntity]] = None,
-                    parse_mode: Optional[str] = None, reply_markup: Optional[InlineKeyboardMarkup] = None,
-                    input_message_content: Optional[InputMessageContent] = None):
+    def __init__(self, id: str, audio_file_id: str,
+                 caption: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 parse_mode: Optional[str] = None,
+                 reply_markup: Optional[InlineKeyboardMarkup] = None,
+                 input_message_content: Optional[InputMessageContent] = None):
         super().__init__('audio', id, caption = caption, input_message_content = input_message_content,
                          reply_markup = reply_markup, parse_mode = parse_mode, caption_entities = caption_entities)
         self.audio_file_id: str = audio_file_id
@@ -6254,7 +6394,9 @@ class Game(JsonDeserializable):
             ret.append(MessageEntity.de_json(me))
         return ret
 
-    def __init__(self, title, description, photo, text=None, text_entities=None, animation=None, **kwargs):
+    def __init__(self,
+                 title: str, description: str, photo: List[PhotoSize], text: str = None,
+                 text_entities: List[MessageEntity] = None, animation: Animation = None, **kwargs):
         self.title: str = title
         self.description: str = description
         self.photo: List[PhotoSize] = photo
@@ -6309,11 +6451,10 @@ class Animation(JsonDeserializable):
             obj['thumbnail'] = None
         return cls(**obj)
 
-    def __init__(
-            self, file_id: str, file_unique_id: str, width: int = None, height: int = None,
-            duration: int = None, thumbnail: Optional[PhotoSize] = None,
-            file_name: Optional[str] = None, mime_type: Optional[str] = None,
-            file_size: Optional[int] = None, **kwargs):
+    def __init__(self, file_id: str, file_unique_id: str, width: int = None, height: int = None,
+                 duration: int = None, thumbnail: Optional[PhotoSize] = None,
+                 file_name: Optional[str] = None, mime_type: Optional[str] = None,
+                 file_size: Optional[int] = None, **kwargs):
         self.file_id: str = file_id
         self.file_unique_id: str = file_unique_id
         self.width: int = width
@@ -6378,7 +6519,7 @@ class LabeledPrice(JsonSerializable, Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.LabeledPrice`
     """
-    def __init__(self, label, amount):
+    def __init__(self, label: str, amount: int):
         self.label: str = label
         self.amount: int = amount
 
@@ -6421,7 +6562,7 @@ class Invoice(JsonDeserializable):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(self, title, description, start_parameter, currency, total_amount, **kwargs):
+    def __init__(self, title: str, description: str, start_parameter: str, currency: str, total_amount: int, **kwargs):
         self.title: str = title
         self.description: str = description
         self.start_parameter: str = start_parameter
@@ -6462,7 +6603,9 @@ class ShippingAddress(JsonDeserializable):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(self, country_code, state, city, street_line1, street_line2, post_code, **kwargs):
+    def __init__(self,
+                 country_code: str, state: str, city: str,
+                 street_line1: str, street_line2: str, post_code: str, **kwargs):
         self.country_code: str = country_code
         self.state: str = state
         self.city: str = city
@@ -6499,7 +6642,10 @@ class OrderInfo(JsonDeserializable):
         obj['shipping_address'] = ShippingAddress.de_json(obj.get('shipping_address'))
         return cls(**obj)
 
-    def __init__(self, name=None, phone_number=None, email=None, shipping_address=None, **kwargs):
+    def __init__(self,
+                 name: str = None, phone_number: str = None,
+                 email: Optional[str] = None,
+                 shipping_address: Optional[ShippingAddress] = None, **kwargs):
         self.name: str = name
         self.phone_number: str = phone_number
         self.email: Optional[str] = email
@@ -6525,10 +6671,10 @@ class ShippingOption(JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.ShippingOption`
     """
-    def __init__(self, id, title):
+    def __init__(self, id, title, prices: List[LabeledPrice] = None):
         self.id: str = id
         self.title: str = title
-        self.prices: List[LabeledPrice] = []
+        self.prices: List[LabeledPrice] = prices or []
 
     def add_price(self, *args) -> 'ShippingOption':
         """
@@ -6597,9 +6743,15 @@ class SuccessfulPayment(JsonDeserializable):
         obj['order_info'] = OrderInfo.de_json(obj.get('order_info'))
         return cls(**obj)
 
-    def __init__(self, currency, total_amount, invoice_payload, shipping_option_id=None, order_info=None,
-                 telegram_payment_charge_id=None, provider_payment_charge_id=None,
-                    subscription_expiration_date=None, is_recurring=None, is_first_recurring=None, **kwargs):
+    def __init__(self,
+                 currency: str, total_amount: int, invoice_payload: str,
+                 shipping_option_id: str = None,
+                 order_info: OrderInfo = None,
+                 telegram_payment_charge_id: str = None,
+                 provider_payment_charge_id: str = None,
+                 subscription_expiration_date: Optional[int] = None,
+                 is_recurring: Optional[bool] = None,
+                 is_first_recurring: Optional[bool] = None, **kwargs):
         self.currency: str = currency
         self.total_amount: int = total_amount
         self.invoice_payload: str = invoice_payload
@@ -6642,7 +6794,7 @@ class ShippingQuery(JsonDeserializable):
         obj['shipping_address'] = ShippingAddress.de_json(obj['shipping_address'])
         return cls(**obj)
 
-    def __init__(self, id, from_user, invoice_payload, shipping_address, **kwargs):
+    def __init__(self, id: str, from_user: User, invoice_payload: str, shipping_address: ShippingAddress, **kwargs):
         self.id: str = id
         self.from_user: User = from_user
         self.invoice_payload: str = invoice_payload
@@ -6688,7 +6840,11 @@ class PreCheckoutQuery(JsonDeserializable):
         obj['order_info'] = OrderInfo.de_json(obj.get('order_info'))
         return cls(**obj)
 
-    def __init__(self, id, from_user, currency, total_amount, invoice_payload, shipping_option_id=None, order_info=None, **kwargs):
+    def __init__(self,
+                 id: str, from_user: User, currency: str, total_amount: int,
+                 invoice_payload: str,
+                 shipping_option_id: Optional[str] = None,
+                 order_info: Optional[OrderInfo] = None, **kwargs):
         self.id: str = id
         self.from_user: User = from_user
         self.currency: str = currency
@@ -6738,7 +6894,10 @@ class StickerSet(JsonDeserializable):
             obj['thumbnail'] = None
         return cls(**obj)
 
-    def __init__(self, name, title, sticker_type, stickers, thumbnail=None, **kwargs):
+    def __init__(self,
+                 name: str, title: str, sticker_type: str,
+                 stickers: List[Sticker],
+                 thumbnail: Optional[PhotoSize] = None, **kwargs):
         self.name: str = name
         self.title: str = title
         self.sticker_type: str = sticker_type
@@ -6835,9 +6994,15 @@ class Sticker(JsonDeserializable):
             obj['premium_animation'] = File.de_json(obj['premium_animation'])
         return cls(**obj)
 
-    def __init__(self, file_id, file_unique_id, type, width, height, is_animated,
-                is_video, thumbnail=None, emoji=None, set_name=None, mask_position=None, file_size=None,
-                premium_animation=None, custom_emoji_id=None, needs_repainting=None, **kwargs):
+    def __init__(self,
+                 file_id: str, file_unique_id: str, type: str, width: int, height: int,
+                 is_animated: bool, is_video: bool,
+                 thumbnail: Optional[PhotoSize] = None, emoji: Optional[str] = None,
+                 set_name: Optional[str] = None,
+                 mask_position: Optional[MaskPosition] = None, file_size: Optional[int] = None,
+                 premium_animation: Optional[File] = None,
+                 custom_emoji_id: Optional[str] = None,
+                 needs_repainting: Optional[bool] = None, **kwargs):
         self.file_id: str = file_id
         self.file_unique_id: str = file_unique_id
         self.type: str = type
@@ -6887,7 +7052,7 @@ class MaskPosition(Dictionaryable, JsonDeserializable, JsonSerializable):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
-    def __init__(self, point, x_shift, y_shift, scale, **kwargs):
+    def __init__(self, point: str, x_shift: float, y_shift: float, scale: float, **kwargs):
         self.point: str = point
         self.x_shift: float = x_shift
         self.y_shift: float = y_shift
@@ -7090,12 +7255,12 @@ class InputMediaVideo(InputMedia):
     :rtype: :class:`telebot.types.InputMediaVideo`
     """
     def __init__(self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
-                    caption: Optional[str] = None, parse_mode: Optional[str] = None,
-                    caption_entities: Optional[List[MessageEntity]] = None, width: Optional[int] = None,
-                    height: Optional[int] = None, duration: Optional[int] = None,
-                    supports_streaming: Optional[bool] = None, has_spoiler: Optional[bool] = None,
-                    show_caption_above_media: Optional[bool] = None, cover: Optional[Union[str, InputFile]] = None,
-                    start_timestamp: Optional[int] = None):
+                 caption: Optional[str] = None, parse_mode: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None, width: Optional[int] = None,
+                 height: Optional[int] = None, duration: Optional[int] = None,
+                 supports_streaming: Optional[bool] = None, has_spoiler: Optional[bool] = None,
+                 show_caption_above_media: Optional[bool] = None, cover: Optional[Union[str, InputFile]] = None,
+                 start_timestamp: Optional[int] = None):
         super(InputMediaVideo, self).__init__(
             type="video", media=media, caption=caption, parse_mode=parse_mode, caption_entities=caption_entities, thumbnail=thumbnail)
         self.width: Optional[int] = width
@@ -7196,10 +7361,10 @@ class InputMediaAnimation(InputMedia):
     :rtype: :class:`telebot.types.InputMediaAnimation`
     """
     def __init__(self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
-                    caption: Optional[str] = None, parse_mode: Optional[str] = None,
-                    caption_entities: Optional[List[MessageEntity]] = None, width: Optional[int] = None,
-                    height: Optional[int] = None, duration: Optional[int] = None,
-                    has_spoiler: Optional[bool] = None, show_caption_above_media: Optional[bool] = None):
+                 caption: Optional[str] = None, parse_mode: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None, width: Optional[int] = None,
+                 height: Optional[int] = None, duration: Optional[int] = None,
+                 has_spoiler: Optional[bool] = None, show_caption_above_media: Optional[bool] = None):
         super(InputMediaAnimation, self).__init__(
             type="animation", media=media, caption=caption, parse_mode=parse_mode, caption_entities=caption_entities, thumbnail=thumbnail)
         self.width: Optional[int] = width
@@ -7265,9 +7430,9 @@ class InputMediaAudio(InputMedia):
     :rtype: :class:`telebot.types.InputMediaAudio`
     """
     def __init__(self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
-                    caption: Optional[str] = None, parse_mode: Optional[str] = None,
-                    caption_entities: Optional[List[MessageEntity]] = None, duration: Optional[int] = None,
-                    performer: Optional[str] = None, title: Optional[str] = None):
+                 caption: Optional[str] = None, parse_mode: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None, duration: Optional[int] = None,
+                 performer: Optional[str] = None, title: Optional[str] = None):
         super(InputMediaAudio, self).__init__(
             type="audio", media=media, caption=caption, parse_mode=parse_mode, caption_entities=caption_entities, thumbnail=thumbnail)
         self.duration: Optional[int] = duration
@@ -7321,9 +7486,9 @@ class InputMediaDocument(InputMedia):
     :rtype: :class:`telebot.types.InputMediaDocument`
     """
     def __init__(self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
-                    caption: Optional[str] = None, parse_mode: Optional[str] = None,
-                    caption_entities: Optional[List[MessageEntity]] = None,
-                    disable_content_type_detection: Optional[bool] = None):
+                 caption: Optional[str] = None, parse_mode: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 disable_content_type_detection: Optional[bool] = None):
         super(InputMediaDocument, self).__init__(
             type="document", media=media, caption=caption, parse_mode=parse_mode, caption_entities=caption_entities, thumbnail=thumbnail)
         self.disable_content_type_detection: Optional[bool] = disable_content_type_detection
@@ -7373,12 +7538,11 @@ class InputMediaLivePhoto(InputMedia):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputMediaLivePhoto`
     """
-    def __init__(
-        self, media: Union[str, InputFile], photo: Union[str, InputFile],
-        caption: Optional[str] = None, parse_mode: Optional[str] = None,
-        caption_entities: Optional[List[MessageEntity]] = None,
-        show_caption_above_media: Optional[bool] = None,
-        has_spoiler: Optional[bool] = None):
+    def __init__(self, media: Union[str, InputFile], photo: Union[str, InputFile],
+                 caption: Optional[str] = None, parse_mode: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 show_caption_above_media: Optional[bool] = None,
+                 has_spoiler: Optional[bool] = None):
         super(InputMediaLivePhoto, self).__init__(
             type="live_photo", media=media, caption=caption,
             parse_mode=parse_mode, caption_entities=caption_entities)
@@ -7513,12 +7677,11 @@ class InputMediaVenue(InputMedia):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputMediaVenue`
     """
-    def __init__(
-        self, latitude: float, longitude: float, title: str, address: str,
-        foursquare_id: Optional[str] = None,
-        foursquare_type: Optional[str] = None,
-        google_place_id: Optional[str] = None,
-        google_place_type: Optional[str] = None):
+    def __init__(self, latitude: float, longitude: float, title: str, address: str,
+                 foursquare_id: Optional[str] = None,
+                 foursquare_type: Optional[str] = None,
+                 google_place_id: Optional[str] = None,
+                 google_place_type: Optional[str] = None):
         super(InputMediaVenue, self).__init__(type="venue", media="")
         self.latitude: float = latitude
         self.longitude: float = longitude
@@ -7632,10 +7795,9 @@ class InputPollOption(JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.PollOption`
     """
-    def __init__(
-        self, text: str, text_parse_mode: Optional[str] = None,
-        text_entities: Optional[List[MessageEntity]] = None,
-        media: Optional[InputPollOptionMedia] = None, **kwargs):
+    def __init__(self, text: str, text_parse_mode: Optional[str] = None,
+                 text_entities: Optional[List[MessageEntity]] = None,
+                 media: Optional[InputPollOptionMedia] = None, **kwargs):
         self.text: str = text
         self.text_parse_mode: Optional[str] = text_parse_mode
         self.text_entities: Optional[List[MessageEntity]] = text_entities
@@ -7753,20 +7915,19 @@ class Poll(JsonDeserializable):
             obj['explanation_media'] = PollMedia.de_json(obj['explanation_media'])
         return cls(**obj)
 
-    def __init__(
-            self, question: str, options: List[PollOption],
-            id: str = None, total_voter_count: int = None,
-            is_closed: bool = None, is_anonymous: bool = None,
-            type: str = None, allows_multiple_answers: bool = None,
-            explanation: Optional[str] = None, explanation_entities: Optional[List[MessageEntity]] = None,
-            question_entities: Optional[List[MessageEntity]] = None,
-            open_period: Optional[int] = None, close_date: Optional[int] = None,
-            poll_type: Optional[str] = None, correct_option_ids: Optional[List[int]] = None,
-            allows_revoting: bool = None, description: Optional[str] = None,
-            description_entities: Optional[List[MessageEntity]] = None,
-            media: Optional[PollMedia] = None, members_only: bool = None,
-            country_codes: Optional[List[str]] = None,
-            explanation_media: Optional[PollMedia] = None, **kwargs):
+    def __init__(self, question: str, options: List[PollOption],
+                 id: str = None, total_voter_count: int = None,
+                 is_closed: bool = None, is_anonymous: bool = None,
+                 type: str = None, allows_multiple_answers: bool = None,
+                 explanation: Optional[str] = None, explanation_entities: Optional[List[MessageEntity]] = None,
+                 question_entities: Optional[List[MessageEntity]] = None,
+                 open_period: Optional[int] = None, close_date: Optional[int] = None,
+                 poll_type: Optional[str] = None, correct_option_ids: Optional[List[int]] = None,
+                 allows_revoting: bool = None, description: Optional[str] = None,
+                 description_entities: Optional[List[MessageEntity]] = None,
+                 media: Optional[PollMedia] = None, members_only: bool = None,
+                 country_codes: Optional[List[str]] = None,
+                 explanation_media: Optional[PollMedia] = None, **kwargs):
         self.id: str = id
         self.question: str = question
         self.options: List[PollOption] = options
@@ -7959,14 +8120,13 @@ class ChatInviteLink(JsonSerializable, JsonDeserializable, Dictionaryable):
         obj['creator'] = User.de_json(obj['creator'])
         return cls(**obj)
 
-    def __init__(
-        self, invite_link: str, creator: User, creates_join_request: bool,
-        is_primary: bool, is_revoked: bool,
-        name: Optional[str] = None, expire_date: Optional[int] = None,
-        member_limit: Optional[int] = None,
-        pending_join_request_count: Optional[int] = None,
-        subscription_period: Optional[int] = None,
-        subscription_price: Optional[int] = None, **kwargs):
+    def __init__(self, invite_link: str, creator: User, creates_join_request: bool,
+                 is_primary: bool, is_revoked: bool,
+                 name: Optional[str] = None, expire_date: Optional[int] = None,
+                 member_limit: Optional[int] = None,
+                 pending_join_request_count: Optional[int] = None,
+                 subscription_period: Optional[int] = None,
+                 subscription_price: Optional[int] = None, **kwargs):
         self.invite_link: str = invite_link
         self.creator: User = creator
         self.creates_join_request: bool = creates_join_request
@@ -8352,13 +8512,13 @@ class ChatAdministratorRights(JsonDeserializable, JsonSerializable, Dictionaryab
         return cls(**obj)
 
     def __init__(self, is_anonymous: bool, can_manage_chat: bool,
-        can_delete_messages: bool, can_manage_video_chats: bool, can_restrict_members: bool,
-        can_promote_members: bool, can_change_info: bool, can_invite_users: bool,
-        can_post_messages: Optional[bool]=None, can_edit_messages: Optional[bool]=None,
-        can_pin_messages: Optional[bool]=None, can_manage_topics: Optional[bool]=None,
-        can_post_stories: bool = False, can_edit_stories: bool = False,
-        can_delete_stories: bool = False, can_manage_direct_messages: Optional[bool] = None,
-        can_manage_tags: Optional[bool]=None, **kwargs) -> None:
+                 can_delete_messages: bool, can_manage_video_chats: bool, can_restrict_members: bool,
+                 can_promote_members: bool, can_change_info: bool, can_invite_users: bool,
+                 can_post_messages: Optional[bool]=None, can_edit_messages: Optional[bool]=None,
+                 can_pin_messages: Optional[bool]=None, can_manage_topics: Optional[bool]=None,
+                 can_post_stories: bool = False, can_edit_stories: bool = False,
+                 can_delete_stories: bool = False, can_manage_direct_messages: Optional[bool] = None,
+                 can_manage_tags: Optional[bool]=None, can_send_welcome_messages: bool = False, **kwargs) -> None:
         self.is_anonymous: bool = is_anonymous
         self.can_manage_chat: bool = can_manage_chat
         self.can_delete_messages: bool = can_delete_messages
@@ -8376,6 +8536,7 @@ class ChatAdministratorRights(JsonDeserializable, JsonSerializable, Dictionaryab
         self.can_delete_stories: bool = can_delete_stories
         self.can_manage_direct_messages: Optional[bool] = can_manage_direct_messages
         self.can_manage_tags: Optional[bool] = can_manage_tags
+        self.can_send_welcome_messages: bool = can_send_welcome_messages
 
     def to_dict(self):
         json_dict = {
@@ -8513,7 +8674,7 @@ class ForumTopicCreated(JsonDeserializable):
         return cls(**obj)
 
     def __init__(self, name: str, icon_color: int, icon_custom_emoji_id: Optional[str]=None, 
-                    is_name_implicit: Optional[bool]=None, **kwargs) -> None:
+                 is_name_implicit: Optional[bool]=None, **kwargs) -> None:
         self.name: str = name
         self.icon_color: int = icon_color
         self.icon_custom_emoji_id: Optional[str] = icon_custom_emoji_id
@@ -8667,10 +8828,9 @@ class WriteAccessAllowed(JsonDeserializable):
         return cls(**obj)
 
 
-    def __init__(
-        self, from_request: Optional[bool] = None,
-        web_app_name: Optional[str] = None,
-        from_attachment_menu: Optional[bool] = None, **kwargs) -> None:
+    def __init__(self, from_request: Optional[bool] = None,
+                 web_app_name: Optional[str] = None,
+                 from_attachment_menu: Optional[bool] = None, **kwargs) -> None:
         self.web_app_name: Optional[str] = web_app_name
         self.from_request: Optional[bool] = from_request
         self.from_attachment_menu: Optional[bool] = from_attachment_menu
@@ -8710,7 +8870,7 @@ class ChatShared(JsonDeserializable):
         return cls(**obj)
 
     def __init__(self, request_id: int, chat_id: int, title: Optional[str]=None, photo: Optional[List[PhotoSize]]=None,
-                    username: Optional[str]=None, **kwargs) -> None:
+                 username: Optional[str]=None, **kwargs) -> None:
         self.request_id: int = request_id
         self.chat_id: int = chat_id
         self.title: Optional[str] = title
@@ -8787,17 +8947,13 @@ class InputSticker(Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`telebot.types.InputSticker`
     """
-    def __init__(self, sticker: Union[str, InputFile], emoji_list: List[str],  format: Optional[str]=None,
-                 mask_position: Optional[MaskPosition]=None, keywords: Optional[List[str]]=None) -> None:
+    def __init__(self, sticker: Union[str, InputFile], emoji_list: List[str], format: str,
+                 mask_position: Optional[MaskPosition]=None, keywords: Optional[List[str]]=None, **kwargs) -> None:
         self.sticker: Union[str, InputFile] = sticker
         self.emoji_list: List[str] = emoji_list
         self.mask_position: Optional[MaskPosition] = mask_position
         self.keywords: Optional[List[str]] = keywords
         self.format: str = format
-
-        if not self.format:
-            log_deprecation_warning("Deprecation warning. 'format' parameter is required in InputSticker. Setting format to 'static'.")
-            self.format = "static"
 
         if service_utils.is_string(self.sticker):
             self._sticker_name = ''
@@ -8859,11 +9015,10 @@ class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerial
         obj = cls.check_json(json_string)
         return cls(**obj)
 
-    def __init__(
-        self, query: Optional[str] = None, allow_user_chats: Optional[bool] = None,
-        allow_bot_chats: Optional[bool] = None,
-        allow_group_chats: Optional[bool] = None,
-        allow_channel_chats: Optional[bool] = None) -> None:
+    def __init__(self, query: Optional[str] = None, allow_user_chats: Optional[bool] = None,
+                 allow_bot_chats: Optional[bool] = None,
+                 allow_group_chats: Optional[bool] = None,
+                 allow_channel_chats: Optional[bool] = None) -> None:
         self.query: Optional[str] = query
         self.allow_user_chats: Optional[bool] = allow_user_chats
         self.allow_bot_chats: Optional[bool] = allow_bot_chats
@@ -9145,11 +9300,10 @@ class MessageReactionUpdated(JsonDeserializable):
         obj['new_reaction'] = [ReactionType.de_json(reaction) for reaction in obj['new_reaction']]
         return cls(**obj)
 
-    def __init__(
-        self, chat: Chat, message_id: int, date: int,
-        old_reaction: List[ReactionType], new_reaction: List[ReactionType],
-        user: Optional[User] = None, actor_chat: Optional[Chat] = None,
-        **kwargs) -> None:
+    def __init__(self, chat: Chat, message_id: int, date: int,
+                 old_reaction: List[ReactionType], new_reaction: List[ReactionType],
+                 user: Optional[User] = None, actor_chat: Optional[Chat] = None,
+                 **kwargs) -> None:
         self.chat: Chat = chat
         self.message_id: int = message_id
         self.user: Optional[User] = user
@@ -9364,18 +9518,17 @@ class ExternalReplyInfo(JsonDeserializable):
             obj['live_photo'] = LivePhoto.de_json(obj['live_photo'])
         return cls(**obj)
 
-    def __init__(
-            self, origin: MessageOrigin, chat: Optional[Chat]=None, message_id: Optional[int]=None,
-            link_preview_options: Optional[LinkPreviewOptions]=None, animation: Optional[Animation]=None,
-            audio: Optional[Audio]=None, document: Optional[Document]=None, photo: Optional[List[PhotoSize]]=None,
-            sticker: Optional[Sticker]=None, story: Optional[Story]=None, video: Optional[Video]=None,
-            video_note: Optional[VideoNote]=None, voice: Optional[Voice]=None,
-            has_media_spoiler: Optional[bool]=None, contact: Optional[Contact]=None,
-            dice: Optional[Dice]=None, game: Optional[Game]=None, giveaway: Optional[Giveaway]=None,
-            giveaway_winners: Optional[GiveawayWinners]=None, invoice: Optional[Invoice]=None,
-            location: Optional[Location]=None, poll: Optional[Poll]=None,
-            venue: Optional[Venue]=None, paid_media: Optional[PaidMediaInfo]=None,
-            live_photo: Optional[LivePhoto]=None, checklist: Optional[Checklist]=None, **kwargs) -> None:
+    def __init__(self, origin: MessageOrigin, chat: Optional[Chat]=None, message_id: Optional[int]=None,
+                 link_preview_options: Optional[LinkPreviewOptions]=None, animation: Optional[Animation]=None,
+                 audio: Optional[Audio]=None, document: Optional[Document]=None, photo: Optional[List[PhotoSize]]=None,
+                 sticker: Optional[Sticker]=None, story: Optional[Story]=None, video: Optional[Video]=None,
+                 video_note: Optional[VideoNote]=None, voice: Optional[Voice]=None,
+                 has_media_spoiler: Optional[bool]=None, contact: Optional[Contact]=None,
+                 dice: Optional[Dice]=None, game: Optional[Game]=None, giveaway: Optional[Giveaway]=None,
+                 giveaway_winners: Optional[GiveawayWinners]=None, invoice: Optional[Invoice]=None,
+                 location: Optional[Location]=None, poll: Optional[Poll]=None,
+                 venue: Optional[Venue]=None, paid_media: Optional[PaidMediaInfo]=None,
+                 live_photo: Optional[LivePhoto]=None, checklist: Optional[Checklist]=None, **kwargs) -> None:
         self.origin: MessageOrigin = origin
         self.chat: Optional[Chat] = chat
         self.message_id: Optional[int] = message_id
@@ -9479,8 +9632,8 @@ class MessageOriginUser(MessageOrigin):
     :rtype: :class:`telebot.types.MessageOriginUser`"""
 
     def __init__(self, date: int, sender_user: User) -> None:
-        super().__init__('user', date)
-        self.sender_user: User = sender_user
+                 super().__init__('user', date)
+                 self.sender_user: User = sender_user
 
 
 class MessageOriginHiddenUser(MessageOrigin):
@@ -9502,8 +9655,8 @@ class MessageOriginHiddenUser(MessageOrigin):
     :rtype: :class:`telebot.types.MessageOriginHiddenUser`"""
 
     def __init__(self, date: int, sender_user_name: str) -> None:
-        super().__init__('hidden_user', date)
-        self.sender_user_name: str = sender_user_name
+                 super().__init__('hidden_user', date)
+                 self.sender_user_name: str = sender_user_name
 
 
 class MessageOriginChat(MessageOrigin):
@@ -9528,9 +9681,9 @@ class MessageOriginChat(MessageOrigin):
     :rtype: :class:`telebot.types.MessageOriginChat`"""
 
     def __init__(self, date: int, sender_chat: Chat, author_signature: Optional[str] = None) -> None:
-        super().__init__('chat', date)
-        self.sender_chat: Chat = sender_chat
-        self.author_signature: Optional[str] = author_signature
+                 super().__init__('chat', date)
+                 self.sender_chat: Chat = sender_chat
+                 self.author_signature: Optional[str] = author_signature
 
 
 class MessageOriginChannel(MessageOrigin):
@@ -9558,10 +9711,10 @@ class MessageOriginChannel(MessageOrigin):
     :rtype: :class:`telebot.types.MessageOriginChannel`
     """
     def __init__(self, date: int, chat: Chat, message_id: int, author_signature: Optional[str] = None) -> None:
-        super().__init__('channel', date)
-        self.chat: Chat = chat
-        self.message_id: int = message_id
-        self.author_signature: Optional[str] = author_signature
+                 super().__init__('channel', date)
+                 self.chat: Chat = chat
+                 self.message_id: int = message_id
+                 self.author_signature: Optional[str] = author_signature
 
 
 class LinkPreviewOptions(JsonDeserializable, Dictionaryable, JsonSerializable):
@@ -9782,11 +9935,10 @@ class GiveawayCompleted(JsonDeserializable):
             obj['giveaway_message'] = Message.de_json(obj['giveaway_message'])
         return cls(**obj)
 
-    def __init__(
-        self, winner_count: int,
-        unclaimed_prize_count: Optional[int] = None,
-        giveaway_message: Optional[Message] = None,
-        is_star_giveaway: Optional[bool] = None, **kwargs) -> None:
+    def __init__(self, winner_count: int,
+                 unclaimed_prize_count: Optional[int] = None,
+                 giveaway_message: Optional[Message] = None,
+                 is_star_giveaway: Optional[bool] = None, **kwargs) -> None:
         self.winner_count: int = winner_count
         self.unclaimed_prize_count: Optional[int] = unclaimed_prize_count
         self.giveaway_message: Optional[Message] = giveaway_message
@@ -9913,7 +10065,7 @@ class ReplyParameters(JsonDeserializable, Dictionaryable, JsonSerializable):
                  allow_sending_without_reply: Optional[bool] = None, quote: Optional[str] = None,
                  quote_parse_mode: Optional[str] = None, quote_entities: Optional[List[MessageEntity]] = None,
                  quote_position: Optional[int] = None, checklist_task_id: Optional[int] = None,
-                    poll_option_id: Optional[str] = None, ephemeral_message_id: Optional[int] = None, **kwargs) -> None:
+                 poll_option_id: Optional[str] = None, ephemeral_message_id: Optional[int] = None, **kwargs) -> None:
         self.message_id: Optional[int] = message_id
         self.chat_id: Optional[Union[int, str]] = chat_id
         self.allow_sending_without_reply: Optional[bool] = allow_sending_without_reply
@@ -10956,7 +11108,7 @@ class RevenueWithdrawalStatePending(RevenueWithdrawalState):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStatePending`
     """
-    def __init__(self, type, **kwargs):
+    def __init__(self, type: str, **kwargs):
         self.type: str = type
 
     @classmethod
@@ -10985,7 +11137,7 @@ class RevenueWithdrawalStateSucceeded(RevenueWithdrawalState):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStateSucceeded`
     """
-    def __init__(self, type, date, url, **kwargs):
+    def __init__(self, type: str, date: int, url: str, **kwargs):
         self.type: str = type
         self.date: int = date
         self.url: str = url
@@ -11010,7 +11162,7 @@ class RevenueWithdrawalStateFailed(RevenueWithdrawalState):
     :return: Instance of the class
     :rtype: :class:`RevenueWithdrawalStateFailed`
     """
-    def __init__(self, type, **kwargs):
+    def __init__(self, type: str, **kwargs):
         self.type: str = type
 
     @classmethod
@@ -11078,7 +11230,7 @@ class TransactionPartnerFragment(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerFragment`
     """
-    def __init__(self, type, withdrawal_state=None, **kwargs):
+    def __init__(self, type: str, withdrawal_state: Optional[RevenueWithdrawalState] = None, **kwargs):
         self.type: str = type
         self.withdrawal_state: Optional[RevenueWithdrawalState] = withdrawal_state
 
@@ -11107,7 +11259,7 @@ class TransactionPartnerTelegramApi(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerTelegramApi`
     """
-    def __init__(self, type, request_count, **kwargs):
+    def __init__(self, type: str, request_count: int, **kwargs):
         self.type: str = type
         self.request_count: int = request_count
 
@@ -11158,13 +11310,18 @@ class TransactionPartnerUser(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerUser`
     """
-    def __init__(self, type, user, affiliate=None, invoice_payload=None, paid_media: Optional[List[PaidMedia]] = None,
-                    subscription_period=None, gift: Optional[Gift] = None, premium_subscription_duration: Optional[int] = None,
-                    transaction_type: Optional[str] = None, **kwargs):
+    def __init__(self, type, user, affiliate=None,
+                 invoice_payload=None, paid_media_payload=None,
+                 paid_media: Optional[List[PaidMedia]] = None,
+                 subscription_period=None,
+                 gift: Optional[Gift] = None,
+                 premium_subscription_duration: Optional[int] = None,
+                 transaction_type: str = None, **kwargs):
         self.type: str = type
         self.user: User = user
         self.affiliate: Optional[AffiliateInfo] = affiliate
         self.invoice_payload: Optional[str] = invoice_payload
+        self.paid_media_payload: Optional[str] = paid_media_payload
         self.paid_media: Optional[List[PaidMedia]] = paid_media
         self.subscription_period: Optional[int] = subscription_period
         self.gift: Optional[Gift] = gift
@@ -11198,7 +11355,7 @@ class TransactionPartnerTelegramAds(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerTelegramAds`
     """
-    def __init__(self, type, **kwargs):
+    def __init__(self, type: str, **kwargs):
         self.type: str = type
 
     @classmethod
@@ -11221,7 +11378,7 @@ class TransactionPartnerOther(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerOther`
     """
-    def __init__(self, type, **kwargs):
+    def __init__(self, type: str, **kwargs):
         self.type: str = type
 
     @classmethod
@@ -11269,7 +11426,11 @@ class StarTransaction(JsonDeserializable):
             obj['receiver'] = TransactionPartner.de_json(obj['receiver'])
         return cls(**obj)
 
-    def __init__(self, id, amount, date, source=None, receiver=None, nanostar_amount=None, **kwargs):
+    def __init__(self,
+                 id: str, amount: int, date: int,
+                 source: Optional[TransactionPartner] = None,
+                 receiver: Optional[TransactionPartner] = None,
+                 nanostar_amount: Optional[int] = None, **kwargs):
         self.id: str = id
         self.amount: int = amount
         self.date: int = date
@@ -11297,7 +11458,7 @@ class StarTransactions(JsonDeserializable):
         obj['transactions'] = [StarTransaction.de_json(transaction) for transaction in obj['transactions']]
         return cls(**obj)
 
-    def __init__(self, transactions, **kwargs):
+    def __init__(self, transactions: List[StarTransaction], **kwargs):
         self.transactions: List[StarTransaction] = transactions
 
 
@@ -11608,13 +11769,12 @@ class InputPaidMediaVideo(InputPaidMedia):
     :return: Instance of the class
     :rtype: :class:`InputPaidMediaVideo`
     """
-    def __init__(
-        self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
-        width: Optional[int] = None, height: Optional[int] = None,
-        duration: Optional[int] = None,
-        supports_streaming: Optional[bool] = None,
-        cover: Optional[Union[str, InputFile]] = None, start_timestamp: Optional[int] = None,
-        **kwargs):
+    def __init__(self, media: Union[str, InputFile], thumbnail: Optional[InputFile] = None,
+                 width: Optional[int] = None, height: Optional[int] = None,
+                 duration: Optional[int] = None,
+                 supports_streaming: Optional[bool] = None,
+                 cover: Optional[Union[str, InputFile]] = None,
+                 start_timestamp: Optional[int] = None, **kwargs):
         super().__init__(type='video', media=media)
         self.thumbnail: Optional[InputFile] = thumbnail
         self.width: Optional[int] = width
@@ -11688,7 +11848,10 @@ class RefundedPayment(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`RefundedPayment`
     """
-    def __init__(self, currency, total_amount, invoice_payload, telegram_payment_charge_id, provider_payment_charge_id=None, **kwargs):
+    def __init__(self,
+                 currency: str, total_amount: int, invoice_payload: str,
+                 telegram_payment_charge_id: str,
+                 provider_payment_charge_id: Optional[str] = None, **kwargs):
         self.currency: str = currency
         self.total_amount: int = total_amount
         self.invoice_payload: str = invoice_payload
@@ -11717,7 +11880,7 @@ class PaidMediaPurchased(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`PaidMediaPurchased`
     """
-    def __init__(self, from_user, paid_media_payload, **kwargs):
+    def __init__(self, from_user: User, paid_media_payload: str, **kwargs):
         self.from_user: User = from_user
         self.paid_media_payload: str = paid_media_payload
 
@@ -11758,6 +11921,14 @@ class CopyTextButton(JsonSerializable, JsonDeserializable):
         if json_string is None: return None
         obj = cls.check_json(json_string)
         return cls(**obj)
+
+
+# noinspection PyShadowingBuiltins
+class DisabledButton(JsonDeserializable):
+    """
+    This object represents a disabled button which does nothing. Currently holds no information.
+    """
+    pass
 
 
 # noinspection PyShadowingBuiltins
@@ -11910,7 +12081,7 @@ class TransactionPartnerAffiliateProgram(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerAffiliateProgram`
     """
-    def __init__(self, type, commission_per_mille, sponsor_user=None, **kwargs):
+    def __init__(self, type: str, commission_per_mille: int, sponsor_user: Optional[User] = None, **kwargs):
         self.type: str = type
         self.sponsor_user: Optional[User] = sponsor_user
         self.commission_per_mille: int = commission_per_mille
@@ -11949,7 +12120,9 @@ class AffiliateInfo(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`AffiliateInfo`
     """
-    def __init__(self, commission_per_mille, amount, affiliate_user=None, affiliate_chat=None, nanostar_amount=None, **kwargs):
+    def __init__(self,
+                 commission_per_mille: int, amount: int, affiliate_user: Optional[User] = None,
+                 affiliate_chat: Optional[Chat] = None, nanostar_amount: Optional[int] = None, **kwargs):
         self.affiliate_user: Optional[User] = affiliate_user
         self.affiliate_chat: Optional[Chat] = affiliate_chat
         self.commission_per_mille: int = commission_per_mille
@@ -11986,7 +12159,7 @@ class TransactionPartnerChat(TransactionPartner):
     :return: Instance of the class
     :rtype: :class:`TransactionPartnerChat`
     """
-    def __init__(self, type, chat, gift=None, **kwargs):
+    def __init__(self, type: str, chat: Chat, gift: Optional[Gift] = None, **kwargs):
         self.type: str = type
         self.chat: Chat = chat
         self.gift: Optional[Gift] = gift
@@ -12114,7 +12287,7 @@ class AcceptedGiftTypes(JsonDeserializable, JsonSerializable):
     :rtype: :class:`AcceptedGiftTypes`
     """
     def __init__(self, unlimited_gifts: bool, limited_gifts: bool,
-                    unique_gifts: bool, premium_subscription: bool, gifts_from_channels: bool, **kwargs):
+                 unique_gifts: bool, premium_subscription: bool, gifts_from_channels: bool, **kwargs):
         self.unlimited_gifts: bool = unlimited_gifts
         self.limited_gifts: bool = limited_gifts
         self.unique_gifts: bool = unique_gifts
@@ -12176,7 +12349,7 @@ class OwnedGift(JsonDeserializable, ABC):
 
     Telegram documentation: https://core.telegram.org/bots/api#ownedgift
     """
-    def __init__(self, type, **kwargs):
+    def __init__(self, type: str, **kwargs):
         self.type: str = type
         self.gift: Optional[Union[Gift, UniqueGift]] = None
 
@@ -12653,10 +12826,9 @@ class InputStoryContentVideo(InputStoryContent):
     :return: Instance of the class
     :rtype: :class:`InputStoryContentVideo`
     """
-    def __init__(
-        self, video: InputFile, duration: Optional[float] = None,
-        cover_frame_timestamp: Optional[float] = None,
-        is_animation: Optional[bool] = None, **kwargs):
+    def __init__(self, video: InputFile, duration: Optional[float] = None,
+                 cover_frame_timestamp: Optional[float] = None,
+                 is_animation: Optional[bool] = None, **kwargs):
         super().__init__(type="video")
         self.video: InputFile = video
         self._video_name = service_utils.generate_random_token()
@@ -12713,7 +12885,7 @@ class StoryAreaPosition(JsonSerializable):
     :rtype: :class:`StoryAreaPosition`
     """
     def __init__(self, x_percentage: float, y_percentage: float, width_percentage: float,
-                    height_percentage: float, rotation_angle: float, corner_radius_percentage: float, **kwargs):
+                 height_percentage: float, rotation_angle: float, corner_radius_percentage: float, **kwargs):
         self.x_percentage: float = x_percentage
         self.y_percentage: float = y_percentage
         self.width_percentage: float = width_percentage
@@ -12758,7 +12930,7 @@ class LocationAddress(JsonSerializable):
     :rtype: :class:`LocationAddress`
     """
     def __init__(self, country_code: str, state: Optional[str] = None, city: Optional[str] = None,
-                    street: Optional[str] = None, **kwargs):
+                 street: Optional[str] = None, **kwargs):
         self.country_code: str = country_code
         self.state: Optional[str] = state
         self.city: Optional[str] = city
@@ -13056,10 +13228,10 @@ class GiftInfo(JsonDeserializable):
     :rtype: :class:`GiftInfo`
     """
     def __init__(self, gift: Gift, owned_gift_id: Optional[str] = None, convert_star_count: Optional[int] = None,
-                    prepaid_upgrade_star_count: Optional[int] = None, can_be_upgraded: Optional[bool] = None,
-                    text: Optional[str] = None, entities: Optional[List[MessageEntity]] = None,
-                    is_private: Optional[bool] = None, is_upgrade_separate: Optional[bool] = None, 
-                    unique_gift_number: Optional[int] = None, **kwargs):
+                 prepaid_upgrade_star_count: Optional[int] = None, can_be_upgraded: Optional[bool] = None,
+                 text: Optional[str] = None, entities: Optional[List[MessageEntity]] = None,
+                 is_private: Optional[bool] = None, is_upgrade_separate: Optional[bool] = None, 
+                 unique_gift_number: Optional[int] = None, **kwargs):
         self.gift: Gift = gift
         self.owned_gift_id: Optional[str] = owned_gift_id
         self.convert_star_count: Optional[int] = convert_star_count
@@ -13124,9 +13296,11 @@ class UniqueGiftInfo(JsonDeserializable):
     :rtype: :class:`UniqueGiftInfo`
     """
     def __init__(self, gift: UniqueGift, origin: str, owned_gift_id: Optional[str] = None,
-                    transfer_star_count: Optional[int] = None, next_transfer_date: Optional[int] = None,
-                    last_resale_currency: Optional[str] = None,
-                    last_resale_amount: Optional[int] = None, **kwargs):
+                 transfer_star_count: Optional[int] = None, next_transfer_date: Optional[int] = None,
+                 last_resale_currency: Optional[str] = None,
+                 last_resale_amount: Optional[int] = None, text: Optional[str] = None,
+                 entities: Optional[List[MessageEntity]] = None, is_private: Optional[bool] = None,
+                 **kwargs):
         self.gift: UniqueGift = gift
         self.origin: str = origin
         self.last_resale_currency: Optional[str] = last_resale_currency
@@ -13134,6 +13308,9 @@ class UniqueGiftInfo(JsonDeserializable):
         self.owned_gift_id: Optional[str] = owned_gift_id
         self.transfer_star_count: Optional[int] = transfer_star_count
         self.next_transfer_date: Optional[int] = next_transfer_date
+        self.text: Optional[str] = text
+        self.entities: Optional[List[MessageEntity]] = entities
+        self.is_private: Optional[bool] = is_private
 
     @property 
     def last_resale_star_count(self) -> Optional[int]:
@@ -13290,9 +13467,9 @@ class ChecklistTask(JsonDeserializable):
     :rtype: :class:`ChecklistTask`
     """
     def __init__(self, id: int, text: str, text_entities: Optional[List[MessageEntity]] = None,
-                    completed_by_user: Optional[User] = None,
-                    completed_by_chat: Optional[Chat] = None,
-                    completion_date: Optional[int] = None, **kwargs):
+                 completed_by_user: Optional[User] = None,
+                 completed_by_chat: Optional[Chat] = None,
+                 completion_date: Optional[int] = None, **kwargs):
         self.id: int = id
         self.text: str = text
         self.text_entities: Optional[List[MessageEntity]] = text_entities
@@ -13338,9 +13515,9 @@ class Checklist(JsonDeserializable):
     :rtype: :class:`Checklist`
     """
     def __init__(self, title: str, tasks: List[ChecklistTask],
-                    title_entities: Optional[List[MessageEntity]] = None,
-                    others_can_add_tasks: Optional[bool] = None,
-                    others_can_mark_tasks_as_done: Optional[bool] = None, **kwargs):
+                 title_entities: Optional[List[MessageEntity]] = None,
+                 others_can_add_tasks: Optional[bool] = None,
+                 others_can_mark_tasks_as_done: Optional[bool] = None, **kwargs):
         self.title: str = title
         self.tasks: List[ChecklistTask] = tasks
         self.title_entities: Optional[List[MessageEntity]] = title_entities
@@ -13380,7 +13557,7 @@ class InputChecklistTask(JsonSerializable):
     :rtype: :class:`InputChecklistTask`
     """
     def __init__(self, id: int, text: str, parse_mode: Optional[str] = None,
-                    text_entities: Optional[List[MessageEntity]] = None, **kwargs):
+                 text_entities: Optional[List[MessageEntity]] = None, **kwargs):
         self.id: int = id
         self.text: str = text
         self.parse_mode: Optional[str] = parse_mode
@@ -13429,10 +13606,10 @@ class InputChecklist(JsonSerializable):
     :rtype: :class:`InputChecklist`
     """
     def __init__(self, title: str, tasks: List[InputChecklistTask],
-                    parse_mode: Optional[str] = None,
-                    title_entities: Optional[List[MessageEntity]] = None,
-                    others_can_add_tasks: Optional[bool] = None,
-                    others_can_mark_tasks_as_done: Optional[bool] = None, **kwargs):
+                 parse_mode: Optional[str] = None,
+                 title_entities: Optional[List[MessageEntity]] = None,
+                 others_can_add_tasks: Optional[bool] = None,
+                 others_can_mark_tasks_as_done: Optional[bool] = None, **kwargs):
         self.title: str = title
         self.tasks: List[InputChecklistTask] = tasks
         self.parse_mode: Optional[str] = parse_mode
@@ -13478,8 +13655,8 @@ class ChecklistTasksDone(JsonDeserializable):
     :rtype: :class:`ChecklistTasksDone`
     """
     def __init__(self, checklist_message: Optional[Message] = None,
-                    marked_as_done_task_ids: Optional[List[int]] = None,
-                    marked_as_not_done_task_ids: Optional[List[int]] = None, **kwargs):
+                 marked_as_done_task_ids: Optional[List[int]] = None,
+                 marked_as_not_done_task_ids: Optional[List[int]] = None, **kwargs):
         self.checklist_message: Optional[Message] = checklist_message
         self.marked_as_done_task_ids: Optional[List[int]] = marked_as_done_task_ids
         self.marked_as_not_done_task_ids: Optional[List[int]] = marked_as_not_done_task_ids
@@ -13705,8 +13882,8 @@ class SuggestedPostInfo(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`SuggestedPostInfo`
     """
-    def __init__(self, state: str, price: Optional[SuggestedPostPrice]
-                    = None, send_date: Optional[int] = None, **kwargs):
+    def __init__(self, state: str, price: Optional[SuggestedPostPrice] = None,
+                 send_date: Optional[int] = None, **kwargs):
         self.state: str = state
         self.price: Optional[SuggestedPostPrice] = price
         self.send_date: Optional[int] = send_date
@@ -13739,10 +13916,10 @@ class SuggestedPostApproved(JsonDeserializable):
     :rtype: :class:`SuggestedPostApproved`
     """
     def __init__(self, send_date: int,
-                    suggested_post_message: Optional[Message] = None,
-                    price: Optional[SuggestedPostPrice] = None,
-                    **kwargs):
-        self.suggested_post_message: Optional[Message] = suggested_post_message 
+                 suggested_post_message: Optional[Message] = None,
+                 price: Optional[SuggestedPostPrice] = None,
+                 **kwargs):
+        self.suggested_post_message: Optional[Message] = suggested_post_message
         self.price: Optional[SuggestedPostPrice] = price
         self.send_date: int = send_date
 
@@ -13864,8 +14041,8 @@ class SuggestedPostPaid(JsonDeserializable):
     :rtype: :class:`SuggestedPostPaid`
     """
     def __init__(self, currency: str,suggested_post_message: Optional[Message] = None,
-                    amount: Optional[int] = None,
-                    star_amount: Optional[StarAmount] = None, **kwargs):
+                 amount: Optional[int] = None,
+                 star_amount: Optional[StarAmount] = None, **kwargs):
         self.suggested_post_message: Optional[Message] = suggested_post_message
         self.currency: str = currency
         self.amount: Optional[int] = amount
@@ -13930,7 +14107,7 @@ class UserRating(JsonDeserializable):
     :rtype: :class:`UserRating`
     """
     def __init__(self, level: int, rating: int, current_level_rating: int,
-                    next_level_rating: Optional[int] = None, **kwargs):
+                 next_level_rating: Optional[int] = None, **kwargs):
         self.level: int = level
         self.rating: int = rating
         self.current_level_rating: int = current_level_rating
@@ -14015,9 +14192,8 @@ class VideoQuality(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`VideoQuality`
     """
-    def __init__(
-        self, file_id: str, file_unique_id: str, width: int, height: int,
-        codec: str, file_size: Optional[int] = None, **kwargs):
+    def __init__(self, file_id: str, file_unique_id: str, width: int, height: int,
+                 codec: str, file_size: Optional[int] = None, **kwargs):
         self.file_id: str = file_id
         self.file_unique_id: str = file_unique_id
         self.width: int = width
@@ -14077,10 +14253,9 @@ class KeyboardButtonRequestManagedBot(JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`KeyboardButtonRequestManagedBot`
     """
-    def __init__(
-        self, request_id: int,
-        suggested_name: Optional[str] = None,
-        suggested_username: Optional[str] = None, **kwargs):
+    def __init__(self, request_id: int,
+                 suggested_name: Optional[str] = None,
+                 suggested_username: Optional[str] = None, **kwargs):
         self.request_id: int = request_id
         self.suggested_name: Optional[str] = suggested_name
         self.suggested_username: Optional[str] = suggested_username
@@ -14196,8 +14371,8 @@ class PollOptionAdded(JsonDeserializable):
     :rtype: :class:`PollOptionAdded`
     """
     def __init__(self, option_persistent_id: str, option_text: str,
-                    poll_message: Optional[MaybeInaccessibleMessage] = None,
-                    option_text_entities: Optional[List[MessageEntity]] = None, **kwargs):
+                 poll_message: Optional[MaybeInaccessibleMessage] = None,
+                 option_text_entities: Optional[List[MessageEntity]] = None, **kwargs):
         self.poll_message: Optional[MaybeInaccessibleMessage] = poll_message
         self.option_persistent_id: str = option_persistent_id
         self.option_text: str = option_text
@@ -14241,8 +14416,8 @@ class PollOptionDeleted(JsonDeserializable):
     :rtype: :class:`PollOptionDeleted`
     """
     def __init__(self, option_persistent_id: str, option_text: str,
-                    poll_message: Optional[MaybeInaccessibleMessage] = None,
-                    option_text_entities: Optional[List[MessageEntity]] = None, **kwargs):
+                 poll_message: Optional[MaybeInaccessibleMessage] = None,
+                 option_text_entities: Optional[List[MessageEntity]] = None, **kwargs):
         self.poll_message: Optional[MaybeInaccessibleMessage] = poll_message
         self.option_persistent_id: str = option_persistent_id
         self.option_text: str = option_text
@@ -14325,16 +14500,15 @@ class PollMedia(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`PollMedia`
     """
-    def __init__(
-        self, animation: Optional[Animation] = None,
-        audio: Optional[Audio] = None,
-        document: Optional[Document] = None,
-        live_photo: Optional[LivePhoto] = None,
-        location: Optional[Location] = None,
-        photo: Optional[List[PhotoSize]] = None,
-        sticker: Optional[Sticker] = None, venue: Optional[Venue] = None,
-        video: Optional[Video] = None, link: Optional[Link] = None,
-        **kwargs):
+    def __init__(self, animation: Optional[Animation] = None,
+                 audio: Optional[Audio] = None,
+                 document: Optional[Document] = None,
+                 live_photo: Optional[LivePhoto] = None,
+                 location: Optional[Location] = None,
+                 photo: Optional[List[PhotoSize]] = None,
+                 sticker: Optional[Sticker] = None, venue: Optional[Venue] = None,
+                 video: Optional[Video] = None, link: Optional[Link] = None,
+                 **kwargs):
         self.animation: Optional[Animation] = animation
         self.audio: Optional[Audio] = audio
         self.document: Optional[Document] = document
@@ -14444,12 +14618,11 @@ class LivePhoto(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`LivePhoto`
     """
-    def __init__(
-        self, file_id: str, file_unique_id: str, width: int, height: int,
-        duration: int,
-        photo: Optional[List[PhotoSize]] = None,
-        mime_type: Optional[str] = None, file_size: Optional[int] = None,
-        **kwargs):
+    def __init__(self, file_id: str, file_unique_id: str, width: int, height: int,
+                 duration: int,
+                 photo: Optional[List[PhotoSize]] = None,
+                 mime_type: Optional[str] = None, file_size: Optional[int] = None,
+                 **kwargs):
         self.photo: Optional[List[PhotoSize]] = photo
         self.file_id: str = file_id
         self.file_unique_id: str = file_unique_id
@@ -15623,7 +15796,11 @@ class RichBlockListItem(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`RichBlockListItem`
     """
-    def __init__(self, label: str, blocks: List['RichBlock'], has_checkbox: Optional[bool] = None, is_checked: Optional[bool] = None, value: Optional[int] = None, type: Optional[str] = None, **kwargs):
+    def __init__(self, label: str, blocks: List['RichBlock'],
+                 has_checkbox: Optional[bool] = None,
+                 is_checked: Optional[bool] = None,
+                 value: Optional[int] = None,
+                 type: Optional[str] = None, **kwargs):
         self.label: str = label
         self.blocks: List[RichBlock] = blocks
         self.has_checkbox: Optional[bool] = has_checkbox
@@ -16095,11 +16272,16 @@ class RichBlockTable(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockTable`
     """
-    def __init__(self, cells: List[List[RichBlockTableCell]], is_bordered: Optional[bool] = None, is_striped: Optional[bool] = None, caption: Optional[RichText] = None, **kwargs):
+    def __init__(self, cells: List[List[RichBlockTableCell]],
+                 is_bordered: Optional[bool] = None,
+                 is_striped: Optional[bool] = None,
+                 is_compact: Optional[bool] = None,
+                 caption: Optional[RichText] = None, **kwargs):
         super().__init__(type='table', **kwargs)
         self.cells: List[List[RichBlockTableCell]] = cells
         self.is_bordered: Optional[bool] = is_bordered
         self.is_striped: Optional[bool] = is_striped
+        self.is_compact: Optional[bool] = is_compact
         self.caption: Optional[RichText] = caption
 
     @classmethod
@@ -16174,7 +16356,9 @@ class RichBlockMap(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockMap`
     """
-    def __init__(self, location: Location, zoom: int, width: int, height: int, caption: Optional[RichBlockCaption] = None, **kwargs):
+    def __init__(self, location: Location, zoom: int,
+                 width: int, height: int,
+                 caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='map', **kwargs)
         self.location: Location = location
         self.zoom: int = zoom
@@ -16212,7 +16396,9 @@ class RichBlockAnimation(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockAnimation`
     """
-    def __init__(self, animation: Animation, has_spoiler: Optional[bool] = None, caption: Optional[RichBlockCaption] = None, **kwargs):
+    def __init__(self, animation: Animation,
+                 has_spoiler: Optional[bool] = None,
+                 caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='animation', **kwargs)
         self.animation: Animation = animation
         self.has_spoiler: Optional[bool] = has_spoiler
@@ -16280,7 +16466,9 @@ class RichBlockPhoto(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockPhoto`
     """
-    def __init__(self, photo: List[PhotoSize], has_spoiler: Optional[bool] = None, caption: Optional[RichBlockCaption] = None, **kwargs):
+    def __init__(self, photo: List[PhotoSize],
+                 has_spoiler: Optional[bool] = None,
+                 caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='photo', **kwargs)
         self.photo: List[PhotoSize] = photo
         self.has_spoiler: Optional[bool] = has_spoiler
@@ -16316,7 +16504,9 @@ class RichBlockVideo(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockVideo`
     """
-    def __init__(self, video: Video, has_spoiler: Optional[bool] = None, caption: Optional[RichBlockCaption] = None, **kwargs):
+    def __init__(self, video: Video,
+                 has_spoiler: Optional[bool] = None,
+                 caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='video', **kwargs)
         self.video: Video = video
         self.has_spoiler: Optional[bool] = has_spoiler
@@ -16444,8 +16634,12 @@ class InputRichMessage(Dictionaryable):
     :return: Instance of the class
     :rtype: :class:`InputRichMessage`
     """
-    def __init__(self, html: Optional[str] = None, markdown: Optional[str] = None, is_rtl: Optional[bool] = None, skip_entity_detection: Optional[bool] = None,
-                    media: Optional[List[InputRichMessageMedia]] = None, blocks: Optional[List[InputRichBlock]] = None, **kwargs):
+    def __init__(self, html: Optional[str] = None,
+                 markdown: Optional[str] = None,
+                 is_rtl: Optional[bool] = None,
+                 skip_entity_detection: Optional[bool] = None,
+                 media: Optional[List[InputRichMessageMedia]] = None,
+                 blocks: Optional[List[InputRichBlock]] = None, **kwargs):
         self.html: Optional[str] = html
         self.markdown: Optional[str] = markdown
         self.is_rtl: Optional[bool] = is_rtl
@@ -16522,10 +16716,9 @@ class InputMediaVoiceNote(InputMedia):
     :return: Instance of the class
     :rtype: :class:`InputMediaVoiceNote`
     """
-    def __init__(
-        self, media: str, caption: Optional[str] = None, parse_mode: Optional[str] = None,
-        caption_entities: Optional[List[MessageEntity]] = None,
-        duration: Optional[int] = None, **kwargs):
+    def __init__(self, media: str, caption: Optional[str] = None, parse_mode: Optional[str] = None,
+                 caption_entities: Optional[List[MessageEntity]] = None,
+                 duration: Optional[int] = None, **kwargs):
         super().__init__(
             type='voice_note', media=media, caption=caption,
             parse_mode=parse_mode, caption_entities=caption_entities)
@@ -16554,9 +16747,11 @@ class InputRichMessageMedia(Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`InputRichMessageMedia`
     """
-    def __init__(self, id: str, media: Union[InputMediaAnimation, InputMediaAudio, InputMediaPhoto, InputMediaVideo, InputMediaVoiceNote], **kwargs):
+    def __init__(self, id: str, media: Union[InputMediaAnimation, InputMediaAudio,
+                 InputMediaDocument, InputMediaPhoto, InputMediaVideo, InputMediaVoiceNote],
+                 **kwargs):
         self.id: str = id
-        self.media: Union[InputMediaAnimation, InputMediaAudio, InputMediaPhoto, InputMediaVideo, InputMediaVoiceNote] = media
+        self.media: Union[InputMediaAnimation, InputMediaAudio, InputMediaDocument, InputMediaPhoto, InputMediaVideo, InputMediaVoiceNote] = media
 
     def to_dict(self) -> dict:
         data = {
@@ -16594,8 +16789,11 @@ class InputRichBlockListItem(Dictionaryable, JsonSerializable):
     :return: Instance of the class
     :rtype: :class:`InputRichBlockListItem`
     """
-    def __init__(self, blocks: List[InputRichBlock], has_checkbox: Optional[bool] = None, is_checked: Optional[bool] = None,
-                    value: Optional[int] = None, type: Optional[str] = None, **kwargs):
+    def __init__(self, blocks: List[InputRichBlock],
+                 has_checkbox: Optional[bool] = None,
+                 is_checked: Optional[bool] = None,
+                 value: Optional[int] = None,
+                 type: Optional[str] = None, **kwargs):
         self.blocks: List[InputRichBlock] = blocks
         self.has_checkbox: Optional[bool] = has_checkbox
         self.is_checked: Optional[bool] = is_checked
@@ -17020,18 +17218,17 @@ class InputRichBlockTable(InputRichBlock):
     :return: Instance of the class
     :rtype: :class:`InputRichBlockTable`
     """
-    def __init__(
-        self,
-        cells: List[List[RichBlockTableCell]],
-        is_bordered: Optional[bool] = None,
-        is_striped: Optional[bool] = None,
-        caption: Optional[RichText] = None,
-        **kwargs
-    ):
+    def __init__(self,
+                 cells: List[List[RichBlockTableCell]],
+                 is_bordered: Optional[bool] = None,
+                 is_striped: Optional[bool] = None,
+                 is_compact: Optional[bool] = None,
+                 caption: Optional[RichText] = None, **kwargs):
         super().__init__(type='table', **kwargs)
         self.cells: List[List[RichBlockTableCell]] = cells
         self.is_bordered: Optional[bool] = is_bordered
         self.is_striped: Optional[bool] = is_striped
+        self.is_compact: Optional[bool] = is_compact
         self.caption: Optional[RichText] = caption
 
     def to_dict(self) -> dict:
@@ -17067,13 +17264,10 @@ class InputRichBlockDetails(InputRichBlock):
     :return: Instance of the class
     :rtype: :class:`InputRichBlockDetails`
     """
-    def __init__(
-        self,
-        summary: RichText,
-        blocks: List[InputRichBlock],
-        is_open: Optional[bool] = None,
-        **kwargs
-    ):
+    def __init__(self,
+                 summary: RichText,
+                 blocks: List[InputRichBlock],
+                 is_open: Optional[bool] = None, **kwargs):
         super().__init__(type='details', **kwargs)
         self.summary: RichText = summary
         self.blocks: List[InputRichBlock] = blocks
@@ -17115,15 +17309,12 @@ class InputRichBlockMap(InputRichBlock):
     :return: Instance of the class
     :rtype: :class:`InputRichBlockMap`
     """
-    def __init__(
-        self,
-        location: Location,
-        zoom: int,
-        width: int,
-        height: int,
-        caption: Optional[RichBlockCaption] = None,
-        **kwargs
-    ):
+    def __init__(self,
+                 location: Location,
+                 zoom: int,
+                 width: int,
+                 height: int,
+                 caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='map', **kwargs)
         self.location: Location = location
         self.zoom: int = zoom
@@ -17387,7 +17578,7 @@ class CommunityChatRemoved(JsonDeserializable):
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
-        obj = cls.check_json(obj)
+        obj = cls.check_json(json_string)
         return cls(**obj)
     
 
