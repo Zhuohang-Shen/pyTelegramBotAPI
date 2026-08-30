@@ -118,7 +118,8 @@ class JsonDeserializable(object):
 
 class Update(JsonDeserializable):
     """
-    This object represents an incoming update.At most one of the optional parameters can be present in any given update.
+    This object represents an incoming update.
+    At most one of the optional fields can be present in any given update.
 
     Telegram documentation: https://core.telegram.org/bots/api#update
 
@@ -2398,7 +2399,7 @@ class Video(JsonDeserializable):
 
 class VideoNote(JsonDeserializable):
     """
-    This object represents a video message (available in Telegram apps as of v.4.0).
+    This object represents a video message.
 
     Telegram documentation: https://core.telegram.org/bots/api#videonote
 
@@ -2665,7 +2666,7 @@ class File(JsonDeserializable):
 # noinspection PyUnresolvedReferences
 class ForceReply(JsonSerializable):
     """
-    Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
+    Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a user account.
 
     Telegram documentation: https://core.telegram.org/bots/api#forcereply
 
@@ -2904,7 +2905,7 @@ class KeyboardButtonPollType(Dictionaryable):
 
 class KeyboardButtonRequestUsers(Dictionaryable):
     """
-    This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed.
+    This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed
 
     Telegram documentation: https://core.telegram.org/bots/api#keyboardbuttonrequestusers
 
@@ -3398,7 +3399,7 @@ class InlineKeyboardButton(Dictionaryable, JsonSerializable, JsonDeserializable)
 
 class LoginUrl(Dictionaryable, JsonSerializable, JsonDeserializable):
     """
-    This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in: Telegram apps support these buttons as of version 5.7.
+    This object represents a parameter of the inline keyboard button used to automatically authorize a user. It serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
 
     Telegram documentation: https://core.telegram.org/bots/api#loginurl
 
@@ -4680,7 +4681,7 @@ class InputInvoiceMessageContent(Dictionaryable):
     
 class InputRichMessageContent(Dictionaryable):
     """
-    This object represents the content of a rich message to be sent as the result of an inline query.
+    Represents the content of a rich message to be sent as the result of an inline query.
 
     :param rich_message: The message to be sent
     :type rich_message: :class:`InputRichMessage`
@@ -6538,7 +6539,7 @@ class ShippingOption(JsonSerializable):
 
 class SuccessfulPayment(JsonDeserializable):
     """
-    This object contains basic information about a successful payment.
+    This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
 
     Telegram documentation: https://core.telegram.org/bots/api#successfulpayment
 
@@ -8166,13 +8167,10 @@ class MenuButton(JsonDeserializable, JsonSerializable, Dictionaryable):
         MenuButtonCommands
         MenuButtonWebApp
         MenuButtonDefault
+    If a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
 
-        If a menu button other than MenuButtonDefault is set for a private chat, then it is applied
-        in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
-
-        Telegram documentation: https://core.telegram.org/bots/api#menubutton
-
-        """
+    Telegram documentation: https://core.telegram.org/bots/api#menubutton
+    """
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -8568,8 +8566,7 @@ class ForumTopicEdited(JsonDeserializable):
 
 class GeneralForumTopicHidden(JsonDeserializable):
     """
-    This object represents a service message about General forum topic hidden in the chat.
-    Currently holds no information.
+    This object represents a service message about General forum topic hidden in the chat. Currently holds no information.
 
     Telegram documentation: https://core.telegram.org/bots/api#generalforumtopichidden
     """
@@ -8583,8 +8580,7 @@ class GeneralForumTopicHidden(JsonDeserializable):
 
 class GeneralForumTopicUnhidden(JsonDeserializable):
     """
-    This object represents a service message about General forum topic unhidden in the chat.
-    Currently holds no information.
+    This object represents a service message about General forum topic unhidden in the chat. Currently holds no information.
 
     Telegram documentation: https://core.telegram.org/bots/api#generalforumtopicunhidden
     """
@@ -8640,9 +8636,7 @@ class ForumTopic(JsonDeserializable):
 
 class WriteAccessAllowed(JsonDeserializable):
     """
-    This object represents a service message about a user allowing a bot to write
-    messages after adding it to the attachment menu, launching a Web App from a link,
-    or accepting an explicit request from a Web App sent by the method requestWriteAccess.
+    This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.
 
     Telegram documentation: https://core.telegram.org/bots/api#writeaccessallowed
 
@@ -9236,8 +9230,7 @@ class ReactionCount(JsonDeserializable):
 
 class ExternalReplyInfo(JsonDeserializable):
     """
-    This object contains information about a message that is being replied to,
-    which may come from another chat or forum topic.
+    This object contains information about a message that is being replied to, which may come from another chat or forum topic.
 
     Telegram documentation: https://core.telegram.org/bots/api#externalreplyinfo
 
@@ -9977,8 +9970,7 @@ class ReplyParameters(JsonDeserializable, Dictionaryable, JsonSerializable):
 
 class UsersShared(JsonDeserializable):
     """
-    This object contains information about the users whose identifiers were shared with the bot
-    using a KeyboardButtonRequestUsers button.
+    This object contains information about the users whose identifiers were shared with the bot using a KeyboardButtonRequestUsers button.
 
     Telegram documentation: https://core.telegram.org/bots/api#usersshared
 
@@ -13630,8 +13622,7 @@ class DirectMessagePriceChanged(JsonDeserializable):
 
 class UniqueGiftColors(JsonDeserializable):
     """
-    This object contains information about the color scheme for a user's name, message replies and link previews
-    based on a unique gift.
+    This object contains information about the color scheme for a user's name, message replies and link previews based on a unique gift.
 
     Telegram documentation: https://core.telegram.org/bots/api#uniquegiftcolors
 
@@ -13869,8 +13860,7 @@ class GiftBackground(JsonDeserializable):
 
 class SuggestedPostApprovalFailed(JsonDeserializable):
     """
-    Describes a service message about the failed approval of a suggested post.
-    Currently, only caused by insufficient user funds at the time of approval.
+    Describes a service message about the failed approval of a suggested post. Currently, only caused by insufficient user funds at the time of approval.
 
     Telegram documentation: https://core.telegram.org/bots/api#suggestedpostapprovalfailed
 
@@ -14143,9 +14133,7 @@ class UserProfileAudios(JsonDeserializable):
 
 class KeyboardButtonRequestManagedBot(JsonSerializable):
     """
-    This object defines the parameters for the creation of a managed bot.
-    Information about the created bot will be shared with the bot using the update managed_bot and a Message with
-    the field managed_bot_created.
+    This object defines the parameters for the creation of a managed bot. Information about the created bot will be shared with the bot using the update managed_bot and a Message with the field managed_bot_created.
 
     Telegram documentation: https://core.telegram.org/bots/api#keyboardbuttonrequestmanagedbot
 
@@ -15586,7 +15574,7 @@ class RichTextReferenceLink(RichText):
 
 class RichBlockCaption(JsonDeserializable, Dictionaryable):
     """
-    This object represents the caption of a rich formatted block.
+    Caption of a rich formatted block.
 
     Telegram documentation: https://core.telegram.org/bots/api#richblockcaption
 
@@ -15625,7 +15613,7 @@ class RichBlockCaption(JsonDeserializable, Dictionaryable):
 
 class RichBlockTableCell(JsonDeserializable, Dictionaryable):
     """
-    This object represents a cell of a table.
+    Cell in a table.
 
     Telegram documentation: https://core.telegram.org/bots/api#richblocktablecell
 
@@ -15686,7 +15674,7 @@ class RichBlockTableCell(JsonDeserializable, Dictionaryable):
 # noinspection shadowing-builtins
 class RichBlockListItem(JsonDeserializable):
     """
-    This object represents an item of a list.
+    An item of a list.
 
     Telegram documentation: https://core.telegram.org/bots/api#richblocklistitem
 
@@ -16453,8 +16441,7 @@ class RichBlockVoiceNote(RichBlock):
 
 class RichBlockThinking(RichBlock):
     """
-    A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>.
-    The block may be used only in sendRichMessageDraft, therefore it can't be received in messages
+    A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft, therefore it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
 
     Telegram documentation: https://core.telegram.org/bots/api#richblockthinking
 
@@ -16481,7 +16468,7 @@ class RichBlockThinking(RichBlock):
 
 class RichMessage(JsonDeserializable):
     """
-    This object represents a rich formatted message.
+    Rich formatted message.
 
     Telegram documentation: https://core.telegram.org/bots/api#richmessage
 
@@ -16508,7 +16495,7 @@ class RichMessage(JsonDeserializable):
 
 class InputRichMessage(Dictionaryable):
     """
-    This object represents a rich message to be sent. Exactly one of the fields html or markdown must be used.
+    Describes a rich message to be sent. Exactly one of the fields html, markdown, or blocks must be used.
 
     :param blocks: Optional. Content of the rich message to send described as a list of blocks
     :type blocks: :obj:`list` of :class:`InputRichBlock`
@@ -16628,7 +16615,7 @@ class InputMediaVoiceNote(InputMedia):
 # noinspection shadowing-builtins
 class InputRichMessageMedia(Dictionaryable, JsonSerializable):
     """
-    This object represents a media element embedded in an outgoing rich message.
+    Describes a media element embedded in an outgoing rich message.
 
     Telegram documentation: https://core.telegram.org/bots/api#inputrichmessagemedia
 
@@ -16710,29 +16697,31 @@ class InputRichBlockListItem(Dictionaryable, JsonSerializable):
 # noinspection shadowing-builtins
 class InputRichBlock(Dictionaryable, JsonSerializable):
     """
-    This object represents a block in a rich formatted message to be sent.
-    Currently, it can be any of the following types:
-    - InputRichBlockParagraph
-    - InputRichBlockSectionHeading
-    - InputRichBlockPreformatted
-    - InputRichBlockFooter
-    - InputRichBlockDivider
-    - InputRichBlockMathematicalExpression
-    - InputRichBlockAnchor
-    - InputRichBlockList
-    - InputRichBlockBlockQuotation
-    - InputRichBlockPullQuotation
-    - InputRichBlockCollage
-    - InputRichBlockSlideshow
-    - InputRichBlockTable
-    - InputRichBlockDetails
-    - InputRichBlockMap
-    - InputRichBlockAnimation
-    - InputRichBlockAudio
-    - InputRichBlockPhoto
-    - InputRichBlockVideo
-    - InputRichBlockVoiceNote
-    - InputRichBlockThinking
+    This object represents a block in a rich formatted message to be sent. Currently, it can be any of the following types:
+        InputRichBlockParagraph
+        InputRichBlockSectionHeading
+        InputRichBlockPreformatted
+        InputRichBlockFooter
+        InputRichBlockDivider
+        InputRichBlockMathematicalExpression
+        InputRichBlockAnchor
+        InputRichBlockList
+        InputRichBlockBlockQuotation
+        InputRichBlockExpandableBlockQuotation
+        InputRichBlockPullQuotation
+        InputRichBlockCollage
+        InputRichBlockSlideshow
+        InputRichBlockTable
+        InputRichBlockDetails
+        InputRichBlockMap
+        InputRichBlockButtons
+        InputRichBlockAnimation
+        InputRichBlockAudio
+        InputRichBlockDocument
+        InputRichBlockPhoto
+        InputRichBlockVideo
+        InputRichBlockVoiceNote
+        InputRichBlockThinking
 
     Telegram documentation: https://core.telegram.org/bots/api#inputrichblock
 
@@ -17433,7 +17422,7 @@ class Community(JsonDeserializable):
 
 class CommunityChatAdded(JsonDeserializable):
     """
-    Describes a service message about a chat being added to a community.
+    Describes a service message about a chat or a bot being added to a community.
 
     Telegram documentation: https://core.telegram.org/bots/api#communitychatadded
 
@@ -17456,7 +17445,7 @@ class CommunityChatAdded(JsonDeserializable):
 
 class CommunityChatRemoved(JsonDeserializable):
     """
-    Describes a service message about a chat being removed from a community. Currently holds no information
+    Describes a service message about a chat or a bot being removed from a community. Currently holds no information.
 
     Telegram documentation: https://core.telegram.org/bots/api#communitychatremoved
 
