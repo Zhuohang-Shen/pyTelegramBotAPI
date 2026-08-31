@@ -602,26 +602,43 @@ class User(JsonDeserializable, Dictionaryable, JsonSerializable):
     def to_json(self):
         return json.dumps(self.to_dict())
 
-    def to_dict(self):
-        return {'id': self.id,
-                'is_bot': self.is_bot,
-                'first_name': self.first_name,
-                'last_name': self.last_name,
-                'username': self.username,
-                'language_code': self.language_code,
-                'can_join_groups': self.can_join_groups,
-                'can_read_all_group_messages': self.can_read_all_group_messages,
-                'supports_inline_queries': self.supports_inline_queries,
-                'is_premium': self.is_premium,
-                'added_to_attachment_menu': self.added_to_attachment_menu,
-                'can_connect_to_business': self.can_connect_to_business,
-                'has_main_web_app': self.has_main_web_app,
-                'has_topics_enabled': self.has_topics_enabled,
-                'allows_users_to_create_topics': self.allows_users_to_create_topics,
-                'can_manage_bots': self.can_manage_bots,
-                'supports_guest_queries': self.supports_guest_queries,
-                'supports_join_request_queries': self.supports_join_request_queries
-                }
+    def to_dict(self) -> dict:
+        data = {
+            'id': self.id,
+            'is_bot': self.is_bot,
+            'first_name': self.first_name,
+        }
+        if self.last_name is not None:
+            data['last_name'] = self.last_name
+        if self.username is not None:
+            data['username'] = self.username
+        if self.language_code is not None:
+            data['language_code'] = self.language_code
+        if self.is_premium is not None:
+            data['is_premium'] = self.is_premium
+        if self.added_to_attachment_menu is not None:
+            data['added_to_attachment_menu'] = self.added_to_attachment_menu
+        if self.can_join_groups is not None:
+            data['can_join_groups'] = self.can_join_groups
+        if self.can_read_all_group_messages is not None:
+            data['can_read_all_group_messages'] = self.can_read_all_group_messages
+        if self.supports_inline_queries is not None:
+            data['supports_inline_queries'] = self.supports_inline_queries
+        if self.can_connect_to_business is not None:
+            data['can_connect_to_business'] = self.can_connect_to_business
+        if self.has_main_web_app is not None:
+            data['has_main_web_app'] = self.has_main_web_app
+        if self.has_topics_enabled is not None:
+            data['has_topics_enabled'] = self.has_topics_enabled
+        if self.allows_users_to_create_topics is not None:
+            data['allows_users_to_create_topics'] = self.allows_users_to_create_topics
+        if self.can_manage_bots is not None:
+            data['can_manage_bots'] = self.can_manage_bots
+        if self.supports_guest_queries is not None:
+            data['supports_guest_queries'] = self.supports_guest_queries
+        if self.supports_join_request_queries is not None:
+            data['supports_join_request_queries'] = self.supports_join_request_queries
+        return data
 
 
 # noinspection PyShadowingBuiltins
@@ -1064,7 +1081,8 @@ class WebAppData(JsonDeserializable, Dictionaryable):
         self.data: str = data
         self.button_text: str = button_text
     def to_dict(self):
-        return {'data': self.data, 'button_text': self.button_text}
+        data = {'data': self.data, 'button_text': self.button_text}
+        return data
 
 
 # noinspection PyUnresolvedReferences
@@ -2102,7 +2120,7 @@ class MessageEntity(Dictionaryable, JsonSerializable, JsonDeserializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        return {"type": self.type,
+        data = {"type": self.type,
                 "offset": self.offset,
                 "length": self.length,
                 "url": self.url,
@@ -2111,6 +2129,7 @@ class MessageEntity(Dictionaryable, JsonSerializable, JsonDeserializable):
                 "custom_emoji_id": self.custom_emoji_id,
                 "unix_time": self.unix_time,
                 "date_time_format": self.date_time_format}
+        return data
 
 
 class Dice(JsonSerializable, Dictionaryable, JsonDeserializable):
@@ -2142,8 +2161,9 @@ class Dice(JsonSerializable, Dictionaryable, JsonDeserializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        return {'value': self.value,
+        data = {'value': self.value,
                 'emoji': self.emoji}
+        return data
 
 
 class PhotoSize(JsonDeserializable):
@@ -2692,7 +2712,7 @@ class File(JsonDeserializable):
 
 
 # noinspection PyUnresolvedReferences
-class ForceReply(JsonSerializable):
+class ForceReply(Dictionaryable, JsonSerializable):
     """
     Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a user account.
 
@@ -2716,17 +2736,20 @@ class ForceReply(JsonSerializable):
         self.selective: Optional[bool] = selective
         self.input_field_placeholder: Optional[str] = input_field_placeholder
 
-    def to_json(self):
-        json_dict = {'force_reply': self.force_reply}
+    def to_dict(self):
+        data = {'force_reply': self.force_reply}
         if self.selective is not None:
-            json_dict['selective'] = self.selective
-        if self.input_field_placeholder:
-            json_dict['input_field_placeholder'] = self.input_field_placeholder
-        return json.dumps(json_dict)
+            data['selective'] = self.selective
+        if self.input_field_placeholder is not None:
+            data['input_field_placeholder'] = self.input_field_placeholder
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 # noinspection PyUnresolvedReferences
-class ReplyKeyboardRemove(JsonSerializable):
+class ReplyKeyboardRemove(Dictionaryable, JsonSerializable):
     """
     Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a business account.
 
@@ -2745,11 +2768,14 @@ class ReplyKeyboardRemove(JsonSerializable):
         self.remove_keyboard: bool = remove_keyboard
         self.selective: Optional[bool] = selective
 
-    def to_json(self):
-        json_dict = {'remove_keyboard': self.remove_keyboard}
+    def to_dict(self):
+        data = {'remove_keyboard': self.remove_keyboard}
         if self.selective is not None:
-            json_dict['selective'] = self.selective
-        return json.dumps(json_dict)
+            data['selective'] = self.selective
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class WebAppInfo(JsonDeserializable, Dictionaryable):
@@ -2774,11 +2800,12 @@ class WebAppInfo(JsonDeserializable, Dictionaryable):
         self.url: str = url
 
     def to_dict(self):
-        return {'url': self.url}
+        data = {'url': self.url}
+        return data
 
 
 # noinspection PyUnresolvedReferences
-class ReplyKeyboardMarkup(JsonSerializable):
+class ReplyKeyboardMarkup(Dictionaryable, JsonSerializable):
     """
     This object represents a custom keyboard with reply options (see Introduction to bots for details and examples). Not supported in channels and for messages sent on behalf of a business account.
 
@@ -2900,19 +2927,22 @@ class ReplyKeyboardMarkup(JsonSerializable):
 
         return self.add(*args, row_width=self.max_row_keys)
 
-    def to_json(self):
-        json_dict = {'keyboard': self.keyboard}
+    def to_dict(self):
+        data = {'keyboard': self.keyboard}
         if self.one_time_keyboard is not None:
-            json_dict['one_time_keyboard'] = self.one_time_keyboard
+            data['one_time_keyboard'] = self.one_time_keyboard
         if self.resize_keyboard is not None:
-            json_dict['resize_keyboard'] = self.resize_keyboard
+            data['resize_keyboard'] = self.resize_keyboard
         if self.selective is not None:
-            json_dict['selective'] = self.selective
-        if self.input_field_placeholder:
-            json_dict['input_field_placeholder'] = self.input_field_placeholder
+            data['selective'] = self.selective
+        if self.input_field_placeholder is not None:
+            data['input_field_placeholder'] = self.input_field_placeholder
         if self.is_persistent is not None:
-            json_dict['is_persistent'] = self.is_persistent
-        return json.dumps(json_dict)
+            data['is_persistent'] = self.is_persistent
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 # noinspection PyShadowingBuiltins
@@ -2932,7 +2962,8 @@ class KeyboardButtonPollType(Dictionaryable):
         self.type: Optional[str] = type
 
     def to_dict(self):
-        return {'type': self.type}
+        data = {'type': self.type}
+        return data
 
 
 class KeyboardButtonRequestUsers(Dictionaryable):
@@ -3075,9 +3106,9 @@ class KeyboardButtonRequestChat(Dictionaryable):
             data['chat_has_username'] = self.chat_has_username
         if self.chat_is_created is not None:
             data['chat_is_created'] = self.chat_is_created
-        if self.user_administrator_rights:
+        if self.user_administrator_rights is not None:
             data['user_administrator_rights'] = self.user_administrator_rights.to_dict()
-        if self.bot_administrator_rights:
+        if self.bot_administrator_rights is not None:
             data['bot_administrator_rights'] = self.bot_administrator_rights.to_dict()
         if self.bot_is_member is not None:
             data['bot_is_member'] = self.bot_is_member
@@ -3163,26 +3194,26 @@ class KeyboardButton(Dictionaryable, JsonSerializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {'text': self.text}
+        data = {'text': self.text}
         if self.request_contact is not None:
-            json_dict['request_contact'] = self.request_contact
+            data['request_contact'] = self.request_contact
         if self.request_location is not None:
-            json_dict['request_location'] = self.request_location
-        if self.request_poll:
-            json_dict['request_poll'] = self.request_poll.to_dict()
-        if self.web_app:
-            json_dict['web_app'] = self.web_app.to_dict()
-        if self.request_users:
-            json_dict['request_users'] = self.request_users.to_dict()
-        if self.request_chat:
-            json_dict['request_chat'] = self.request_chat.to_dict()
-        if self.icon_custom_emoji_id:
-            json_dict['icon_custom_emoji_id'] = self.icon_custom_emoji_id
-        if self.style:
-            json_dict['style'] = self.style
+            data['request_location'] = self.request_location
+        if self.request_poll is not None:
+            data['request_poll'] = self.request_poll.to_dict()
+        if self.web_app is not None:
+            data['web_app'] = self.web_app.to_dict()
+        if self.request_users is not None:
+            data['request_users'] = self.request_users.to_dict()
+        if self.request_chat is not None:
+            data['request_chat'] = self.request_chat.to_dict()
+        if self.icon_custom_emoji_id is not None:
+            data['icon_custom_emoji_id'] = self.icon_custom_emoji_id
+        if self.style is not None:
+            data['style'] = self.style
         if self.request_managed_bot is not None:
-            json_dict['request_managed_bot'] = self.request_managed_bot.to_dict()
-        return json_dict
+            data['request_managed_bot'] = self.request_managed_bot.to_dict()
+        return data
 
 
 class InlineKeyboardMarkup(Dictionaryable, JsonSerializable, JsonDeserializable):
@@ -3304,9 +3335,8 @@ class InlineKeyboardMarkup(Dictionaryable, JsonSerializable, JsonDeserializable)
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = dict()
-        json_dict['inline_keyboard'] = [[button.to_dict() for button in row] for row in self.inline_keyboard]
-        return json_dict
+        data = {'inline_keyboard': [[button.to_dict() for button in row] for row in self.inline_keyboard]}
+        return data
 
     @property
     def keyboard(self):
@@ -3409,32 +3439,32 @@ This offers a quick way for the user to open your bot in inline mode in the same
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {'text': self.text}
-        if self.url:
-            json_dict['url'] = self.url
-        if self.callback_data:
-            json_dict['callback_data'] = self.callback_data
-        if self.web_app:
-            json_dict['web_app'] = self.web_app.to_dict()
-        if self.switch_inline_query:
-            json_dict['switch_inline_query'] = self.switch_inline_query
-        if self.switch_inline_query_current_chat:
-            json_dict['switch_inline_query_current_chat'] = self.switch_inline_query_current_chat
-        if self.callback_game:
-            json_dict['callback_game'] = self.callback_game
+        data = {'text': self.text}
+        if self.url is not None:
+            data['url'] = self.url
+        if self.callback_data is not None:
+            data['callback_data'] = self.callback_data
+        if self.web_app is not None:
+            data['web_app'] = self.web_app.to_dict()
+        if self.switch_inline_query is not None:
+            data['switch_inline_query'] = self.switch_inline_query
+        if self.switch_inline_query_current_chat is not None:
+            data['switch_inline_query_current_chat'] = self.switch_inline_query_current_chat
+        if self.callback_game is not None:
+            data['callback_game'] = self.callback_game
         if self.pay is not None:
-            json_dict['pay'] = self.pay
-        if self.login_url:
-            json_dict['login_url'] = self.login_url.to_dict()
-        if self.switch_inline_query_chosen_chat:
-            json_dict['switch_inline_query_chosen_chat'] = self.switch_inline_query_chosen_chat.to_dict()
-        if self.copy_text:
-            json_dict['copy_text'] = self.copy_text.to_dict()
-        if self.icon_custom_emoji_id:
-            json_dict['icon_custom_emoji_id'] = self.icon_custom_emoji_id
-        if self.style:
-            json_dict['style'] = self.style
-        return json_dict
+            data['pay'] = self.pay
+        if self.login_url is not None:
+            data['login_url'] = self.login_url.to_dict()
+        if self.switch_inline_query_chosen_chat is not None:
+            data['switch_inline_query_chosen_chat'] = self.switch_inline_query_chosen_chat.to_dict()
+        if self.copy_text is not None:
+            data['copy_text'] = self.copy_text.to_dict()
+        if self.icon_custom_emoji_id is not None:
+            data['icon_custom_emoji_id'] = self.icon_custom_emoji_id
+        if self.style is not None:
+            data['style'] = self.style
+        return data
 
 
 class LoginUrl(Dictionaryable, JsonSerializable, JsonDeserializable):
@@ -3476,14 +3506,14 @@ class LoginUrl(Dictionaryable, JsonSerializable, JsonDeserializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {'url': self.url}
-        if self.forward_text:
-            json_dict['forward_text'] = self.forward_text
-        if self.bot_username:
-            json_dict['bot_username'] = self.bot_username
+        data = {'url': self.url}
+        if self.forward_text is not None:
+            data['forward_text'] = self.forward_text
+        if self.bot_username is not None:
+            data['bot_username'] = self.bot_username
         if self.request_write_access is not None:
-            json_dict['request_write_access'] = self.request_write_access
-        return json_dict
+            data['request_write_access'] = self.request_write_access
+        return data
 
 
 # noinspection PyShadowingBuiltins
@@ -4048,42 +4078,42 @@ class ChatPermissions(JsonDeserializable, JsonSerializable, Dictionaryable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = dict()
+        data = dict()
         if self.can_send_messages is not None:
-            json_dict['can_send_messages'] = self.can_send_messages
+            data['can_send_messages'] = self.can_send_messages
         if self.can_send_audios is not None:
-            json_dict['can_send_audios'] = self.can_send_audios
+            data['can_send_audios'] = self.can_send_audios
 
         if self.can_send_documents is not None:
-            json_dict['can_send_documents'] = self.can_send_documents
+            data['can_send_documents'] = self.can_send_documents
         if self.can_send_photos is not None:
-            json_dict['can_send_photos'] = self.can_send_photos
+            data['can_send_photos'] = self.can_send_photos
         if self.can_send_videos is not None:
-            json_dict['can_send_videos'] = self.can_send_videos
+            data['can_send_videos'] = self.can_send_videos
         if self.can_send_video_notes is not None:
-            json_dict['can_send_video_notes'] = self.can_send_video_notes
+            data['can_send_video_notes'] = self.can_send_video_notes
         if self.can_send_voice_notes is not None:
-            json_dict['can_send_voice_notes'] = self.can_send_voice_notes
+            data['can_send_voice_notes'] = self.can_send_voice_notes
         if self.can_send_polls is not None:
-            json_dict['can_send_polls'] = self.can_send_polls
+            data['can_send_polls'] = self.can_send_polls
         if self.can_send_other_messages is not None:
-            json_dict['can_send_other_messages'] = self.can_send_other_messages
+            data['can_send_other_messages'] = self.can_send_other_messages
         if self.can_add_web_page_previews is not None:
-            json_dict['can_add_web_page_previews'] = self.can_add_web_page_previews
+            data['can_add_web_page_previews'] = self.can_add_web_page_previews
         if self.can_change_info is not None:
-            json_dict['can_change_info'] = self.can_change_info
+            data['can_change_info'] = self.can_change_info
         if self.can_invite_users is not None:
-            json_dict['can_invite_users'] = self.can_invite_users
+            data['can_invite_users'] = self.can_invite_users
         if self.can_pin_messages is not None:
-            json_dict['can_pin_messages'] = self.can_pin_messages
+            data['can_pin_messages'] = self.can_pin_messages
         if self.can_manage_topics is not None:
-            json_dict['can_manage_topics'] = self.can_manage_topics
+            data['can_manage_topics'] = self.can_manage_topics
         if self.can_edit_tag is not None:
-            json_dict['can_edit_tag'] = self.can_edit_tag
+            data['can_edit_tag'] = self.can_edit_tag
         if self.can_react_to_messages is not None:
-            json_dict['can_react_to_messages'] = self.can_react_to_messages
+            data['can_react_to_messages'] = self.can_react_to_messages
 
-        return json_dict
+        return data
 
 
 class BotCommand(JsonSerializable, JsonDeserializable, Dictionaryable):
@@ -4432,14 +4462,14 @@ class InputTextMessageContent(Dictionaryable):
                 self.link_preview_options: Optional[LinkPreviewOptions] = LinkPreviewOptions(is_disabled=disable_web_page_preview)
 
     def to_dict(self):
-        json_dict = {'message_text': self.message_text}
-        if self.parse_mode:
-            json_dict['parse_mode'] = self.parse_mode
-        if self.entities:
-            json_dict['entities'] = MessageEntity.to_list_of_dicts(self.entities)
-        if self.link_preview_options:
-            json_dict['link_preview_options'] = self.link_preview_options.to_dict()
-        return json_dict
+        data = {'message_text': self.message_text}
+        if self.parse_mode is not None:
+            data['parse_mode'] = self.parse_mode
+        if self.entities is not None:
+            data['entities'] = MessageEntity.to_list_of_dicts(self.entities)
+        if self.link_preview_options is not None:
+            data['link_preview_options'] = self.link_preview_options.to_dict()
+        return data
 
 
 class InputLocationMessageContent(Dictionaryable):
@@ -4483,19 +4513,19 @@ class InputLocationMessageContent(Dictionaryable):
         self.proximity_alert_radius: Optional[int] = proximity_alert_radius
 
     def to_dict(self):
-        json_dict = {
+        data = {
             'latitude': self.latitude,
             'longitude': self.longitude
         }
         if self.horizontal_accuracy is not None:
-            json_dict['horizontal_accuracy'] = self.horizontal_accuracy
+            data['horizontal_accuracy'] = self.horizontal_accuracy
         if self.live_period is not None:
-            json_dict['live_period'] = self.live_period
+            data['live_period'] = self.live_period
         if self.heading is not None:
-            json_dict['heading'] = self.heading
+            data['heading'] = self.heading
         if self.proximity_alert_radius is not None:
-            json_dict['proximity_alert_radius'] = self.proximity_alert_radius
-        return json_dict
+            data['proximity_alert_radius'] = self.proximity_alert_radius
+        return data
 
 
 class InputVenueMessageContent(Dictionaryable):
@@ -4548,21 +4578,21 @@ class InputVenueMessageContent(Dictionaryable):
         self.google_place_type: Optional[str] = google_place_type
 
     def to_dict(self):
-        json_dict = {
+        data = {
             'latitude': self.latitude,
             'longitude': self.longitude,
             'title': self.title,
-            'address' : self.address
+            'address': self.address
         }
-        if self.foursquare_id:
-            json_dict['foursquare_id'] = self.foursquare_id
-        if self.foursquare_type:
-            json_dict['foursquare_type'] = self.foursquare_type
-        if self.google_place_id:
-            json_dict['google_place_id'] = self.google_place_id
-        if self.google_place_type:
-            json_dict['google_place_type'] = self.google_place_type
-        return json_dict
+        if self.foursquare_id is not None:
+            data['foursquare_id'] = self.foursquare_id
+        if self.foursquare_type is not None:
+            data['foursquare_type'] = self.foursquare_type
+        if self.google_place_id is not None:
+            data['google_place_id'] = self.google_place_id
+        if self.google_place_type is not None:
+            data['google_place_type'] = self.google_place_type
+        return data
 
 
 class InputContactMessageContent(Dictionaryable):
@@ -4593,12 +4623,12 @@ class InputContactMessageContent(Dictionaryable):
         self.vcard: Optional[str] = vcard
 
     def to_dict(self):
-        json_dict = {'phone_number': self.phone_number, 'first_name': self.first_name}
-        if self.last_name:
-            json_dict['last_name'] = self.last_name
-        if self.vcard:
-            json_dict['vcard'] = self.vcard
-        return json_dict
+        data = {'phone_number': self.phone_number, 'first_name': self.first_name}
+        if self.last_name is not None:
+            data['last_name'] = self.last_name
+        if self.vcard is not None:
+            data['vcard'] = self.vcard
+        return data
 
 
 class InputInvoiceMessageContent(Dictionaryable):
@@ -4709,7 +4739,7 @@ class InputInvoiceMessageContent(Dictionaryable):
         self.is_flexible: Optional[bool] = is_flexible
 
     def to_dict(self):
-        json_dict = {
+        data = {
             'title': self.title,
             'description': self.description,
             'payload': self.payload,
@@ -4717,35 +4747,35 @@ class InputInvoiceMessageContent(Dictionaryable):
             'currency': self.currency,
             'prices': [LabeledPrice.to_dict(lp) for lp in self.prices]
         }
-        if self.max_tip_amount:
-            json_dict['max_tip_amount'] = self.max_tip_amount
-        if self.suggested_tip_amounts:
-            json_dict['suggested_tip_amounts'] = self.suggested_tip_amounts
-        if self.provider_data:
-            json_dict['provider_data'] = self.provider_data
-        if self.photo_url:
-            json_dict['photo_url'] = self.photo_url
-        if self.photo_size:
-            json_dict['photo_size'] = self.photo_size
-        if self.photo_width:
-            json_dict['photo_width'] = self.photo_width
-        if self.photo_height:
-            json_dict['photo_height'] = self.photo_height
+        if self.max_tip_amount is not None:
+            data['max_tip_amount'] = self.max_tip_amount
+        if self.suggested_tip_amounts is not None:
+            data['suggested_tip_amounts'] = self.suggested_tip_amounts
+        if self.provider_data is not None:
+            data['provider_data'] = self.provider_data
+        if self.photo_url is not None:
+            data['photo_url'] = self.photo_url
+        if self.photo_size is not None:
+            data['photo_size'] = self.photo_size
+        if self.photo_width is not None:
+            data['photo_width'] = self.photo_width
+        if self.photo_height is not None:
+            data['photo_height'] = self.photo_height
         if self.need_name is not None:
-            json_dict['need_name'] = self.need_name
+            data['need_name'] = self.need_name
         if self.need_phone_number is not None:
-            json_dict['need_phone_number'] = self.need_phone_number
+            data['need_phone_number'] = self.need_phone_number
         if self.need_email is not None:
-            json_dict['need_email'] = self.need_email
+            data['need_email'] = self.need_email
         if self.need_shipping_address is not None:
-            json_dict['need_shipping_address'] = self.need_shipping_address
+            data['need_shipping_address'] = self.need_shipping_address
         if self.send_phone_number_to_provider is not None:
-            json_dict['send_phone_number_to_provider'] = self.send_phone_number_to_provider
+            data['send_phone_number_to_provider'] = self.send_phone_number_to_provider
         if self.send_email_to_provider is not None:
-            json_dict['send_email_to_provider'] = self.send_email_to_provider
+            data['send_email_to_provider'] = self.send_email_to_provider
         if self.is_flexible is not None:
-            json_dict['is_flexible'] = self.is_flexible
-        return json_dict
+            data['is_flexible'] = self.is_flexible
+        return data
     
 class InputRichMessageContent(Dictionaryable):
     """
@@ -4763,7 +4793,8 @@ class InputRichMessageContent(Dictionaryable):
         self.rich_message: InputRichMessage = rich_message
 
     def to_dict(self) -> dict:
-        return {'rich_message': self.rich_message.to_dict()}
+        data = {'rich_message': self.rich_message.to_dict()}
+        return data
     
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
@@ -4834,10 +4865,10 @@ class SentWebAppMessage(JsonDeserializable, Dictionaryable):
         self.inline_message_id: Optional[str] = inline_message_id
 
     def to_dict(self):
-        json_dict = {}
-        if self.inline_message_id:
-            json_dict['inline_message_id'] = self.inline_message_id
-        return json_dict
+        data = {}
+        if self.inline_message_id is not None:
+            data['inline_message_id'] = self.inline_message_id
+        return data
 
 
 class InlineQueryResultBase(Dictionaryable, JsonSerializable, ABC):
@@ -4905,27 +4936,27 @@ class InlineQueryResult(InlineQueryResultCachedBase, ABC):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {
+        data = {
             'type': self.type,
             'id': self.id
         }
-        if self.title:
-            json_dict['title'] = self.title
-        if self.caption:
-            json_dict['caption'] = self.caption
-        if self.input_message_content:
-            json_dict['input_message_content'] = self.input_message_content.to_dict()
-        if self.reply_markup:
-            json_dict['reply_markup'] = self.reply_markup.to_dict()
-        if self.caption_entities:
-            json_dict['caption_entities'] = MessageEntity.to_list_of_dicts(self.caption_entities)
-        if self.parse_mode:
-            json_dict['parse_mode'] = self.parse_mode
-        if self.description:
-            json_dict['description'] = self.description
+        if self.title is not None:
+            data['title'] = self.title
+        if self.caption is not None:
+            data['caption'] = self.caption
+        if self.input_message_content is not None:
+            data['input_message_content'] = self.input_message_content.to_dict()
+        if self.reply_markup is not None:
+            data['reply_markup'] = self.reply_markup.to_dict()
+        if self.caption_entities is not None:
+            data['caption_entities'] = MessageEntity.to_list_of_dicts(self.caption_entities)
+        if self.parse_mode is not None:
+            data['parse_mode'] = self.parse_mode
+        if self.description is not None:
+            data['description'] = self.description
         if self.show_caption_above_media is not None:
-            json_dict['show_caption_above_media'] = self.show_caption_above_media
-        return json_dict
+            data['show_caption_above_media'] = self.show_caption_above_media
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -4992,16 +5023,16 @@ class InlineQueryResultArticle(InlineQueryResult):
             self.url = ''
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        if self.url:
-            json_dict['url'] = self.url
-        if self.thumbnail_url:
-            json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.thumbnail_width:
-            json_dict['thumbnail_width'] = self.thumbnail_width
-        if self.thumbnail_height:
-            json_dict['thumbnail_height'] = self.thumbnail_height
-        return json_dict
+        data = super().to_dict()
+        if self.url is not None:
+            data['url'] = self.url
+        if self.thumbnail_url is not None:
+            data['thumbnail_url'] = self.thumbnail_url
+        if self.thumbnail_width is not None:
+            data['thumbnail_width'] = self.thumbnail_width
+        if self.thumbnail_height is not None:
+            data['thumbnail_height'] = self.thumbnail_height
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5077,14 +5108,14 @@ class InlineQueryResultPhoto(InlineQueryResult):
         self.photo_height: Optional[int] = photo_height
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['photo_url'] = self.photo_url
-        json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.photo_width:
-            json_dict['photo_width'] = self.photo_width
-        if self.photo_height:
-            json_dict['photo_height'] = self.photo_height
-        return json_dict
+        data = super().to_dict()
+        data['photo_url'] = self.photo_url
+        data['thumbnail_url'] = self.thumbnail_url
+        if self.photo_width is not None:
+            data['photo_width'] = self.photo_width
+        if self.photo_height is not None:
+            data['photo_height'] = self.photo_height
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5167,18 +5198,18 @@ class InlineQueryResultGif(InlineQueryResult):
         self.thumbnail_mime_type: Optional[str] = thumbnail_mime_type
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['gif_url'] = self.gif_url
-        if self.gif_width:
-            json_dict['gif_width'] = self.gif_width
-        if self.gif_height:
-            json_dict['gif_height'] = self.gif_height
-        json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.gif_duration:
-            json_dict['gif_duration'] = self.gif_duration
-        if self.thumbnail_mime_type:
-            json_dict['thumbnail_mime_type'] = self.thumbnail_mime_type
-        return json_dict
+        data = super().to_dict()
+        data['gif_url'] = self.gif_url
+        if self.gif_width is not None:
+            data['gif_width'] = self.gif_width
+        if self.gif_height is not None:
+            data['gif_height'] = self.gif_height
+        data['thumbnail_url'] = self.thumbnail_url
+        if self.gif_duration is not None:
+            data['gif_duration'] = self.gif_duration
+        if self.thumbnail_mime_type is not None:
+            data['thumbnail_mime_type'] = self.thumbnail_mime_type
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5261,18 +5292,18 @@ class InlineQueryResultMpeg4Gif(InlineQueryResult):
         self.thumbnail_mime_type: Optional[str] = thumbnail_mime_type
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['mpeg4_url'] = self.mpeg4_url
-        if self.mpeg4_width:
-            json_dict['mpeg4_width'] = self.mpeg4_width
-        if self.mpeg4_height:
-            json_dict['mpeg4_height'] = self.mpeg4_height
-        json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.mpeg4_duration:
-            json_dict['mpeg4_duration '] = self.mpeg4_duration
-        if self.thumbnail_mime_type:
-            json_dict['thumbnail_mime_type'] = self.thumbnail_mime_type
-        return json_dict
+        data = super().to_dict()
+        data['mpeg4_url'] = self.mpeg4_url
+        if self.mpeg4_width is not None:
+            data['mpeg4_width'] = self.mpeg4_width
+        if self.mpeg4_height is not None:
+            data['mpeg4_height'] = self.mpeg4_height
+        data['thumbnail_url'] = self.thumbnail_url
+        if self.mpeg4_duration is not None:
+            data['mpeg4_duration'] = self.mpeg4_duration
+        if self.thumbnail_mime_type is not None:
+            data['thumbnail_mime_type'] = self.thumbnail_mime_type
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5358,15 +5389,15 @@ class InlineQueryResultVideo(InlineQueryResult):
         self.video_duration: Optional[int] = video_duration
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['video_url'] = self.video_url
-        json_dict['mime_type'] = self.mime_type
-        json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.video_height:
-            json_dict['video_height'] = self.video_height
-        if self.video_duration:
-            json_dict['video_duration'] = self.video_duration
-        return json_dict
+        data = super().to_dict()
+        data['video_url'] = self.video_url
+        data['mime_type'] = self.mime_type
+        data['thumbnail_url'] = self.thumbnail_url
+        if self.video_height is not None:
+            data['video_height'] = self.video_height
+        if self.video_duration is not None:
+            data['video_duration'] = self.video_duration
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5574,16 +5605,16 @@ class InlineQueryResultDocument(InlineQueryResult):
         self.thumbnail_height: Optional[int] = thumbnail_height
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['document_url'] = self.document_url
-        json_dict['mime_type'] = self.mime_type
-        if self.thumbnail_url:
-            json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.thumbnail_width:
-            json_dict['thumbnail_width'] = self.thumbnail_width
-        if self.thumbnail_height:
-            json_dict['thumbnail_height'] = self.thumbnail_height
-        return json_dict
+        data = super().to_dict()
+        data['document_url'] = self.document_url
+        data['mime_type'] = self.mime_type
+        if self.thumbnail_url is not None:
+            data['thumbnail_url'] = self.thumbnail_url
+        if self.thumbnail_width is not None:
+            data['thumbnail_width'] = self.thumbnail_width
+        if self.thumbnail_height is not None:
+            data['thumbnail_height'] = self.thumbnail_height
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5663,24 +5694,24 @@ class InlineQueryResultLocation(InlineQueryResult):
         self.thumbnail_height: Optional[int] = thumbnail_height
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['latitude'] = self.latitude
-        json_dict['longitude'] = self.longitude
+        data = super().to_dict()
+        data['latitude'] = self.latitude
+        data['longitude'] = self.longitude
         if self.horizontal_accuracy is not None:
-            json_dict['horizontal_accuracy'] = self.horizontal_accuracy
+            data['horizontal_accuracy'] = self.horizontal_accuracy
         if self.live_period is not None:
-            json_dict['live_period'] = self.live_period
+            data['live_period'] = self.live_period
         if self.heading is not None:
-            json_dict['heading'] = self.heading
+            data['heading'] = self.heading
         if self.proximity_alert_radius is not None:
-            json_dict['proximity_alert_radius'] = self.proximity_alert_radius
-        if self.thumbnail_url:
-            json_dict['thumbnail_url'] = self.thumbnail_url
+            data['proximity_alert_radius'] = self.proximity_alert_radius
+        if self.thumbnail_url is not None:
+            data['thumbnail_url'] = self.thumbnail_url
         if self.thumbnail_width is not None:
-            json_dict['thumbnail_width'] = self.thumbnail_width
+            data['thumbnail_width'] = self.thumbnail_width
         if self.thumbnail_height is not None:
-            json_dict['thumbnail_height'] = self.thumbnail_height
-        return json_dict
+            data['thumbnail_height'] = self.thumbnail_height
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5765,25 +5796,25 @@ class InlineQueryResultVenue(InlineQueryResult):
         self.thumbnail_height: Optional[int] = thumbnail_height
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['latitude'] = self.latitude
-        json_dict['longitude'] = self.longitude
-        json_dict['address'] = self.address
-        if self.foursquare_id:
-            json_dict['foursquare_id'] = self.foursquare_id
-        if self.foursquare_type:
-            json_dict['foursquare_type'] = self.foursquare_type
-        if self.google_place_id:
-            json_dict['google_place_id'] = self.google_place_id
-        if self.google_place_type:
-            json_dict['google_place_type'] = self.google_place_type
-        if self.thumbnail_url:
-            json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.thumbnail_width:
-            json_dict['thumbnail_width'] = self.thumbnail_width
-        if self.thumbnail_height:
-            json_dict['thumbnail_height'] = self.thumbnail_height
-        return json_dict
+        data = super().to_dict()
+        data['latitude'] = self.latitude
+        data['longitude'] = self.longitude
+        data['address'] = self.address
+        if self.foursquare_id is not None:
+            data['foursquare_id'] = self.foursquare_id
+        if self.foursquare_type is not None:
+            data['foursquare_type'] = self.foursquare_type
+        if self.google_place_id is not None:
+            data['google_place_id'] = self.google_place_id
+        if self.google_place_type is not None:
+            data['google_place_type'] = self.google_place_type
+        if self.thumbnail_url is not None:
+            data['thumbnail_url'] = self.thumbnail_url
+        if self.thumbnail_width is not None:
+            data['thumbnail_width'] = self.thumbnail_width
+        if self.thumbnail_height is not None:
+            data['thumbnail_height'] = self.thumbnail_height
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5847,20 +5878,20 @@ class InlineQueryResultContact(InlineQueryResult):
         self.thumbnail_height: Optional[int] = thumbnail_height
 
     def to_dict(self):
-        json_dict = super().to_dict()
-        json_dict['phone_number'] = self.phone_number
-        json_dict['first_name'] = self.first_name
-        if self.last_name:
-            json_dict['last_name'] = self.last_name
-        if self.vcard:
-            json_dict['vcard'] = self.vcard
-        if self.thumbnail_url:
-            json_dict['thumbnail_url'] = self.thumbnail_url
-        if self.thumbnail_width:
-            json_dict['thumbnail_width'] = self.thumbnail_width
-        if self.thumbnail_height:
-            json_dict['thumbnail_height'] = self.thumbnail_height
-        return json_dict
+        data = super().to_dict()
+        data['phone_number'] = self.phone_number
+        data['first_name'] = self.first_name
+        if self.last_name is not None:
+            data['last_name'] = self.last_name
+        if self.vcard is not None:
+            data['vcard'] = self.vcard
+        if self.thumbnail_url is not None:
+            data['thumbnail_url'] = self.thumbnail_url
+        if self.thumbnail_width is not None:
+            data['thumbnail_width'] = self.thumbnail_width
+        if self.thumbnail_height is not None:
+            data['thumbnail_height'] = self.thumbnail_height
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6524,9 +6555,10 @@ class LabeledPrice(JsonSerializable, Dictionaryable):
         self.amount: int = amount
 
     def to_dict(self):
-        return {
+        data = {
             'label': self.label, 'amount': self.amount
         }
+        return data
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -6653,7 +6685,7 @@ class OrderInfo(JsonDeserializable):
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
-class ShippingOption(JsonSerializable):
+class ShippingOption(Dictionaryable, JsonSerializable):
     """
     This object represents one shipping option.
 
@@ -6688,6 +6720,14 @@ class ShippingOption(JsonSerializable):
         for price in args:
             self.prices.append(price)
         return self
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'title': self.title,
+            'prices': [LabeledPrice.to_dict(lp) for lp in self.prices]
+        }
+        return data
 
     def to_json(self):
         price_list = []
@@ -7062,7 +7102,8 @@ class MaskPosition(Dictionaryable, JsonDeserializable, JsonSerializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        return {'point': self.point, 'x_shift': self.x_shift, 'y_shift': self.y_shift, 'scale': self.scale}
+        data = {'point': self.point, 'x_shift': self.x_shift, 'y_shift': self.y_shift, 'scale': self.scale}
+        return data
 
 
 # InputMedia
@@ -7119,18 +7160,18 @@ class InputMedia(Dictionaryable, JsonSerializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {'type': self.type}
+        data = {'type': self.type}
         if self.media is not None:
-            json_dict['media'] = self._media_dic
-        if self._thumbnail_dic:
-            json_dict['thumbnail'] = self._thumbnail_dic
-        if self.caption:
-            json_dict['caption'] = self.caption
-        if self.parse_mode:
-            json_dict['parse_mode'] = self.parse_mode
-        if self.caption_entities:
-            json_dict['caption_entities'] = MessageEntity.to_list_of_dicts(self.caption_entities)
-        return json_dict
+            data['media'] = self._media_dic
+        if self._thumbnail_dic is not None:
+            data['thumbnail'] = self._thumbnail_dic
+        if self.caption is not None:
+            data['caption'] = self.caption
+        if self.parse_mode is not None:
+            data['parse_mode'] = self.parse_mode
+        if self.caption_entities is not None:
+            data['caption_entities'] = MessageEntity.to_list_of_dicts(self.caption_entities)
+        return data
 
     def convert_input_media(self):
         """
@@ -7195,12 +7236,15 @@ class InputMediaPhoto(InputMedia):
         self.show_caption_above_media: Optional[bool] = show_caption_above_media
 
     def to_dict(self):
-        ret = super(InputMediaPhoto, self).to_dict()
+        data = super(InputMediaPhoto, self).to_dict()
         if self.has_spoiler is not None:
-            ret['has_spoiler'] = self.has_spoiler
+            data['has_spoiler'] = self.has_spoiler
         if self.show_caption_above_media is not None:
-            ret['show_caption_above_media'] = self.show_caption_above_media
-        return ret
+            data['show_caption_above_media'] = self.show_caption_above_media
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaVideo(InputMedia):
@@ -7288,24 +7332,24 @@ class InputMediaVideo(InputMedia):
         return self.thumbnail
 
     def to_dict(self):
-        ret = super(InputMediaVideo, self).to_dict()
-        if self.width:
-            ret['width'] = self.width
-        if self.height:
-            ret['height'] = self.height
-        if self.duration:
-            ret['duration'] = self.duration
+        data = super(InputMediaVideo, self).to_dict()
+        if self.width is not None:
+            data['width'] = self.width
+        if self.height is not None:
+            data['height'] = self.height
+        if self.duration is not None:
+            data['duration'] = self.duration
         if self.supports_streaming is not None:
-            ret['supports_streaming'] = self.supports_streaming
+            data['supports_streaming'] = self.supports_streaming
         if self.has_spoiler is not None:
-            ret['has_spoiler'] = self.has_spoiler
+            data['has_spoiler'] = self.has_spoiler
         if self.show_caption_above_media is not None:
-            ret['show_caption_above_media'] = self.show_caption_above_media
-        if self._cover_dic:
-            ret['cover'] = self._cover_dic
-        if self.start_timestamp:
-            ret['start_timestamp'] = self.start_timestamp
-        return ret
+            data['show_caption_above_media'] = self.show_caption_above_media
+        if self._cover_dic is not None:
+            data['cover'] = self._cover_dic
+        if self.start_timestamp is not None:
+            data['start_timestamp'] = self.start_timestamp
+        return data
 
     def convert_input_media(self):
         media_json, files = super(InputMediaVideo, self).convert_input_media()
@@ -7316,6 +7360,9 @@ class InputMediaVideo(InputMedia):
         else:
             files[self._cover_name] = self.cover
         return media_json, files
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaAnimation(InputMedia):
@@ -7379,18 +7426,21 @@ class InputMediaAnimation(InputMedia):
         return self.thumbnail
 
     def to_dict(self):
-        ret = super(InputMediaAnimation, self).to_dict()
-        if self.width:
-            ret['width'] = self.width
-        if self.height:
-            ret['height'] = self.height
-        if self.duration:
-            ret['duration'] = self.duration
+        data = super(InputMediaAnimation, self).to_dict()
+        if self.width is not None:
+            data['width'] = self.width
+        if self.height is not None:
+            data['height'] = self.height
+        if self.duration is not None:
+            data['duration'] = self.duration
         if self.has_spoiler is not None:
-            ret['has_spoiler'] = self.has_spoiler
+            data['has_spoiler'] = self.has_spoiler
         if self.show_caption_above_media is not None:
-            ret['show_caption_above_media'] = self.show_caption_above_media
-        return ret
+            data['show_caption_above_media'] = self.show_caption_above_media
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaAudio(InputMedia):
@@ -7445,14 +7495,17 @@ class InputMediaAudio(InputMedia):
         return self.thumbnail
 
     def to_dict(self):
-        ret = super(InputMediaAudio, self).to_dict()
-        if self.duration:
-            ret['duration'] = self.duration
-        if self.performer:
-            ret['performer'] = self.performer
-        if self.title:
-            ret['title'] = self.title
-        return ret
+        data = super(InputMediaAudio, self).to_dict()
+        if self.duration is not None:
+            data['duration'] = self.duration
+        if self.performer is not None:
+            data['performer'] = self.performer
+        if self.title is not None:
+            data['title'] = self.title
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaDocument(InputMedia):
@@ -7499,10 +7552,13 @@ class InputMediaDocument(InputMedia):
         return self.thumbnail
 
     def to_dict(self):
-        ret = super(InputMediaDocument, self).to_dict()
+        data = super(InputMediaDocument, self).to_dict()
         if self.disable_content_type_detection is not None:
-            ret['disable_content_type_detection'] = self.disable_content_type_detection
-        return ret
+            data['disable_content_type_detection'] = self.disable_content_type_detection
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaLivePhoto(InputMedia):
@@ -7559,13 +7615,15 @@ class InputMediaLivePhoto(InputMedia):
             self._photo_dic = 'attach://{0}'.format(self._photo_name)
 
     def to_dict(self):
-        json_dict = super(InputMediaLivePhoto, self).to_dict()
-        json_dict['photo'] = self._photo_dic
+        data = super(InputMediaLivePhoto, self).to_dict()
+        data['_photo_name'] = self._photo_name
+        if self._photo_dic is not None:
+            data['photo'] = self._photo_dic
         if self.show_caption_above_media is not None:
-            json_dict['show_caption_above_media'] = self.show_caption_above_media
+            data['show_caption_above_media'] = self.show_caption_above_media
         if self.has_spoiler is not None:
-            json_dict['has_spoiler'] = self.has_spoiler
-        return json_dict
+            data['has_spoiler'] = self.has_spoiler
+        return data
 
     def convert_input_media(self):
         media_json, files = super(InputMediaLivePhoto, self).convert_input_media()
@@ -7574,6 +7632,9 @@ class InputMediaLivePhoto(InputMedia):
         else:
             files[self._photo_name] = self.photo
         return media_json, files
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaLocation(InputMedia):
@@ -7604,12 +7665,15 @@ class InputMediaLocation(InputMedia):
         self.horizontal_accuracy: Optional[float] = horizontal_accuracy
 
     def to_dict(self):
-        json_dict = super(InputMediaLocation, self).to_dict()
-        json_dict['latitude'] = self.latitude
-        json_dict['longitude'] = self.longitude
+        data = super(InputMediaLocation, self).to_dict()
+        data['latitude'] = self.latitude
+        data['longitude'] = self.longitude
         if self.horizontal_accuracy is not None:
-            json_dict['horizontal_accuracy'] = self.horizontal_accuracy
-        return json_dict
+            data['horizontal_accuracy'] = self.horizontal_accuracy
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaSticker(InputMedia):
@@ -7635,10 +7699,13 @@ class InputMediaSticker(InputMedia):
         self.emoji: Optional[str] = emoji
 
     def to_dict(self):
-        json_dict = super(InputMediaSticker, self).to_dict()
-        if self.emoji:
-            json_dict['emoji'] = self.emoji
-        return json_dict
+        data = super(InputMediaSticker, self).to_dict()
+        if self.emoji is not None:
+            data['emoji'] = self.emoji
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputMediaVenue(InputMedia):
@@ -7693,21 +7760,24 @@ class InputMediaVenue(InputMedia):
         self.google_place_type: Optional[str] = google_place_type
 
     def to_dict(self):
-        json_dict = super(InputMediaVenue, self).to_dict()
-        json_dict['latitude'] = self.latitude
-        json_dict['longitude'] = self.longitude
-        json_dict['title'] = self.title
-        json_dict['address'] = self.address
-        if self.foursquare_id:
-            json_dict['foursquare_id'] = self.foursquare_id
-        if self.foursquare_type:
-            json_dict['foursquare_type'] = self.foursquare_type
-        if self.google_place_id:
-            json_dict['google_place_id'] = self.google_place_id
-        if self.google_place_type:
-            json_dict['google_place_type'] = self.google_place_type
-        return json_dict
-    
+        data = super(InputMediaVenue, self).to_dict()
+        data['latitude'] = self.latitude
+        data['longitude'] = self.longitude
+        data['title'] = self.title
+        data['address'] = self.address
+        if self.foursquare_id is not None:
+            data['foursquare_id'] = self.foursquare_id
+        if self.foursquare_type is not None:
+            data['foursquare_type'] = self.foursquare_type
+        if self.google_place_id is not None:
+            data['google_place_id'] = self.google_place_id
+        if self.google_place_type is not None:
+            data['google_place_type'] = self.google_place_type
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class PollOption(JsonDeserializable):
     """
@@ -7774,7 +7844,7 @@ class PollOption(JsonDeserializable):
     #     return json.dumps(self.text)
 
 
-class InputPollOption(JsonSerializable):
+class InputPollOption(Dictionaryable, JsonSerializable):
     """
     This object contains information about one answer option in a poll to be sent.
 
@@ -7807,16 +7877,16 @@ class InputPollOption(JsonSerializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {
+        data = {
             "text": self.text,
         }
-        if self.text_parse_mode:
-            json_dict["text_parse_mode"] = self.text_parse_mode
-        if self.text_entities:
-            json_dict['text_entities'] = [entity.to_dict() for entity in self.text_entities]
-        if self.media:
-            json_dict['media'] = self.media.to_dict()
-        return json_dict
+        if self.text_parse_mode is not None:
+            data["text_parse_mode"] = self.text_parse_mode
+        if self.text_entities is not None:
+            data['text_entities'] = MessageEntity.to_list_of_dicts(self.text_entities)
+        if self.media is not None:
+            data['media'] = self.media.to_dict()
+        return data
 
 
 # noinspection PyShadowingBuiltins
@@ -8027,11 +8097,11 @@ class PollAnswer(JsonSerializable, JsonDeserializable, Dictionaryable):
     def to_dict(self):
         # Left for backward compatibility, but with no support for voter_chat
         logger.warning("PollAnswer.to_dict is deprecated and will be removed in future versions.")
-        json_dict = {
+        data = {
             "poll_id": self.poll_id,
             "option_ids": self.option_ids,
         }
-        return json_dict
+        return data
 
 
 
@@ -8065,10 +8135,11 @@ class ChatLocation(JsonSerializable, JsonDeserializable, Dictionaryable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        return {
+        data = {
             "location": self.location.to_dict(),
             "address": self.address
         }
+        return data
 
 
 class ChatInviteLink(JsonSerializable, JsonDeserializable, Dictionaryable):
@@ -8143,22 +8214,22 @@ class ChatInviteLink(JsonSerializable, JsonDeserializable, Dictionaryable):
         return json.dumps(self.to_dict())
 
     def to_dict(self):
-        json_dict = {
+        data = {
             "invite_link": self.invite_link,
             "creator": self.creator.to_dict(),
             "is_primary": self.is_primary,
             "is_revoked": self.is_revoked,
             "creates_join_request": self.creates_join_request
         }
-        if self.expire_date:
-            json_dict["expire_date"] = self.expire_date
-        if self.member_limit:
-            json_dict["member_limit"] = self.member_limit
-        if self.pending_join_request_count:
-            json_dict["pending_join_request_count"] = self.pending_join_request_count
-        if self.name:
-            json_dict["name"] = self.name
-        return json_dict
+        if self.expire_date is not None:
+            data["expire_date"] = self.expire_date
+        if self.member_limit is not None:
+            data["member_limit"] = self.member_limit
+        if self.pending_join_request_count is not None:
+            data["pending_join_request_count"] = self.pending_join_request_count
+        if self.name is not None:
+            data["name"] = self.name
+        return data
 
 
 class ProximityAlertTriggered(JsonDeserializable):
@@ -8240,6 +8311,11 @@ class VoiceChatScheduled(VideoChatScheduled):
     """
     Deprecated, use :class:`VideoChatScheduled` instead.
     """
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        return VideoChatScheduled.de_json(json_string)
+
     def __init__(self, *args, **kwargs):
         log_deprecation_warning('VoiceChatScheduled is deprecated. Use VideoChatScheduled instead.')
         super().__init__(*args, **kwargs)
@@ -8271,6 +8347,11 @@ class VoiceChatEnded(VideoChatEnded):
     """
     Deprecated, use :class:`VideoChatEnded` instead.
     """
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        return VideoChatEnded.de_json(json_string)
+
     def __init__(self, *args, **kwargs):
         log_deprecation_warning('VoiceChatEnded is deprecated. Use VideoChatEnded instead.')
         super().__init__(*args, **kwargs)
@@ -8304,6 +8385,11 @@ class VoiceChatParticipantsInvited(VideoChatParticipantsInvited):
     """
     Deprecated, use :class:`VideoChatParticipantsInvited` instead.
     """
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        return VideoChatParticipantsInvited.de_json(json_string)
+
     def __init__(self, *args, **kwargs):
         log_deprecation_warning('VoiceChatParticipantsInvited is deprecated. Use VideoChatParticipantsInvited instead.')
         super().__init__(*args, **kwargs)
@@ -8358,11 +8444,12 @@ class MenuButton(JsonDeserializable, JsonSerializable, Dictionaryable):
         """
         raise NotImplementedError
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """
         :meta private:
         """
-        raise NotImplementedError
+        data = {}
+        return data
 
 
 # noinspection PyUnusedLocal,PyShadowingBuiltins
@@ -8382,10 +8469,49 @@ class MenuButtonCommands(MenuButton):
         self.type: str = "commands"
 
     def to_dict(self):
-        return {'type': self.type}
+        data = super().to_dict()
+        data['type'] = self.type
+        return data
 
     def to_json(self):
         return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
+
+
+# noinspection PyUnusedLocal,PyShadowingBuiltins
+class MenuButtonWebApp(MenuButton):
+    """
+    Represents a menu button, which opens the bot's list of commands.
+
+    Telegram documentation: https://core.telegram.org/bots/api#menubuttoncommands
+
+    :param type: Type of the button, must be commands
+    :type type: :obj:`str`
+
+    :return: Instance of the class
+    :rtype: :class:`telebot.types.MenuButtonCommands`
+    """
+    def __init__(self, **kwargs):
+        self.type: str = "commands"
+
+    def to_dict(self):
+        data = super().to_dict()
+        data['type'] = self.type
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
 
 
 # noinspection PyUnusedLocal,PyShadowingBuiltins
@@ -8413,10 +8539,20 @@ class MenuButtonWebApp(MenuButton):
         self.web_app: WebAppInfo = web_app
 
     def to_dict(self):
-        return {'type': self.type, 'text': self.text, 'web_app': self.web_app.to_dict()}
+        data = super().to_dict()
+        data['type'] = self.type
+        data['text'] = self.text
+        data['web_app'] = self.web_app.to_dict()
+        return data
 
     def to_json(self):
         return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
 
 
 # noinspection PyUnusedLocal,PyShadowingBuiltins
@@ -8435,8 +8571,16 @@ class MenuButtonDefault(MenuButton):
     def __init__(self, **kwargs):
         self.type: str = "default"
 
-    def to_dict(self):
-        return {'type': self.type}
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
+
+    def to_dict(self) -> dict:
+        data = super().to_dict()
+        data['type'] = self.type
+        return data
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -8539,7 +8683,7 @@ class ChatAdministratorRights(JsonDeserializable, JsonSerializable, Dictionaryab
         self.can_send_welcome_messages: bool = can_send_welcome_messages
 
     def to_dict(self):
-        json_dict = {
+        data = {
             'is_anonymous': self.is_anonymous,
             'can_manage_chat': self.can_manage_chat,
             'can_delete_messages': self.can_delete_messages,
@@ -8548,27 +8692,24 @@ class ChatAdministratorRights(JsonDeserializable, JsonSerializable, Dictionaryab
             'can_promote_members': self.can_promote_members,
             'can_change_info': self.can_change_info,
             'can_invite_users': self.can_invite_users,
+            'can_post_stories': self.can_post_stories,
+            'can_edit_stories': self.can_edit_stories,
+            'can_delete_stories': self.can_delete_stories,
         }
         if self.can_post_messages is not None:
-            json_dict['can_post_messages'] = self.can_post_messages
+            data['can_post_messages'] = self.can_post_messages
         if self.can_edit_messages is not None:
-            json_dict['can_edit_messages'] = self.can_edit_messages
+            data['can_edit_messages'] = self.can_edit_messages
         if self.can_pin_messages is not None:
-            json_dict['can_pin_messages'] = self.can_pin_messages
+            data['can_pin_messages'] = self.can_pin_messages
         if self.can_manage_topics is not None:
-            json_dict['can_manage_topics'] = self.can_manage_topics
-        if self.can_post_stories is not None:
-            json_dict['can_post_stories'] = self.can_post_stories
-        if self.can_edit_stories is not None:
-            json_dict['can_edit_stories'] = self.can_edit_stories
-        if self.can_delete_stories is not None:
-            json_dict['can_delete_stories'] = self.can_delete_stories
+            data['can_manage_topics'] = self.can_manage_topics
         if self.can_manage_direct_messages is not None:
-            json_dict['can_manage_direct_messages'] = self.can_manage_direct_messages
+            data['can_manage_direct_messages'] = self.can_manage_direct_messages
         if self.can_manage_tags is not None:
-            json_dict['can_manage_tags'] = self.can_manage_tags
+            data['can_manage_tags'] = self.can_manage_tags
 
-        return json_dict
+        return data
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -8963,17 +9104,17 @@ class InputSticker(Dictionaryable, JsonSerializable):
             self._sticker_dic = 'attach://{0}'.format(self._sticker_name)
 
     def to_dict(self) -> dict:
-        json_dict = {
+        data = {
             'sticker': self._sticker_dic,
             'emoji_list': self.emoji_list,
             'format': self.format
         }
         if self.mask_position is not None:
-            json_dict['mask_position'] = self.mask_position.to_dict()
+            data['mask_position'] = self.mask_position.to_dict()
         if self.keywords is not None:
-            json_dict['keywords'] = self.keywords
+            data['keywords'] = self.keywords
 
-        return json_dict
+        return data
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
@@ -9027,20 +9168,20 @@ class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerial
 
 
     def to_dict(self):
-        json_dict = {}
+        data = {}
 
         if self.query is not None:
-            json_dict['query'] = self.query
+            data['query'] = self.query
         if self.allow_user_chats is not None:
-            json_dict['allow_user_chats'] = self.allow_user_chats
+            data['allow_user_chats'] = self.allow_user_chats
         if self.allow_bot_chats is not None:
-            json_dict['allow_bot_chats'] = self.allow_bot_chats
+            data['allow_bot_chats'] = self.allow_bot_chats
         if self.allow_group_chats is not None:
-            json_dict['allow_group_chats'] = self.allow_group_chats
+            data['allow_group_chats'] = self.allow_group_chats
         if self.allow_channel_chats is not None:
-            json_dict['allow_channel_chats'] = self.allow_channel_chats
+            data['allow_channel_chats'] = self.allow_channel_chats
 
-        return json_dict
+        return data
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -9092,16 +9233,16 @@ class InlineQueryResultsButton(JsonSerializable, Dictionaryable):
         self.start_parameter: Optional[str] = start_parameter
 
     def to_dict(self) -> dict:
-        json_dict = {
+        data = {
             'text': self.text
         }
 
         if self.web_app is not None:
-            json_dict['web_app'] = self.web_app.to_dict()
+            data['web_app'] = self.web_app.to_dict()
         if self.start_parameter is not None:
-            json_dict['start_parameter'] = self.start_parameter
+            data['start_parameter'] = self.start_parameter
 
-        return json_dict
+        return data
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
@@ -9175,10 +9316,10 @@ class ReactionType(JsonDeserializable, Dictionaryable, JsonSerializable):
             log_deprecation_warning('The ReactionType class should not be instantiated directly. Use particular ReactionTypeXXX class instead')
 
     def to_dict(self) -> dict:
-        json_dict = {
+        data = {
             'type': self.type
         }
-        return json_dict
+        return data
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
@@ -9205,9 +9346,18 @@ class ReactionTypeEmoji(ReactionType):
         self.emoji: str = emoji
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['emoji'] = self.emoji
-        return json_dict
+        data = super().to_dict()
+        data['emoji'] = self.emoji
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
 
 
 # noinspection PyUnresolvedReferences,PyUnusedLocal
@@ -9231,9 +9381,18 @@ class ReactionTypeCustomEmoji(ReactionType):
         self.custom_emoji_id: str = custom_emoji_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['custom_emoji_id'] = self.custom_emoji_id
-        return json_dict
+        data = super().to_dict()
+        data['custom_emoji_id'] = self.custom_emoji_id
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
 
 
 class ReactionTypePaid(ReactionType):
@@ -9252,7 +9411,17 @@ class ReactionTypePaid(ReactionType):
         super().__init__('paid')
 
     def to_dict(self) -> dict:
-        return super().to_dict()
+        data = super().to_dict()
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        obj = cls.check_json(json_string)
+        return cls(**obj)
 
 
 
@@ -9757,19 +9926,19 @@ class LinkPreviewOptions(JsonDeserializable, Dictionaryable, JsonSerializable):
         self.show_above_text: Optional[bool] = show_above_text
 
     def to_dict(self) -> dict:
-        json_dict = {}
+        data = {}
 
         if self.is_disabled is not None:
-            json_dict['is_disabled'] = self.is_disabled
+            data['is_disabled'] = self.is_disabled
         if self.url is not None:
-            json_dict['url'] = self.url
+            data['url'] = self.url
         if self.prefer_small_media is not None:
-            json_dict['prefer_small_media'] = self.prefer_small_media
+            data['prefer_small_media'] = self.prefer_small_media
         if self.prefer_large_media is not None:
-            json_dict['prefer_large_media'] = self.prefer_large_media
+            data['prefer_large_media'] = self.prefer_large_media
         if self.show_above_text is not None:
-            json_dict['show_above_text'] = self.show_above_text
-        return json_dict
+            data['show_above_text'] = self.show_above_text
+        return data
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
@@ -10081,28 +10250,28 @@ class ReplyParameters(JsonDeserializable, Dictionaryable, JsonSerializable):
             raise ValueError("Either 'message_id' or 'ephemeral_message_id' must be provided.")
 
     def to_dict(self) -> dict:
-        json_dict = {
+        data = {
             'message_id': self.message_id
         }
         if self.chat_id is not None:
-            json_dict['chat_id'] = self.chat_id
+            data['chat_id'] = self.chat_id
         if self.allow_sending_without_reply is not None:
-            json_dict['allow_sending_without_reply'] = self.allow_sending_without_reply
+            data['allow_sending_without_reply'] = self.allow_sending_without_reply
         if self.quote is not None:
-            json_dict['quote'] = self.quote
+            data['quote'] = self.quote
         if self.quote_parse_mode is not None:
-            json_dict['quote_parse_mode'] = self.quote_parse_mode
+            data['quote_parse_mode'] = self.quote_parse_mode
         if self.quote_entities is not None:
-            json_dict['quote_entities'] = [entity.to_dict() for entity in self.quote_entities]
+            data['quote_entities'] = MessageEntity.to_list_of_dicts(self.quote_entities)
         if self.quote_position is not None:
-            json_dict['quote_position'] = self.quote_position
+            data['quote_position'] = self.quote_position
         if self.checklist_task_id is not None:
-            json_dict['checklist_task_id'] = self.checklist_task_id
+            data['checklist_task_id'] = self.checklist_task_id
         if self.poll_option_id is not None:
-            json_dict['poll_option_id'] = self.poll_option_id
+            data['poll_option_id'] = self.poll_option_id
         if self.ephemeral_message_id is not None:
-            json_dict['ephemeral_message_id'] = self.ephemeral_message_id
-        return json_dict
+            data['ephemeral_message_id'] = self.ephemeral_message_id
+        return data
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
 
@@ -11697,6 +11866,13 @@ class InputPaidMediaPhoto(InputPaidMedia):
     def __init__(self, media: Union[str, InputFile], **kwargs):
         super().__init__(type='photo', media=media)
 
+    def to_dict(self):
+        data = super().to_dict()
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputPaidMediaLivePhoto(InputPaidMedia):
     """
@@ -11729,9 +11905,13 @@ class InputPaidMediaLivePhoto(InputPaidMedia):
 
     def to_dict(self):
         data = super().to_dict()
+        data['_photo_name'] = self._photo_name
         data['photo'] = self._photo_dic
         return data
-    
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputPaidMediaVideo(InputPaidMedia):
     """
@@ -11807,21 +11987,24 @@ class InputPaidMediaVideo(InputPaidMedia):
 
     def to_dict(self):
         data = super().to_dict()
-        if self._thumbnail_dic:
+        if self._thumbnail_dic is not None:
             data['thumbnail'] = self._thumbnail_dic
-        if self.width:
+        if self.width is not None:
             data['width'] = self.width
-        if self.height:
+        if self.height is not None:
             data['height'] = self.height
-        if self.duration:
+        if self.duration is not None:
             data['duration'] = self.duration
         if self.supports_streaming is not None:
             data['supports_streaming'] = self.supports_streaming
-        if self._cover_dic:
+        if self._cover_dic is not None:
             data['cover'] = self._cover_dic
-        if self.start_timestamp:
+        if self.start_timestamp is not None:
             data['start_timestamp'] = self.start_timestamp
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class RefundedPayment(JsonDeserializable):
@@ -11892,7 +12075,7 @@ class PaidMediaPurchased(JsonDeserializable):
         return cls(**obj)
 
 
-class CopyTextButton(JsonSerializable, JsonDeserializable):
+class CopyTextButton(Dictionaryable, JsonSerializable, JsonDeserializable):
     """
     This object represents an inline keyboard button that copies specified text to the clipboard.
 
@@ -11924,11 +12107,21 @@ class CopyTextButton(JsonSerializable, JsonDeserializable):
 
 
 # noinspection PyShadowingBuiltins
-class DisabledButton(JsonDeserializable):
+class DisabledButton(Dictionaryable, JsonSerializable, JsonDeserializable):
     """
     This object represents a disabled button which does nothing. Currently holds no information.
     """
-    pass
+    def to_dict(self):
+        data = {}
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    @classmethod
+    def de_json(cls, json_string):
+        if json_string is None: return None
+        return DisabledButton()
 
 
 # noinspection PyShadowingBuiltins
@@ -12262,7 +12455,7 @@ class BusinessBotRights(JsonDeserializable):
         return self.can_delete_sent_messages
 
 
-class AcceptedGiftTypes(JsonDeserializable, JsonSerializable):
+class AcceptedGiftTypes(Dictionaryable, JsonDeserializable, JsonSerializable):
     """
     This object describes the types of gifts that can be gifted to a user or a chat.
 
@@ -12857,7 +13050,7 @@ class InputStoryContentVideo(InputStoryContent):
         return self.to_json(), {self._video_name: self.video}
 
 
-class StoryAreaPosition(JsonSerializable):
+class StoryAreaPosition(Dictionaryable, JsonSerializable):
     """
     Describes the position of a clickable area within a story.
 
@@ -12908,7 +13101,7 @@ class StoryAreaPosition(JsonSerializable):
         return data
 
 
-class LocationAddress(JsonSerializable):
+class LocationAddress(Dictionaryable, JsonSerializable):
     """
     Describes the physical address of a location.
 
@@ -12943,7 +13136,7 @@ class LocationAddress(JsonSerializable):
         data = {
             'country_code': self.country_code
         }
-        if self.state:
+        if self.state is not None:
             data['state'] = self.state
         if self.city is not None:
             data['city'] = self.city
@@ -13158,7 +13351,7 @@ class StoryAreaTypeUniqueGift(StoryAreaType):
 
 
 # noinspection PyShadowingBuiltins
-class StoryArea(JsonSerializable):
+class StoryArea(Dictionaryable, JsonSerializable):
     """
     Describes a clickable area on a story media.
 
@@ -13535,7 +13728,7 @@ class Checklist(JsonDeserializable):
 
 
 # noinspection PyShadowingBuiltins
-class InputChecklistTask(JsonSerializable):
+class InputChecklistTask(Dictionaryable, JsonSerializable):
     """
     Describes a task to add to a checklist.
 
@@ -13571,14 +13764,14 @@ class InputChecklistTask(JsonSerializable):
             'id': self.id,
             'text': self.text
         }
-        if self.parse_mode:
+        if self.parse_mode is not None:
             data['parse_mode'] = self.parse_mode
-        if self.text_entities:
-            data['text_entities'] = [entity.to_dict() for entity in self.text_entities]
+        if self.text_entities is not None:
+            data['text_entities'] = MessageEntity.to_list_of_dicts(self.text_entities)
         return data
 
 
-class InputChecklist(JsonSerializable):
+class InputChecklist(Dictionaryable, JsonSerializable):
     """
     Describes a checklist to create.
 
@@ -13625,10 +13818,10 @@ class InputChecklist(JsonSerializable):
             'title': self.title,
             'tasks': [task.to_dict() for task in self.tasks]
         }
-        if self.parse_mode:
+        if self.parse_mode is not None:
             data['parse_mode'] = self.parse_mode
-        if self.title_entities:
-            data['title_entities'] = [entity.to_dict() for entity in self.title_entities]
+        if self.title_entities is not None:
+            data['title_entities'] = MessageEntity.to_list_of_dicts(self.title_entities)
         if self.others_can_add_tasks is not None:
             data['others_can_add_tasks'] = self.others_can_add_tasks
         if self.others_can_mark_tasks_as_done is not None:
@@ -13797,7 +13990,7 @@ class DirectMessagesTopic(JsonDeserializable):
         return cls(**obj)
     
 
-class SuggestedPostPrice(JsonSerializable, JsonDeserializable):
+class SuggestedPostPrice(Dictionaryable, JsonSerializable, JsonDeserializable):
     """
     Describes the price of a suggested post.
 
@@ -13833,7 +14026,7 @@ class SuggestedPostPrice(JsonSerializable, JsonDeserializable):
         return cls(**obj)
     
 
-class SuggestedPostParameters(JsonSerializable):
+class SuggestedPostParameters(Dictionaryable, JsonSerializable):
     """
     Contains parameters of a post that is being suggested by the bot.
 
@@ -14235,7 +14428,7 @@ class UserProfileAudios(JsonDeserializable):
         return cls(**obj)
     
 
-class KeyboardButtonRequestManagedBot(JsonSerializable):
+class KeyboardButtonRequestManagedBot(Dictionaryable, JsonSerializable):
     """
     This object defines the parameters for the creation of a managed bot. Information about the created bot will be shared with the bot using the update managed_bot and a Message with the field managed_bot_created.
 
@@ -14267,9 +14460,9 @@ class KeyboardButtonRequestManagedBot(JsonSerializable):
         data = {
             'request_id': self.request_id
         }
-        if self.suggested_name:
+        if self.suggested_name is not None:
             data['suggested_name'] = self.suggested_name
-        if self.suggested_username:
+        if self.suggested_username is not None:
             data['suggested_username'] = self.suggested_username
         return data
 
@@ -15699,10 +15892,8 @@ class RichBlockCaption(JsonDeserializable, Dictionaryable):
             obj['credit'] = RichText.de_json(obj['credit'])
         return cls(**obj)
 
-    def to_dict(self):
-        data = {
-            'text': RichText.richtext_to_dict(self.text),
-        }
+    def to_dict(self) -> dict:
+        data = {'text': RichText.richtext_to_dict(self.text)}
         if self.credit is not None:
             data['credit'] = RichText.richtext_to_dict(self.credit)
         return data
@@ -16730,6 +16921,9 @@ class InputMediaVoiceNote(InputMedia):
             data['duration'] = self.duration
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 # noinspection shadowing-builtins
 class InputRichMessageMedia(Dictionaryable, JsonSerializable):
@@ -16802,7 +16996,7 @@ class InputRichBlockListItem(Dictionaryable, JsonSerializable):
 
     def to_dict(self) -> dict:
         data = {
-            'blocks': [block.to_dict() for block in self.blocks]
+            'blocks': [b.to_dict() for b in self.blocks]
         }
         if self.has_checkbox is not None:
             data['has_checkbox'] = self.has_checkbox
@@ -16859,10 +17053,9 @@ class InputRichBlock(Dictionaryable, JsonSerializable):
         return json.dumps(self.to_dict())
     
     def to_dict(self) -> dict:
-        return {
-            'type': self.type
-        }
-    
+        data = {'type': self.type}
+        return data
+
 
 class InputRichBlockParagraph(InputRichBlock):
     """
@@ -16887,6 +17080,9 @@ class InputRichBlockParagraph(InputRichBlock):
         data = super().to_dict()
         data['text'] = RichText.richtext_to_dict(self.text)
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
     
 
 class InputRichBlockSectionHeading(InputRichBlock):
@@ -16917,6 +17113,9 @@ class InputRichBlockSectionHeading(InputRichBlock):
         data['text'] = RichText.richtext_to_dict(self.text)
         data['size'] = self.size
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
     
 class InputRichBlockPreformatted(InputRichBlock):
@@ -16949,6 +17148,9 @@ class InputRichBlockPreformatted(InputRichBlock):
             data['language'] = self.language
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockFooter(InputRichBlock):
     """
@@ -16974,6 +17176,9 @@ class InputRichBlockFooter(InputRichBlock):
         data['text'] = RichText.richtext_to_dict(self.text)
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockDivider(InputRichBlock):
     """
@@ -16990,6 +17195,12 @@ class InputRichBlockDivider(InputRichBlock):
     def __init__(self, **kwargs):
         super().__init__(type='divider', **kwargs)
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+    def to_dict(self) -> dict:
+        data = super().to_dict()
+        return data
 
 
 class InputRichBlockMathematicalExpression(InputRichBlock):
@@ -17016,6 +17227,9 @@ class InputRichBlockMathematicalExpression(InputRichBlock):
         data['expression'] = self.expression
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockAnchor(InputRichBlock):
     """
@@ -17041,6 +17255,9 @@ class InputRichBlockAnchor(InputRichBlock):
         data['name'] = self.name
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockList(InputRichBlock):
     """
@@ -17063,8 +17280,11 @@ class InputRichBlockList(InputRichBlock):
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['items'] = [item.to_dict() for item in self.items]
+        data['items'] = [i.to_dict() for i in self.items]
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockBlockQuotation(InputRichBlock):
@@ -17092,10 +17312,13 @@ class InputRichBlockBlockQuotation(InputRichBlock):
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['blocks'] = [block.to_dict() for block in self.blocks]
+        data['blocks'] = [b.to_dict() for b in self.blocks]
         if self.credit is not None:
             data['credit'] = RichText.richtext_to_dict(self.credit)
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockPullQuotation(InputRichBlock):
@@ -17128,6 +17351,9 @@ class InputRichBlockPullQuotation(InputRichBlock):
             data['credit'] = RichText.richtext_to_dict(self.credit)
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockCollage(InputRichBlock):
     """
@@ -17154,10 +17380,13 @@ class InputRichBlockCollage(InputRichBlock):
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['blocks'] = [block.to_dict() for block in self.blocks]
+        data['blocks'] = [b.to_dict() for b in self.blocks]
         if self.caption is not None:
             data['caption'] = self.caption.to_dict()
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockSlideshow(InputRichBlock):
@@ -17185,10 +17414,13 @@ class InputRichBlockSlideshow(InputRichBlock):
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['blocks'] = [block.to_dict() for block in self.blocks]
+        data['blocks'] = [b.to_dict() for b in self.blocks]
         if self.caption is not None:
             data['caption'] = self.caption.to_dict()
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockTable(InputRichBlock):
@@ -17233,7 +17465,7 @@ class InputRichBlockTable(InputRichBlock):
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['cells'] = [[cell.to_dict() for cell in row] for row in self.cells]
+        data['cells'] = [[c.to_dict() for c in row] for row in self.cells]
         if self.is_bordered is not None:
             data['is_bordered'] = self.is_bordered
         if self.is_striped is not None:
@@ -17241,6 +17473,9 @@ class InputRichBlockTable(InputRichBlock):
         if self.caption is not None:
             data['caption'] = RichText.richtext_to_dict(self.caption)
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockDetails(InputRichBlock):
@@ -17276,10 +17511,13 @@ class InputRichBlockDetails(InputRichBlock):
     def to_dict(self) -> dict:
         data = super().to_dict()
         data['summary'] = RichText.richtext_to_dict(self.summary)
-        data['blocks'] = [block.to_dict() for block in self.blocks]
+        data['blocks'] = [b.to_dict() for b in self.blocks]
         if self.is_open is not None:
             data['is_open'] = self.is_open
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockMap(InputRichBlock):
@@ -17332,6 +17570,9 @@ class InputRichBlockMap(InputRichBlock):
             data['caption'] = self.caption.to_dict()
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockAnimation(InputRichBlock):
     """
@@ -17362,6 +17603,9 @@ class InputRichBlockAnimation(InputRichBlock):
         if self.caption is not None:
             data['caption'] = self.caption.to_dict()
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockAudio(InputRichBlock):
@@ -17394,6 +17638,9 @@ class InputRichBlockAudio(InputRichBlock):
             data['caption'] = self.caption.to_dict()
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockPhoto(InputRichBlock):
     """
@@ -17424,6 +17671,9 @@ class InputRichBlockPhoto(InputRichBlock):
         if self.caption is not None:
             data['caption'] = self.caption.to_dict()
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputRichBlockVideo(InputRichBlock):
@@ -17456,6 +17706,9 @@ class InputRichBlockVideo(InputRichBlock):
             data['caption'] = self.caption.to_dict()
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockVoiceNote(InputRichBlock):
     """
@@ -17487,6 +17740,9 @@ class InputRichBlockVoiceNote(InputRichBlock):
             data['caption'] = self.caption.to_dict()
         return data
 
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
 
 class InputRichBlockThinking(InputRichBlock):
     """
@@ -17511,6 +17767,9 @@ class InputRichBlockThinking(InputRichBlock):
         data = super().to_dict()
         data['text'] = RichText.richtext_to_dict(self.text)
         return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
     
 
 # noinspection shadowing-builtins
