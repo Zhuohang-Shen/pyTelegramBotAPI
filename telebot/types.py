@@ -3498,7 +3498,8 @@ class CallbackGame(Dictionaryable, JsonSerializable, JsonDeserializable):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        return {}
+        data = {}
+        return data
 
     @classmethod
     def de_json(cls, json_string):
@@ -10355,7 +10356,6 @@ class ReplyParameters(JsonDeserializable, Dictionaryable, JsonSerializable):
 
 class EphemeralMessageParameters(JsonDeserializable, Dictionaryable, JsonSerializable):
     """
-    Describes the ephemeral settings for a message.
 
     Telegram documentation: https://core.telegram.org/bots/api#ephemeralmessageparameters
 
@@ -10365,7 +10365,7 @@ class EphemeralMessageParameters(JsonDeserializable, Dictionaryable, JsonSeriali
     :param callback_query_id: Optional. Identifier of the callback query which triggered the message, if any
     :type callback_query_id: :obj:`str`
 
-    :param replace_callback_query_message: Optional. Pass True if the ephemeral message must be shown in place of the original message. Must be False for callback queries from ephemeral messages, which must be edited using regular editEphemeralMessage methods.
+    :param replace_callback_query_message: Optional. Pass True if the ephemeral message must be shown in place of the original message. Must be False for callback queries from ephemeral messages, which must be edited using regular editEphemeralMessage… methods.
     :type replace_callback_query_message: :obj:`bool`
 
     :return: Instance of the class
@@ -12219,6 +12219,8 @@ class CopyTextButton(Dictionaryable, JsonSerializable, JsonDeserializable):
 class DisabledButton(Dictionaryable, JsonSerializable, JsonDeserializable):
     """
     This object represents a disabled button which does nothing. Currently holds no information.
+
+    Telegram documentation: https://core.telegram.org/bots/api#disabledbutton
     """
     def to_dict(self) -> dict:
         data = {}
@@ -16533,32 +16535,32 @@ class RichBlockExpandableBlockQuotation(RichBlock):
 
 class RichBlockButtons(RichBlock):
     """
-    A list of rich blocks to be displayed as a button group.
+    A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag <tg-button-row>.
 
     Telegram documentation: https://core.telegram.org/bots/api#richblockbuttons
 
     :param type: Type of the block, always "buttons"
     :type type: :obj:`str`
 
-    :param buttons: List of rich blocks to be displayed as a button group
-    :type buttons: :obj:`list` of :class:`RichBlock`
+    :param buttons: The buttons
+    :type buttons: :obj:`list` of :class:`RichMessageButton`
 
-    :param align: Optional. Horizontal alignment of the button group
-    :type align: :obj:`int`
+    :param align: Optional. Horizontal alignment of the buttons. Currently, must be one of "left", "center", or "right".
+    :type align: :obj:`str`
 
     :return: Instance of the class
     :rtype: :class:`RichBlockButtons`
     """
-    def __init__(self, buttons: List['RichBlock'], align: Optional[int] = None, **kwargs):
+    def __init__(self, buttons: List[RichMessageButton], align: Optional[str] = None, **kwargs):
         super().__init__(type='buttons', **kwargs)
-        self.buttons: List[RichBlock] = buttons
-        self.align: Optional[int] = align
+        self.buttons: List[RichMessageButton] = buttons
+        self.align: Optional[str] = align
 
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string)
-        obj['buttons'] = [RichBlock.de_json(b) for b in obj['buttons']]
+        obj['buttons'] = [RichMessageButton.de_json(b) for b in obj['buttons']]
         return cls(**obj)
 
 
@@ -16897,32 +16899,32 @@ class RichBlockPhoto(RichBlock):
 
 class RichBlockDocument(RichBlock):
     """
-    A document block with a link to a file.
+    A block with a general file, corresponding to the custom HTML tag <tg-document>.
 
     Telegram documentation: https://core.telegram.org/bots/api#richblockdocument
 
     :param type: Type of the block, always "document"
     :type type: :obj:`str`
 
-    :param url: URL to the document
-    :type url: :obj:`str`
+    :param document: The document
+    :type document: :class:`Document`
 
-    :param caption: Optional. Caption of the document
-    :type caption: :class:`RichText`
+    :param caption: Optional. Caption of the block
+    :type caption: :class:`RichBlockCaption`
 
     :return: Instance of the class
     :rtype: :class:`RichBlockDocument`
     """
-    def __init__(self, url: str, caption: Optional[RichText] = None, **kwargs):
+    def __init__(self, document: Document, caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='document', **kwargs)
-        self.url: str = url
-        self.caption: Optional[RichText] = caption
+        self.document: Document = document
+        self.caption: Optional[RichBlockCaption] = caption
 
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string)
-        obj['caption'] = RichText.de_json(obj['caption']) if obj.get('caption') else None
+        obj['caption'] = RichBlockCaption.de_json(obj['caption']) if obj.get('caption') else None
         return cls(**obj)
 
 
@@ -17963,30 +17965,30 @@ class InputRichBlockVoiceNote(InputRichBlock):
 
 class InputRichBlockButtons(InputRichBlock):
     """
-    A list of rich blocks to be displayed as a button group.
+    A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag <tg-button-row>.
 
     Telegram documentation: https://core.telegram.org/bots/api#inputrichblockbuttons
 
     :param type: Type of the block, always "buttons"
     :type type: :obj:`str`
 
-    :param blocks: List of rich blocks to be displayed as a button group
-    :type blocks: :obj:`list` of :class:`InputRichBlock`
+    :param buttons: List of 1-8 buttons to send
+    :type buttons: :obj:`list` of :class:`RichMessageButton`
 
-    :param align: Optional. Horizontal alignment of the button group
-    :type align: :obj:`int`
+    :param align: Optional. Horizontal alignment of the buttons. Currently, must be one of "left", "center", or "right".
+    :type align: :obj:`str`
 
     :return: Instance of the class
     :rtype: :class:`InputRichBlockButtons`
     """
-    def __init__(self, blocks: List[InputRichBlock], align: Optional[int] = None, **kwargs):
+    def __init__(self, buttons: List[RichMessageButton], align: Optional[str] = None, **kwargs):
         super().__init__(type='buttons', **kwargs)
-        self.blocks: List[InputRichBlock] = blocks
-        self.align: Optional[int] = align
+        self.buttons: List[RichMessageButton] = buttons
+        self.align: Optional[str] = align
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['blocks'] = [b.to_dict() for b in self.blocks]
+        data['buttons'] = [b.to_dict() for b in self.buttons]
         if self.align is not None:
             data['align'] = self.align
         return data
@@ -17994,32 +17996,33 @@ class InputRichBlockButtons(InputRichBlock):
 
 class InputRichBlockDocument(InputRichBlock):
     """
-    A document block with a link to a file.
+    A block with a general file, corresponding to the custom HTML tag <tg-document>.
 
     Telegram documentation: https://core.telegram.org/bots/api#inputrichblockdocument
 
     :param type: Type of the block, always "document"
     :type type: :obj:`str`
 
-    :param url: URL to the document
-    :type url: :obj:`str`
+    :param document: The document. Caption is ignored.
+    :type document: :class:`InputMediaDocument`
 
-    :param caption: Optional. Caption of the document
-    :type caption: :class:`RichText`
+    :param caption: Optional. Caption of the block
+    :type caption: :class:`RichBlockCaption`
 
     :return: Instance of the class
     :rtype: :class:`InputRichBlockDocument`
     """
-    def __init__(self, url: str, caption: Optional[RichText] = None, **kwargs):
+    def __init__(self, document: InputMediaDocument, caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='document', **kwargs)
-        self.url: str = url
-        self.caption: Optional[RichText] = caption
+        self.document: InputMediaDocument = document
+        self.caption: Optional[RichBlockCaption] = caption
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data['url'] = self.url
+        if hasattr(self, 'document'):
+            data['document'] = self.document.to_dict() if hasattr(self.document, 'to_dict') else self.document
         if self.caption is not None:
-            data['caption'] = RichText.richtext_to_dict(self.caption)
+            data['caption'] = RichBlockCaption.to_dict(self.caption) if hasattr(self.caption, 'to_dict') else self.caption
         return data
 
 
