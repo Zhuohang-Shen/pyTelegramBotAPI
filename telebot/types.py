@@ -9655,7 +9655,7 @@ class ExternalReplyInfo(JsonDeserializable):
     :type live_photo: :class:`LivePhoto`
 
     :param paid_media: Optional. Message contains paid media; information about the paid media
-    :type paid_media: :class:`PaidMedia`
+    :type paid_media: :class:`PaidMediaInfo`
 
     :param photo: Optional. Message is a photo, available sizes of the photo
     :type photo: :obj:`list` of :class:`PhotoSize`
@@ -9757,7 +9757,7 @@ class ExternalReplyInfo(JsonDeserializable):
         if 'venue' in obj:
             obj['venue'] = Venue.de_json(obj['venue'])
         if 'paid_media' in obj:
-            obj['paid_media'] = PaidMedia.de_json(obj['paid_media'])
+            obj['paid_media'] = PaidMediaInfo.de_json(obj['paid_media'])
         if 'checklist' in obj:
             obj['checklist'] = Checklist.de_json(obj['checklist'])
         if 'live_photo' in obj:
