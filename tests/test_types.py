@@ -837,7 +837,7 @@ def test_json_inlinekeyboardbutton():
     assert result.switch_inline_query == 'query'
     assert result.switch_inline_query_current_chat == 'query'
     assert isinstance(result.switch_inline_query_chosen_chat, types.SwitchInlineQueryChosenChat)
-    assert isinstance(result.callback_game, dict)
+    assert isinstance(result.callback_game, types.CallbackGame)
     assert result.pay == True
     assert isinstance(result.login_url, types.LoginUrl)
     assert isinstance(result.copy_text, types.CopyTextButton)
@@ -865,7 +865,7 @@ def test_json_menubuttonwebapp():
     assert isinstance(result, types.MenuButtonWebApp)
     assert result.type == 'web_app'
     assert result.text == 'Open App'
-    assert isinstance(result.web_app, dict)
+    assert isinstance(result.web_app, types.WebAppInfo)
 
 
 def test_json_pollanswer():
@@ -2143,8 +2143,8 @@ def test_json_proximityalerttriggered():
     json_str = r'{"traveler": {"id": 1, "is_bot": false, "first_name": "Test"}, "watcher": {"id": 1, "is_bot": false, "first_name": "Test"}, "distance": "test"}'
     result = types.ProximityAlertTriggered.de_json(json_str)
     assert isinstance(result, types.ProximityAlertTriggered)
-    assert isinstance(result.traveler, dict)
-    assert isinstance(result.watcher, dict)
+    assert isinstance(result.traveler, types.User)
+    assert isinstance(result.watcher, types.User)
     assert result.distance == 'test'
 
 

@@ -983,7 +983,8 @@ class ChatFullInfo(JsonDeserializable):
         return False
 
 
-class Chat(ChatFullInfo):
+# noinspection PyShadowingBuiltins
+class Chat(JsonDeserializable):
     """
     This object represents a chat.
 
@@ -1022,6 +1023,17 @@ class Chat(ChatFullInfo):
         obj = cls.check_json(json_string, dict_copy=False)
         return cls(**obj)
 
+    def __init__(self, id: int, type: str, title: Optional[str]=None, username: Optional[str]=None,
+                 first_name: Optional[str]=None, last_name: Optional[str]=None,
+                 is_forum: Optional[bool]=None, is_direct_messages: Optional[bool]=None, **kwargs) -> None:
+        self.id: int = id
+        self.type: str = type
+        self.title: Optional[str] = title
+        self.username: Optional[str] = username
+        self.first_name: Optional[str] = first_name
+        self.last_name: Optional[str] = last_name
+        self.is_forum: Optional[bool] = is_forum
+        self.is_direct_messages: Optional[bool] = is_direct_messages
 
 
 class MessageID(JsonDeserializable, ABC):
@@ -2951,6 +2963,8 @@ class ReplyKeyboardMarkup(Dictionaryable, JsonSerializable):
             data['input_field_placeholder'] = self.input_field_placeholder
         if self.is_persistent is not None:
             data['is_persistent'] = self.is_persistent
+        if self.force_reply is not None:
+            data['force_reply'] = self.force_reply
         return data
 
     def to_json(self):
@@ -3134,7 +3148,6 @@ class KeyboardButtonRequestChat(Dictionaryable):
         if self.request_username is not None:
             data['request_username'] = self.request_username
         return data
-
 
 
 class KeyboardButton(Dictionaryable, JsonSerializable):
@@ -3353,14 +3366,14 @@ class InlineKeyboardMarkup(Dictionaryable, JsonSerializable, JsonDeserializable)
         data = {
             'inline_keyboard': [[button.to_dict() for button in row] for row in self.inline_keyboard],
         }
+        if self.force_reply is not None:
+            data['force_reply'] = self.force_reply
         return data
 
     @property
     def keyboard(self):
         logger.warning('The "keyboard" property is deprecated. Use "inline_keyboard" instead.')
         return self.inline_keyboard
-
-
 
 
 class InlineKeyboardButton(Dictionaryable, JsonSerializable, JsonDeserializable):
@@ -3393,8 +3406,7 @@ class InlineKeyboardButton(Dictionaryable, JsonSerializable, JsonDeserializable)
     :param switch_inline_query: Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
     :type switch_inline_query: :obj:`str`
 
-    :param switch_inline_query_current_chat: Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
-This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.
+    :param switch_inline_query_current_chat: Optional. If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.
     :type switch_inline_query_current_chat: :obj:`str`
 
     :param switch_inline_query_chosen_chat: Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
@@ -3427,6 +3439,10 @@ This offers a quick way for the user to open your bot in inline mode in the same
             obj['switch_inline_query_chosen_chat'] = SwitchInlineQueryChosenChat.de_json(obj.get('switch_inline_query_chosen_chat'))
         if 'copy_text' in obj:
             obj['copy_text'] = CopyTextButton.de_json(obj.get('copy_text'))
+        if 'disabled' in obj:
+            obj['disabled'] = DisabledButton.de_json(obj.get('disabled'))
+        if 'callback_game' in obj:
+            obj['callback_game'] = CallbackGame.de_json(obj.get('callback_game'))
 
         return cls(**obj)
 
@@ -3470,7 +3486,7 @@ This offers a quick way for the user to open your bot in inline mode in the same
         if self.switch_inline_query_current_chat is not None:
             data['switch_inline_query_current_chat'] = self.switch_inline_query_current_chat
         if self.callback_game is not None:
-            data['callback_game'] = self.callback_game
+            data['callback_game'] = self.callback_game.to_dict()
         if self.pay is not None:
             data['pay'] = self.pay
         if self.login_url is not None:
@@ -3483,6 +3499,8 @@ This offers a quick way for the user to open your bot in inline mode in the same
             data['icon_custom_emoji_id'] = self.icon_custom_emoji_id
         if self.style is not None:
             data['style'] = self.style
+        if self.disabled is not None:
+            data['disabled'] = self.disabled.to_dict()
         return data
 
 
@@ -5554,6 +5572,8 @@ class InlineQueryResultVideo(InlineQueryResult):
         data['video_url'] = self.video_url
         data['mime_type'] = self.mime_type
         data['thumbnail_url'] = self.thumbnail_url
+        if self.video_width is not None:
+            data['video_width'] = self.video_width
         if self.video_height is not None:
             data['video_height'] = self.video_height
         if self.video_duration is not None:
@@ -5623,9 +5643,9 @@ class InlineQueryResultAudio(InlineQueryResult):
     def to_dict(self) -> dict:
         data = super().to_dict()
         data['audio_url'] = self.audio_url
-        if self.performer:
+        if self.performer is not None:
             data['performer'] = self.performer
-        if self.audio_duration:
+        if self.audio_duration is not None:
             data['audio_duration'] = self.audio_duration
         return data
 
@@ -5687,7 +5707,7 @@ class InlineQueryResultVoice(InlineQueryResult):
     def to_dict(self) -> dict:
         data = super().to_dict()
         data['voice_url'] = self.voice_url
-        if self.voice_duration:
+        if self.voice_duration is not None:
             data['voice_duration'] = self.voice_duration
         return data
 
@@ -8234,7 +8254,6 @@ class PollAnswer(JsonSerializable, JsonDeserializable, Dictionaryable):
         return data
 
 
-
 class ChatLocation(JsonSerializable, JsonDeserializable, Dictionaryable):
     """
     Represents a location to which a chat is connected.
@@ -8359,6 +8378,10 @@ class ChatInviteLink(JsonSerializable, JsonDeserializable, Dictionaryable):
             data["pending_join_request_count"] = self.pending_join_request_count
         if self.name is not None:
             data["name"] = self.name
+        if self.subscription_period is not None:
+            data["subscription_period"] = self.subscription_period
+        if self.subscription_price is not None:
+            data["subscription_price"] = self.subscription_price
         return data
 
 
@@ -8384,6 +8407,8 @@ class ProximityAlertTriggered(JsonDeserializable):
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string, dict_copy=False)
+        obj['traveler'] = User.de_json(obj.get('traveler'))
+        obj['watcher'] = User.de_json(obj.get('watcher'))
         return cls(**obj)
 
     def __init__(self, traveler: User, watcher: User, distance: int, **kwargs):
@@ -8485,7 +8510,6 @@ class VoiceChatEnded(VideoChatEnded):
     def __init__(self, *args, **kwargs):
         log_deprecation_warning('VoiceChatEnded is deprecated. Use VideoChatEnded instead.')
         super().__init__(*args, **kwargs)
-
 
 
 class VideoChatParticipantsInvited(JsonDeserializable):
@@ -8641,6 +8665,7 @@ class MenuButtonWebApp(MenuButton):
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string)
+        obj['web_app'] = WebAppInfo.de_json(obj.get('web_app'))
         return cls(**obj)
 
 
@@ -8801,7 +8826,6 @@ class ChatAdministratorRights(JsonDeserializable, JsonSerializable, Dictionaryab
 
     def to_json(self):
         return json.dumps(self.to_dict())
-
 
 
 class InputFile:
@@ -8992,7 +9016,6 @@ class GeneralForumTopicUnhidden(JsonDeserializable):
 
     def __init__(self) -> None:
         pass
-
 
 
 class ForumTopic(JsonDeserializable):
@@ -9213,7 +9236,6 @@ class InputSticker(Dictionaryable, JsonSerializable):
         if service_utils.is_string(self.sticker):
             return self.to_json(), None
         return self.to_json(), {self._sticker_name: self.sticker}
-
 
 
 class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerializable):
@@ -9557,7 +9579,6 @@ class MessageReactionUpdated(JsonDeserializable):
         self.date: int = date
         self.old_reaction: List[ReactionType] = old_reaction
         self.new_reaction: List[ReactionType] = new_reaction
-
 
 
 class MessageReactionCountUpdated(JsonDeserializable):
@@ -10824,7 +10845,6 @@ class BusinessConnection(JsonDeserializable):
         return self.rights is not None and self.rights.can_reply
 
 
-
 class BusinessMessagesDeleted(JsonDeserializable):
     """
     This object is received when messages are deleted from a connected business account.
@@ -12024,7 +12044,6 @@ class InputPaidMediaLivePhoto(InputPaidMedia):
         data = super().to_dict()
         data['photo'] = self._photo_dic
         return data
-
 
 
 class InputPaidMediaVideo(InputPaidMedia):
@@ -17727,6 +17746,8 @@ class InputRichBlockTable(InputRichBlock):
             data['is_bordered'] = self.is_bordered
         if self.is_striped is not None:
             data['is_striped'] = self.is_striped
+        if self.is_compact is not None:
+            data['is_compact'] = self.is_compact
         if self.caption is not None:
             data['caption'] = RichText.richtext_to_dict(self.caption)
         return data
@@ -18036,7 +18057,7 @@ class InputRichBlockDocument(InputRichBlock):
         if hasattr(self, 'document'):
             data['document'] = self.document.to_dict() if hasattr(self.document, 'to_dict') else self.document
         if self.caption is not None:
-            data['caption'] = RichBlockCaption.to_dict(self.caption) if hasattr(self.caption, 'to_dict') else self.caption
+            data['caption'] = self.caption.to_dict()
         return data
 
 

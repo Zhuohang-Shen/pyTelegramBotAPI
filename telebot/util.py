@@ -44,7 +44,8 @@ content_type_service = [
     'checklist_tasks_done', 'checklist_tasks_added', 'direct_message_price_changed', 'suggested_post_refunded',
     'suggested_post_info', 'suggested_post_approved', 'suggested_post_approval_failed', 'suggested_post_declined',
     'suggested_post_paid', 'gift_upgrade_sent', 'chat_owner_left', 'chat_owner_changed', 'managed_bot_created',
-    'poll_option_added', 'poll_option_deleted', 'community_chat_added', 'community_chat_removed'
+    'poll_option_added', 'poll_option_deleted', 'community_chat_added', 'community_chat_removed',
+    'community_chat_joined'
 ]
 
 #: All update types, should be used for allowed_updates parameter in polling.
