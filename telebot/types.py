@@ -11186,7 +11186,7 @@ class BackgroundType(ABC, JsonDeserializable):
 
 
 # noinspection PyShadowingBuiltins
-class BackgroundTypeFill(BackgroundFill):
+class BackgroundTypeFill(BackgroundType):
     """
     The background is automatically filled based on the selected colors.
 
@@ -11218,7 +11218,7 @@ class BackgroundTypeFill(BackgroundFill):
 
 
 # noinspection PyShadowingBuiltins
-class BackgroundTypeWallpaper(BackgroundFill):
+class BackgroundTypeWallpaper(BackgroundType):
     """
     The background is a wallpaper in the JPEG format.
 
@@ -11259,7 +11259,7 @@ class BackgroundTypeWallpaper(BackgroundFill):
 
 
 # noinspection PyShadowingBuiltins
-class BackgroundTypePattern(BackgroundFill):
+class BackgroundTypePattern(BackgroundType):
     """
     The background is a .PNG or .TGV (gzipped subset of SVG with MIME type "application/x-tgwallpattern") pattern to be combined with the background fill chosen by the user.
 
@@ -11305,7 +11305,7 @@ class BackgroundTypePattern(BackgroundFill):
 
 
 # noinspection PyShadowingBuiltins
-class BackgroundTypeChatTheme(BackgroundFill):
+class BackgroundTypeChatTheme(BackgroundType):
     """
     The background is taken directly from a built-in chat theme.
 
