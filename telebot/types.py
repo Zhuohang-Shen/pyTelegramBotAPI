@@ -3274,7 +3274,8 @@ class InlineKeyboardMarkup(Dictionaryable, JsonSerializable, JsonDeserializable)
         if json_string is None: return None
         obj = cls.check_json(json_string, dict_copy=False)
         inline_keyboard = [[InlineKeyboardButton.de_json(button) for button in row] for row in obj['inline_keyboard']]
-        return cls(inline_keyboard=inline_keyboard)
+        obj['inline_keyboard'] = inline_keyboard
+        return cls(**obj)
 
     def __init__(self, inline_keyboard: List[List[InlineKeyboardButton]] = None, row_width: int = 3,
                  keyboard: List[List[InlineKeyboardButton]] = None,
@@ -4317,10 +4318,8 @@ class BotCommand(JsonSerializable, JsonDeserializable, Dictionaryable):
         return data
 
 
-# BotCommandScopes
-
 # noinspection PyShadowingBuiltins
-class BotCommandScope(ABC, JsonSerializable):
+class BotCommandScope(ABC, Dictionaryable, JsonSerializable):
     """
     This object represents the scope to which bot commands are applied. Currently, the following 7 scopes are supported:
         BotCommandScopeDefault
@@ -4372,20 +4371,15 @@ class BotCommandScope(ABC, JsonSerializable):
     :rtype: :class:`telebot.types.BotCommandScope`
     """
     def __init__(self,
-                 type: str = 'default',
-                 chat_id: Optional[Union[int, str]] = None,
-                 user_id: Optional[Union[int, str]] = None):
+                 type: str = 'default'):
         self.type: str = type
-        self.chat_id: Optional[Union[int, str]] = chat_id
-        self.user_id: Optional[Union[int, str]] = user_id
+
+    def to_dict(self) -> dict:
+        data = {'type': self.type}
+        return data
 
     def to_json(self):
-        json_dict = {'type': self.type}
-        if self.chat_id:
-            json_dict['chat_id'] = self.chat_id
-        if self.user_id:
-            json_dict['user_id'] = self.user_id
-        return json.dumps(json_dict)
+        return json.dumps(self.to_dict())
 
 
 # noinspection PyUnresolvedReferences
@@ -4486,7 +4480,7 @@ class BotCommandScopeChat(BotCommandScope):
     :rtype: :class:`telebot.types.BotCommandScopeChat`
     """
     def __init__(self, chat_id: Optional[Union[str, int]]=None):
-        super(BotCommandScopeChat, self).__init__(type='chat', chat_id=chat_id)
+        super(BotCommandScopeChat, self).__init__(type='chat')
 
 
 # noinspection PyUnresolvedReferences
@@ -4506,7 +4500,7 @@ class BotCommandScopeChatAdministrators(BotCommandScope):
     :rtype: :class:`telebot.types.BotCommandScopeChatAdministrators`
     """
     def __init__(self, chat_id: Optional[Union[str, int]]=None):
-        super(BotCommandScopeChatAdministrators, self).__init__(type='chat_administrators', chat_id=chat_id)
+        super(BotCommandScopeChatAdministrators, self).__init__(type='chat_administrators')
 
 
 # noinspection PyUnresolvedReferences
@@ -4529,7 +4523,7 @@ class BotCommandScopeChatMember(BotCommandScope):
     :rtype: :class:`telebot.types.BotCommandScopeChatMember`
     """
     def __init__(self, chat_id: Optional[Union[str, int]]=None, user_id: Optional[Union[str, int]]=None):
-        super(BotCommandScopeChatMember, self).__init__(type='chat_member', chat_id=chat_id, user_id=user_id)
+        super(BotCommandScopeChatMember, self).__init__(type='chat_member')
 
 
 # noinspection PyShadowingBuiltins
@@ -5036,6 +5030,13 @@ class InlineQueryResultBase(Dictionaryable, JsonSerializable, ABC):
     """
     Deprecated. Use `InlineQueryResult` instead.
     """
+    def to_dict(self) -> dict:
+        return {}
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+
 class InlineQueryResultCachedBase(InlineQueryResultBase, ABC):
     """
     Deprecated. Use `InlineQueryResult` instead.
@@ -5097,10 +5098,9 @@ class InlineQueryResult(InlineQueryResultCachedBase, ABC):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'id': self.id
-        }
+        data = super().to_dict()
+        data['type'] = self.type
+        data['id'] = self.id
         if self.title is not None:
             data['title'] = self.title
         if self.caption is not None:
@@ -5621,13 +5621,13 @@ class InlineQueryResultAudio(InlineQueryResult):
         self.audio_duration: Optional[int] = audio_duration
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['audio_url'] = self.audio_url
+        data = super().to_dict()
+        data['audio_url'] = self.audio_url
         if self.performer:
-            json_dict['performer'] = self.performer
+            data['performer'] = self.performer
         if self.audio_duration:
-            json_dict['audio_duration'] = self.audio_duration
-        return json_dict
+            data['audio_duration'] = self.audio_duration
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -5685,11 +5685,11 @@ class InlineQueryResultVoice(InlineQueryResult):
         self.voice_duration: Optional[int] = voice_duration
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['voice_url'] = self.voice_url
+        data = super().to_dict()
+        data['voice_url'] = self.voice_url
         if self.voice_duration:
-            json_dict['voice_duration'] = self.voice_duration
-        return json_dict
+            data['voice_duration'] = self.voice_duration
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6082,9 +6082,9 @@ class InlineQueryResultGame(InlineQueryResult):
         self.game_short_name: str = game_short_name
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['game_short_name'] = self.game_short_name
-        return json_dict
+        data = super().to_dict()
+        data['game_short_name'] = self.game_short_name
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6145,9 +6145,9 @@ class InlineQueryResultCachedPhoto(InlineQueryResult):
         self.photo_file_id: str = photo_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['photo_file_id'] = self.photo_file_id
-        return json_dict
+        data = super().to_dict()
+        data['photo_file_id'] = self.photo_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6205,9 +6205,9 @@ class InlineQueryResultCachedGif(InlineQueryResult):
         self.gif_file_id: str = gif_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['gif_file_id'] = self.gif_file_id
-        return json_dict
+        data = super().to_dict()
+        data['gif_file_id'] = self.gif_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6265,9 +6265,9 @@ class InlineQueryResultCachedMpeg4Gif(InlineQueryResult):
         self.mpeg4_file_id: str = mpeg4_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['mpeg4_file_id'] = self.mpeg4_file_id
-        return json_dict
+        data = super().to_dict()
+        data['mpeg4_file_id'] = self.mpeg4_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6301,9 +6301,9 @@ class InlineQueryResultCachedSticker(InlineQueryResult):
         self.sticker_file_id: str = sticker_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['sticker_file_id'] = self.sticker_file_id
-        return json_dict
+        data = super().to_dict()
+        data['sticker_file_id'] = self.sticker_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6356,9 +6356,9 @@ class InlineQueryResultCachedDocument(InlineQueryResult):
         self.document_file_id: str = document_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['document_file_id'] = self.document_file_id
-        return json_dict
+        data = super().to_dict()
+        data['document_file_id'] = self.document_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6419,9 +6419,9 @@ class InlineQueryResultCachedVideo(InlineQueryResult):
         self.video_file_id: str = video_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['video_file_id'] = self.video_file_id
-        return json_dict
+        data = super().to_dict()
+        data['video_file_id'] = self.video_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6473,9 +6473,9 @@ class InlineQueryResultCachedVoice(InlineQueryResult):
         self.voice_file_id: str = voice_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['voice_file_id'] = self.voice_file_id
-        return json_dict
+        data = super().to_dict()
+        data['voice_file_id'] = self.voice_file_id
+        return data
 
 
 # noinspection PyUnresolvedReferences,PyShadowingBuiltins
@@ -6523,9 +6523,9 @@ class InlineQueryResultCachedAudio(InlineQueryResult):
         self.audio_file_id: str = audio_file_id
 
     def to_dict(self) -> dict:
-        json_dict = super().to_dict()
-        json_dict['audio_file_id'] = self.audio_file_id
-        return json_dict
+        data = super().to_dict()
+        data['audio_file_id'] = self.audio_file_id
+        return data
 
 
 class Game(JsonDeserializable):
@@ -9757,7 +9757,7 @@ class ExternalReplyInfo(JsonDeserializable):
         if 'venue' in obj:
             obj['venue'] = Venue.de_json(obj['venue'])
         if 'paid_media' in obj:
-            obj['paid_media'] = PaidMediaInfo.de_json(obj['paid_media'])
+            obj['paid_media'] = PaidMedia.de_json(obj['paid_media'])
         if 'checklist' in obj:
             obj['checklist'] = Checklist.de_json(obj['checklist'])
         if 'live_photo' in obj:
@@ -10391,7 +10391,8 @@ class EphemeralMessageParameters(JsonDeserializable, Dictionaryable, JsonSeriali
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
-        return cls(**cls.check_json(json_string))
+        obj = cls.check_json(json_string)
+        return cls(**obj)
 
 
 class UsersShared(JsonDeserializable):
@@ -11290,6 +11291,7 @@ class BackgroundTypePattern(BackgroundFill):
         if json_string is None: return None
         obj = cls.check_json(json_string)
         obj['document'] = Document.de_json(obj['document'])
+        obj['fill'] = BackgroundFill.de_json(obj['fill'])
         return cls(**obj)
 
     def __init__(self, type: str, document: Document, fill: BackgroundFill, intensity: int,
@@ -11649,7 +11651,7 @@ class TransactionPartnerTelegramAds(TransactionPartner):
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string)
-        return obj
+        return cls(**obj)
 
 
 # noinspection PyShadowingBuiltins
@@ -13059,7 +13061,7 @@ class UniqueGiftBackdrop(JsonDeserializable):
 
 
 # noinspection PyShadowingBuiltins
-class InputStoryContent(JsonSerializable, ABC):
+class InputStoryContent(JsonSerializable, Dictionaryable, ABC):
     """
     This object describes the content of a story to post. Currently, it can be one of
     InputStoryContentPhoto
@@ -13069,6 +13071,15 @@ class InputStoryContent(JsonSerializable, ABC):
     """
     def __init__(self, type: str, **kwargs):
         self.type: str = type
+
+    def to_dict(self) -> dict:
+        data = {
+            'type': self.type
+        }
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InputStoryContentPhoto(InputStoryContent):
@@ -13096,10 +13107,8 @@ class InputStoryContentPhoto(InputStoryContent):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'photo': self._photo_dic
-        }
+        data = super().to_dict()
+        data['photo'] = self._photo_dic
         return data
 
     def convert_input_story(self):
@@ -13145,10 +13154,8 @@ class InputStoryContentVideo(InputStoryContent):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'video': self._video_dic
-        }
+        data = super().to_dict()
+        data['video'] = self._video_dic
         if self.duration is not None:
             data['duration'] = self.duration
         if self.cover_frame_timestamp is not None:
@@ -13257,7 +13264,7 @@ class LocationAddress(Dictionaryable, JsonSerializable):
 
 
 # noinspection PyShadowingBuiltins
-class StoryAreaType(JsonSerializable, ABC):
+class StoryAreaType(JsonSerializable, Dictionaryable, ABC):
     """
     Describes the type of a clickable area on a story. Currently, it can be one of
     StoryAreaTypeLocation
@@ -13273,6 +13280,15 @@ class StoryAreaType(JsonSerializable, ABC):
     """
     def __init__(self, type: str, **kwargs):
         self.type: str = type
+
+    def to_dict(self) -> dict:
+        data = {
+            'type': self.type
+        }
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class StoryAreaTypeLocation(StoryAreaType):
@@ -13307,11 +13323,9 @@ class StoryAreaTypeLocation(StoryAreaType):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'latitude': self.latitude,
-            'longitude': self.longitude,
-        }
+        data = super().to_dict()
+        data['latitude'] = self.latitude
+        data['longitude'] = self.longitude
         if self.address is not None:
             data['address'] = self.address.to_dict()
         return data
@@ -13349,10 +13363,8 @@ class StoryAreaTypeSuggestedReaction(StoryAreaType):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'reaction_type': self.reaction_type.to_dict()
-        }
+        data = super().to_dict()
+        data['reaction_type'] = self.reaction_type.to_dict()
         if self.is_dark is not None:
             data['is_dark'] = self.is_dark
         if self.is_flipped is not None:
@@ -13383,10 +13395,8 @@ class StoryAreaTypeLink(StoryAreaType):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'url': self.url
-        }
+        data = super().to_dict()
+        data['url'] = self.url
         return data
 
 
@@ -13421,12 +13431,10 @@ class StoryAreaTypeWeather(StoryAreaType):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'temperature': self.temperature,
-            'emoji': self.emoji,
-            'background_color': self.background_color
-        }
+        data = super().to_dict()
+        data['temperature'] = self.temperature
+        data['emoji'] = self.emoji
+        data['background_color'] = self.background_color
         return data
 
 
@@ -13453,11 +13461,8 @@ class StoryAreaTypeUniqueGift(StoryAreaType):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'name': self.name
-        }
-
+        data = super().to_dict()
+        data['name'] = self.name
         return data
 
 
@@ -13655,7 +13660,7 @@ class PaidMessagePriceChanged(JsonDeserializable):
         return cls(**obj)
 
 
-class InputProfilePhoto(JsonSerializable, ABC):
+class InputProfilePhoto(JsonSerializable, Dictionaryable, ABC):
     """
     This object describes a profile photo to set. Currently, it can be one of
     InputProfilePhotoStatic
@@ -13666,6 +13671,14 @@ class InputProfilePhoto(JsonSerializable, ABC):
     :return: Instance of the class
     :rtype: :class:`InputProfilePhoto`
     """
+    def to_dict(self) -> dict:
+        data = {}
+        return data
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
+
+
 class InputProfilePhotoStatic(InputProfilePhoto):
     """
     A static profile photo in the .JPG format.
@@ -13691,10 +13704,9 @@ class InputProfilePhotoStatic(InputProfilePhoto):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'photo': self._photo_dic
-        }
+        data = super().to_dict()
+        data['type'] = self.type
+        data['photo'] = self._photo_dic
         return data
 
     def convert_input_profile_photo(self):
@@ -13730,10 +13742,9 @@ class InputProfilePhotoAnimated(InputProfilePhoto):
         return json.dumps(self.to_dict())
 
     def to_dict(self) -> dict:
-        data = {
-            'type': self.type,
-            'animation': self._animation_dic
-        }
+        data = super().to_dict()
+        data['type'] = self.type
+        data['animation'] = self._animation_dic
         if self.main_frame_timestamp is not None:
             data['main_frame_timestamp'] = self.main_frame_timestamp
         return data
@@ -14354,6 +14365,7 @@ class SuggestedPostPaid(JsonDeserializable):
         self.currency: str = currency
         self.amount: Optional[int] = amount
         self.star_amount: Optional[StarAmount] = star_amount
+
     @classmethod
     def de_json(cls, json_string):
         if json_string is None: return None
@@ -16595,6 +16607,7 @@ class RichBlockPullQuotation(RichBlock):
         obj['credit'] = RichText.de_json(obj['credit']) if obj.get('credit') else None
         return cls(**obj)
     
+
 class RichBlockCollage(RichBlock):
     """
     A collage, corresponding to the custom HTML tag <tg-collage>.
@@ -16924,6 +16937,7 @@ class RichBlockDocument(RichBlock):
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string)
+        obj['document'] = Document.de_json(obj['document'])
         obj['caption'] = RichBlockCaption.de_json(obj['caption']) if obj.get('caption') else None
         return cls(**obj)
 
