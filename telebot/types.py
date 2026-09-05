@@ -3123,7 +3123,6 @@ class KeyboardButtonRequestChat(Dictionaryable):
         self.request_photo: Optional[bool] = request_photo
         self.request_username: Optional[bool] = request_username
 
-
     def to_dict(self) -> dict:
         data = {
             'request_id': self.request_id,
@@ -3216,7 +3215,6 @@ class KeyboardButton(Dictionaryable, JsonSerializable):
             if self.request_users is None:
                 # noinspection PyTypeChecker
                 self.request_users = request_user
-
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -4251,7 +4249,6 @@ class ChatPermissions(JsonDeserializable, JsonSerializable, Dictionaryable):
             self.can_send_video_notes: Optional[bool] = can_send_media_messages
             self.can_send_voice_notes: Optional[bool] = can_send_media_messages
 
-
     def to_json(self):
         return json.dumps(self.to_dict())
 
@@ -4414,10 +4411,6 @@ class BotCommandScopeDefault(BotCommandScope):
     :rtype: :class:`telebot.types.BotCommandScopeDefault`
     """
     def __init__(self):
-        """
-        Represents the default scope of bot commands.
-        Default commands are used if no commands with a narrower scope are specified for the user.
-        """
         super(BotCommandScopeDefault, self).__init__(type='default')
 
 
@@ -4455,9 +4448,6 @@ class BotCommandScopeAllGroupChats(BotCommandScope):
     :rtype: :class:`telebot.types.BotCommandScopeAllGroupChats`
     """
     def __init__(self):
-        """
-        Represents the scope of bot commands, covering all group and supergroup chats.
-        """
         super(BotCommandScopeAllGroupChats, self).__init__(type='all_group_chats')
 
 
@@ -4475,9 +4465,6 @@ class BotCommandScopeAllChatAdministrators(BotCommandScope):
     :rtype: :class:`telebot.types.BotCommandScopeAllChatAdministrators`
     """
     def __init__(self):
-        """
-        Represents the scope of bot commands, covering all group and supergroup chat administrators.
-        """
         super(BotCommandScopeAllChatAdministrators, self).__init__(type='all_chat_administrators')
 
 
@@ -4497,8 +4484,15 @@ class BotCommandScopeChat(BotCommandScope):
     :return: Instance of the class
     :rtype: :class:`telebot.types.BotCommandScopeChat`
     """
-    def __init__(self, chat_id: Optional[Union[str, int]]=None):
+    def __init__(self, chat_id: Union[int, str]=None):
         super(BotCommandScopeChat, self).__init__(type='chat')
+        self.chat_id = chat_id
+
+    def to_dict(self) -> dict:
+        data = super().to_dict()
+        if self.chat_id is not None:
+            data['chat_id'] = self.chat_id
+        return data
 
 
 # noinspection PyUnresolvedReferences
@@ -4517,8 +4511,15 @@ class BotCommandScopeChatAdministrators(BotCommandScope):
     :return: Instance of the class
     :rtype: :class:`telebot.types.BotCommandScopeChatAdministrators`
     """
-    def __init__(self, chat_id: Optional[Union[str, int]]=None):
+    def __init__(self, chat_id: Union[int, str]=None):
         super(BotCommandScopeChatAdministrators, self).__init__(type='chat_administrators')
+        self.chat_id = chat_id
+
+    def to_dict(self) -> dict:
+        data = super().to_dict()
+        if self.chat_id is not None:
+            data['chat_id'] = self.chat_id
+        return data
 
 
 # noinspection PyUnresolvedReferences
@@ -4540,8 +4541,18 @@ class BotCommandScopeChatMember(BotCommandScope):
     :return: Instance of the class
     :rtype: :class:`telebot.types.BotCommandScopeChatMember`
     """
-    def __init__(self, chat_id: Optional[Union[str, int]]=None, user_id: Optional[Union[str, int]]=None):
+    def __init__(self, chat_id: Union[int, str]=None, user_id: int=None):
         super(BotCommandScopeChatMember, self).__init__(type='chat_member')
+        self.chat_id = chat_id
+        self.user_id = user_id
+
+    def to_dict(self) -> dict:
+        data = super().to_dict()
+        if self.chat_id is not None:
+            data['chat_id'] = self.chat_id
+        if self.user_id is not None:
+            data['user_id'] = self.user_id
+        return data
 
 
 # noinspection PyShadowingBuiltins
@@ -8239,7 +8250,6 @@ class PollAnswer(JsonSerializable, JsonDeserializable, Dictionaryable):
         self.option_persistent_ids: List[str] = option_persistent_ids
         self.voter_chat: Optional[Chat] = voter_chat
 
-
     def to_json(self):
         return json.dumps(self.to_dict())
 
@@ -9277,7 +9287,6 @@ class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerial
         self.allow_bot_chats: Optional[bool] = allow_bot_chats
         self.allow_group_chats: Optional[bool] = allow_group_chats
         self.allow_channel_chats: Optional[bool] = allow_channel_chats
-
 
     def to_dict(self) -> dict:
         data = {}
@@ -13647,7 +13656,6 @@ class UniqueGiftInfo(JsonDeserializable):
         if self.last_resale_currency == "XTR":
             return self.last_resale_amount
         return None
-
 
     @classmethod
     def de_json(cls, json_string):
