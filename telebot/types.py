@@ -8509,7 +8509,7 @@ class MenuButton(JsonDeserializable, JsonSerializable, Dictionaryable):
             'web_app': MenuButtonWebApp,
             'default': MenuButtonDefault
         }
-        return types[obj['type']](**obj)
+        return types[obj['type']].de_json(obj)
 
     def to_json(self):
         return json.dumps(self.to_dict())
