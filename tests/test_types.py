@@ -1092,12 +1092,6 @@ def test_json_videochatstarted():
     assert isinstance(result, types.VideoChatStarted)
 
 
-def test_json_voicechatstarted():
-    json_str = r'{}'
-    result = types.VoiceChatStarted.de_json(json_str)
-    assert isinstance(result, types.VoiceChatStarted)
-
-
 def test_json_writeaccessallowed():
     json_str = r'{"from_request": true, "web_app_name": "TestApp", "from_attachment_menu": false}'
     result = types.WriteAccessAllowed.de_json(json_str)
