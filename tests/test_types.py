@@ -1785,14 +1785,6 @@ def test_json_giveawaywinners():
     assert result.prize_star_count == 100
 
 
-def test_json_groupchat():
-    json_str = r'{"id": 1, "title": "test"}'
-    result = types.GroupChat.de_json(json_str)
-    assert isinstance(result, types.GroupChat)
-    assert result.id == 1
-    assert result.title == 'test'
-
-
 def test_json_inaccessiblemessage():
     json_str = r'{"chat": {"id": 1, "type": "private", "title": "Test"}, "message_id": 1, "date": 1682189507}'
     result = types.InaccessibleMessage.de_json(json_str)

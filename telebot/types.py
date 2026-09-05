@@ -643,22 +643,6 @@ class User(JsonDeserializable, Dictionaryable, JsonSerializable):
 
 
 # noinspection PyShadowingBuiltins
-class GroupChat(JsonDeserializable):
-    """
-    :meta private:
-    """
-    @classmethod
-    def de_json(cls, json_string):
-        if json_string is None: return None
-        obj = cls.check_json(json_string, dict_copy=False)
-        return cls(**obj)
-
-    def __init__(self, id: int, title: str, **kwargs):
-        self.id: int = id
-        self.title: str = title
-
-
-# noinspection PyShadowingBuiltins
 class ChatFullInfo(JsonDeserializable):
     """
     This object contains full information about a chat.
@@ -1806,16 +1790,6 @@ class Message(JsonDeserializable):
             opts['community_chat_joined'] = CommunityChatJoined.de_json(obj['community_chat_joined'])
             content_type = 'community_chat_joined'
         return cls(message_id, from_user, date, chat, content_type, opts, json_string)
-
-    @classmethod
-    def parse_chat(cls, chat) -> Union[User, GroupChat]:
-        """
-        Parses chat.
-        """
-        if 'first_name' not in chat:
-            return GroupChat.de_json(chat)
-        else:
-            return User.de_json(chat)
 
     @classmethod
     def parse_photo(cls, photo_size_array) -> List[PhotoSize]:
