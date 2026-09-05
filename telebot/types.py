@@ -3583,18 +3583,18 @@ class RichMessageButton(Dictionaryable, JsonSerializable, JsonDeserializable):
             obj['disabled'] = DisabledButton.de_json(obj['disabled'])
         return cls(**obj)
 
-    def __init__(self, text: 'RichText', style: Optional[str] = None, url: Optional[str] = None, callback_data: Optional[str] = None, web_app: Optional['WebAppInfo'] = None, login_url: Optional['LoginUrl'] = None, switch_inline_query: Optional[str] = None, switch_inline_query_current_chat: Optional[str] = None, switch_inline_query_chosen_chat: Optional['SwitchInlineQueryChosenChat'] = None, copy_text: Optional['CopyTextButton'] = None, disabled: Optional['DisabledButton'] = None, **kwargs) -> None:
-        self.text: 'RichText' = text
+    def __init__(self, text: RichText, style: Optional[str] = None, url: Optional[str] = None, callback_data: Optional[str] = None, web_app: Optional[WebAppInfo] = None, login_url: Optional[LoginUrl] = None, switch_inline_query: Optional[str] = None, switch_inline_query_current_chat: Optional[str] = None, switch_inline_query_chosen_chat: Optional[SwitchInlineQueryChosenChat] = None, copy_text: Optional[CopyTextButton] = None, disabled: Optional[DisabledButton] = None, **kwargs) -> None:
+        self.text: RichText = text
         self.style: Optional[str] = style
         self.url: Optional[str] = url
         self.callback_data: Optional[str] = callback_data
-        self.web_app: Optional['WebAppInfo'] = web_app
-        self.login_url: Optional['LoginUrl'] = login_url
+        self.web_app: Optional[WebAppInfo] = web_app
+        self.login_url: Optional[LoginUrl] = login_url
         self.switch_inline_query: Optional[str] = switch_inline_query
         self.switch_inline_query_current_chat: Optional[str] = switch_inline_query_current_chat
-        self.switch_inline_query_chosen_chat: Optional['SwitchInlineQueryChosenChat'] = switch_inline_query_chosen_chat
-        self.copy_text: Optional['CopyTextButton'] = copy_text
-        self.disabled: Optional['DisabledButton'] = disabled
+        self.switch_inline_query_chosen_chat: Optional[SwitchInlineQueryChosenChat] = switch_inline_query_chosen_chat
+        self.copy_text: Optional[CopyTextButton] = copy_text
+        self.disabled: Optional[DisabledButton] = disabled
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -3612,34 +3612,19 @@ class RichMessageButton(Dictionaryable, JsonSerializable, JsonDeserializable):
         if self.callback_data is not None:
             data['callback_data'] = self.callback_data
         if self.web_app is not None:
-            if hasattr(self.web_app, 'to_dict'):
-                data['web_app'] = self.web_app.to_dict()
-            else:
-                data['web_app'] = self.web_app
+            data['web_app'] = self.web_app.to_dict()
         if self.login_url is not None:
-            if hasattr(self.login_url, 'to_dict'):
-                data['login_url'] = self.login_url.to_dict()
-            else:
-                data['login_url'] = self.login_url
+            data['login_url'] = self.login_url.to_dict()
         if self.switch_inline_query is not None:
             data['switch_inline_query'] = self.switch_inline_query
         if self.switch_inline_query_current_chat is not None:
             data['switch_inline_query_current_chat'] = self.switch_inline_query_current_chat
         if self.switch_inline_query_chosen_chat is not None:
-            if hasattr(self.switch_inline_query_chosen_chat, 'to_dict'):
-                data['switch_inline_query_chosen_chat'] = self.switch_inline_query_chosen_chat.to_dict()
-            else:
-                data['switch_inline_query_chosen_chat'] = self.switch_inline_query_chosen_chat
+            data['switch_inline_query_chosen_chat'] = self.switch_inline_query_chosen_chat.to_dict()
         if self.copy_text is not None:
-            if hasattr(self.copy_text, 'to_dict'):
-                data['copy_text'] = self.copy_text.to_dict()
-            else:
-                data['copy_text'] = self.copy_text
+            data['copy_text'] = self.copy_text.to_dict()
         if self.disabled is not None:
-            if hasattr(self.disabled, 'to_dict'):
-                data['disabled'] = self.disabled.to_dict()
-            else:
-                data['disabled'] = self.disabled
+            data['disabled'] = self.disabled.to_dict()
         return data
 
 
@@ -8441,14 +8426,6 @@ class VideoChatStarted(JsonDeserializable):
     def __init__(self):
         pass
 
-class VoiceChatStarted(VideoChatStarted):
-    """
-    Deprecated, use :class:`VideoChatStarted` instead.
-    """
-    def __init__(self):
-        log_deprecation_warning('VoiceChatStarted is deprecated. Use VideoChatStarted instead.')
-        super().__init__()
-
 
 class VideoChatScheduled(JsonDeserializable):
     """
@@ -8470,20 +8447,6 @@ class VideoChatScheduled(JsonDeserializable):
 
     def __init__(self, start_date: int, **kwargs):
         self.start_date: int = start_date
-
-
-class VoiceChatScheduled(VideoChatScheduled):
-    """
-    Deprecated, use :class:`VideoChatScheduled` instead.
-    """
-    @classmethod
-    def de_json(cls, json_string):
-        if json_string is None: return None
-        return VideoChatScheduled.de_json(json_string)
-
-    def __init__(self, *args, **kwargs):
-        log_deprecation_warning('VoiceChatScheduled is deprecated. Use VideoChatScheduled instead.')
-        super().__init__(*args, **kwargs)
 
 
 class VideoChatEnded(JsonDeserializable):
@@ -8508,20 +8471,6 @@ class VideoChatEnded(JsonDeserializable):
         self.duration: int = duration
 
 
-class VoiceChatEnded(VideoChatEnded):
-    """
-    Deprecated, use :class:`VideoChatEnded` instead.
-    """
-    @classmethod
-    def de_json(cls, json_string):
-        if json_string is None: return None
-        return VideoChatEnded.de_json(json_string)
-
-    def __init__(self, *args, **kwargs):
-        log_deprecation_warning('VoiceChatEnded is deprecated. Use VideoChatEnded instead.')
-        super().__init__(*args, **kwargs)
-
-
 class VideoChatParticipantsInvited(JsonDeserializable):
     """
     This object represents a service message about new members invited to a video chat.
@@ -8543,20 +8492,6 @@ class VideoChatParticipantsInvited(JsonDeserializable):
 
     def __init__(self, users: List[User], **kwargs):
         self.users: List[User] = users
-
-
-class VoiceChatParticipantsInvited(VideoChatParticipantsInvited):
-    """
-    Deprecated, use :class:`VideoChatParticipantsInvited` instead.
-    """
-    @classmethod
-    def de_json(cls, json_string):
-        if json_string is None: return None
-        return VideoChatParticipantsInvited.de_json(json_string)
-
-    def __init__(self, *args, **kwargs):
-        log_deprecation_warning('VoiceChatParticipantsInvited is deprecated. Use VideoChatParticipantsInvited instead.')
-        super().__init__(*args, **kwargs)
 
 
 class MessageAutoDeleteTimerChanged(JsonDeserializable):
@@ -9290,7 +9225,6 @@ class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerial
 
     def to_dict(self) -> dict:
         data = {}
-
         if self.query is not None:
             data['query'] = self.query
         if self.allow_user_chats is not None:
@@ -9301,7 +9235,6 @@ class SwitchInlineQueryChosenChat(JsonDeserializable, Dictionaryable, JsonSerial
             data['allow_group_chats'] = self.allow_group_chats
         if self.allow_channel_chats is not None:
             data['allow_channel_chats'] = self.allow_channel_chats
-
         return data
 
     def to_json(self):
@@ -9357,12 +9290,10 @@ class InlineQueryResultsButton(JsonSerializable, Dictionaryable):
         data = {
             'text': self.text
         }
-
         if self.web_app is not None:
             data['web_app'] = self.web_app.to_dict()
         if self.start_parameter is not None:
             data['start_parameter'] = self.start_parameter
-
         return data
 
     def to_json(self) -> str:
@@ -9417,16 +9348,12 @@ class ReactionType(JsonDeserializable, Dictionaryable, JsonSerializable):
     def de_json(cls, json_string):
         if json_string is None: return None
         obj = cls.check_json(json_string)
-        # remove type
         if obj['type'] == 'emoji':
-            del obj['type']
-            return ReactionTypeEmoji(**obj)
+            return ReactionTypeEmoji.de_json(obj)
         elif obj['type'] == 'custom_emoji':
-            del obj['type']
-            return ReactionTypeCustomEmoji(**obj)
+            return ReactionTypeCustomEmoji.de_json(obj)
         elif obj['type'] == 'paid':
-            del obj['type']
-            return ReactionTypePaid(**obj)
+            return ReactionTypePaid.de_json(obj)
         else:
             raise ValueError(f"Unknown reaction type: {obj['type']}.")
 
@@ -10034,7 +9961,6 @@ class LinkPreviewOptions(JsonDeserializable, Dictionaryable, JsonSerializable):
 
     def to_dict(self) -> dict:
         data = {}
-
         if self.is_disabled is not None:
             data['is_disabled'] = self.is_disabled
         if self.url is not None:
@@ -15366,7 +15292,7 @@ class RichTextTextMention(RichText):
     :return: Instance of the class
     :rtype: :class:`RichTextTextMention`
     """
-    def __init__(self, text: RichText, user: 'User', **kwargs):
+    def __init__(self, text: RichText, user: User, **kwargs):
         super().__init__(type='text_mention', **kwargs)
         self.text: RichText = text
         self.user: User = user
@@ -16034,9 +15960,9 @@ class RichTextButton(RichText):
     :return: Instance of the class
     :rtype: :class:`RichTextButton`
     """
-    def __init__(self, button: 'RichMessageButton', **kwargs):
+    def __init__(self, button: RichMessageButton, **kwargs):
         super().__init__(type='button', **kwargs)
-        self.button: 'RichMessageButton' = button
+        self.button: RichMessageButton = button
 
     @classmethod
     def de_json(cls, json_string):
@@ -16177,7 +16103,7 @@ class RichBlockListItem(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`RichBlockListItem`
     """
-    def __init__(self, label: str, blocks: List['RichBlock'],
+    def __init__(self, label: str, blocks: List[RichBlock],
                  has_checkbox: Optional[bool] = None,
                  is_checked: Optional[bool] = None,
                  value: Optional[int] = None,
@@ -16496,7 +16422,7 @@ class RichBlockList(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockList`
     """
-    def __init__(self, items: List['RichBlockListItem'], **kwargs):
+    def __init__(self, items: List[RichBlockListItem], **kwargs):
         super().__init__(type='list', **kwargs)
         self.items: List[RichBlockListItem] = items
 
@@ -16526,7 +16452,7 @@ class RichBlockBlockQuotation(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockBlockQuotation`
     """
-    def __init__(self, blocks: List['RichBlock'], credit: Optional[RichText] = None, **kwargs):
+    def __init__(self, blocks: List[RichBlock], credit: Optional[RichText] = None, **kwargs):
         super().__init__(type='blockquote', **kwargs)
         self.blocks: List[RichBlock] = blocks
         self.credit: Optional[RichText] = credit
@@ -16653,7 +16579,7 @@ class RichBlockCollage(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockCollage`
     """
-    def __init__(self, blocks: List['RichBlock'], caption: Optional[RichBlockCaption] = None, **kwargs):
+    def __init__(self, blocks: List[RichBlock], caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='collage', **kwargs)
         self.blocks: List[RichBlock] = blocks
         self.caption: Optional[RichBlockCaption] = caption
@@ -16685,7 +16611,7 @@ class RichBlockSlideshow(RichBlock):
     :return: Instance of the class
     :rtype: :class:`RichBlockSlideshow`
     """
-    def __init__(self, blocks: List['RichBlock'], caption: Optional[RichBlockCaption] = None, **kwargs):
+    def __init__(self, blocks: List[RichBlock], caption: Optional[RichBlockCaption] = None, **kwargs):
         super().__init__(type='slideshow', **kwargs)
         self.blocks: List[RichBlock] = blocks
         self.caption: Optional[RichBlockCaption] = caption
@@ -17081,7 +17007,7 @@ class RichMessage(JsonDeserializable):
     :return: Instance of the class
     :rtype: :class:`RichMessage`
     """
-    def __init__(self, blocks: List['RichBlock'], is_rtl: Optional[bool] = None, **kwargs):
+    def __init__(self, blocks: List[RichBlock], is_rtl: Optional[bool] = None, **kwargs):
         self.blocks: List[RichBlock] = blocks
         self.is_rtl: Optional[bool] = is_rtl
 
